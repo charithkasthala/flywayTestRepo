@@ -1,0 +1,37 @@
+databaseType = "MySql"
+id = "5a0d824f-835c-4ec7-b7bc-9b39f616ed81"
+name = "Aurave"
+
+[flyway]
+callbackLocations = [ "filesystem:callbacks" ]
+locations = [ "filesystem:migrations" ]
+mixed = true
+outOfOrder = true
+schemaModelLocation = "schema-model"
+validateMigrationNaming = true
+baselineVersion = "000"
+baselineOnMigrate = true
+
+  [flyway.check]
+  majorTolerance = 0
+
+[flywayDesktop]
+developmentEnvironment = "development"
+shadowEnvironment = "shadow"
+
+  [flywayDesktop.generate]
+  undoScripts = true
+
+[redgateCompare]
+filterFile = "filter.rgf"
+
+[redgateCompare.mysql.options.ignores]
+ignoreNewlinesInTextObjects = "off"
+
+[environments.development]
+url = "jdbc:mysql://localhost:3306/flyway_desktop"
+schemas = [ "flyway_desktop" ]
+
+[environments.production]
+url = "jdbc:mysql://localhost:3306/flyway_springboot"
+schemas = [ "flyway_springboot" ]
