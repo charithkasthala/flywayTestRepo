@@ -7,6 +7,9 @@ table "flyway_desktop"."dev" {
     column "title" {
       type = varchar(45)
     }
+    column "code" {
+      type = varchar(45)
+    }
   )
   primaryKey = {
     columns = [
