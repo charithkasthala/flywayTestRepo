@@ -1,0 +1,52 @@
+table "flyway_desktop"."cpg_wallet_adjustments" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "wallet_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "reason_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "narration" {
+      type = varchar(1000)
+    }
+    column "amount" {
+      type = decimal(12,2)
+      null = NOT NULL
+    }
+    column "balance" {
+      type = decimal(12,2)
+      null = NOT NULL
+    }
+    column "created_on" {
+      type = datetime
+      null = NOT NULL
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

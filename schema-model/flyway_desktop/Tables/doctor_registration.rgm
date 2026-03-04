@@ -1,0 +1,54 @@
+table "flyway_desktop"."doctor_registration" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "doctor_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "council_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "registration_number" {
+      type = varchar(100)
+      null = NOT NULL
+    }
+    column "registration_date" {
+      type = date
+    }
+    column "expiry_date" {
+      type = date
+    }
+    column "status" {
+      type = enum('PENDING','ACTIVE','EXPIRED','SUSPENDED')
+      default = 'ACTIVE'
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

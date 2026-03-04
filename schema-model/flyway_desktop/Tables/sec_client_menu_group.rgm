@@ -1,0 +1,52 @@
+table "flyway_desktop"."sec_client_menu_group" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "client_code" {
+      type = varchar(50)
+    }
+    column "title" {
+      type = varchar(255)
+    }
+    column "icon" {
+      type = varchar(255)
+    }
+    column "uri" {
+      type = varchar(50)
+    }
+    column "seq" {
+      type = int
+      null = NOT NULL
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

@@ -1,0 +1,181 @@
+procedure "flyway_desktop"."sp_validate_slot_overlap" {
+  parameters = <
+    {
+      name = p_doctor_id
+      datatype = varchar(50)
+      mode = IN
+    }
+
+    {
+      name = p_start_date
+      datatype = date
+      mode = IN
+    }
+
+    {
+      name = p_end_date
+      datatype = date
+      mode = IN
+    }
+
+    {
+      name = p_start_time
+      datatype = time
+      mode = IN
+    }
+
+    {
+      name = p_end_time
+      datatype = time
+      mode = IN
+    }
+
+    {
+      name = p_duration_secs
+      datatype = int
+      mode = IN
+    }
+
+    {
+      name = p_is_weekend_enabled
+      datatype = tinyint
+      mode = IN
+    }
+
+  >
+  text = """-
+BEGIN
+  DECLARE v_count_def_ids int DEFAULT 0;
+  DECLARE v_def_ids VARCHAR(50);
+  DECLARE result int DEFAULT 1;
+  DECLARE v_weekends TEXT;
+  DECLARE v_session_id varchar(50);
+DECLARE v_from_time TIME;
+DECLARE v_to_time TIME;
+  -- declare v_start_time datetime;
+  -- declare v_end_time datetime;
+  
+    IF p_is_weekend_enabled = 0 THEN
+    SELECT weekends INTO v_weekends
+    FROM doctor_preferences
+    WHERE doctor_id = p_doctor_id;
+  
+		-- SET v_start_time = CAST(CONCAT(p_start_date, ' ', p_start_time) AS DATETIME);
+		-- SET v_end_time = CAST(CONCAT(p_end_date,   ' ', p_end_time)   AS DATETIME);
+
+  -- basic input validations
+/* IF p_start_date > p_end_date THEN
+    SELECT 'ERROR' AS result, CONCAT('start_date > end_date: ', p_start_date, ' > ', p_end_date) AS message;
+  ELSEIF p_start_time >= p_end_time THEN
+    SELECT 'ERROR' AS result, CONCAT('from_time >= to_time: ', p_start_time, ' >= ', p_end_time) AS message;
+  ELSE */
+--    
+
+-- select v_weekends;
+-- SELECT CONCAT("'", REPLACE(v_weekends, ",", "','"), "'") INTO v_weekends;
+-- select v_weekends;
+           SELECT count(id),group_concat(id) into v_count_def_ids, v_def_ids  
+           
+           FROM op_slot_defs  
+       WHERE doctor_id = p_doctor_id 
+       and (date(start_time) between DATE(p_start_date) AND DATE(p_end_date) AND FIND_IN_SET(UPPER(DAYNAME(start_time)), v_weekends) = 0)
+		 or (date(end_time) between DATE(p_start_date) AND DATE(p_end_date) AND FIND_IN_SET(UPPER(DAYNAME(end_time)), v_weekends) = 0);
+       --  select UPPER(DAYNAME(start_time)) from op_slot_defs where doctor_id = p_doctor_id;
+ELSE
+    SELECT COUNT(id), GROUP_CONCAT(id) INTO v_count_def_ids, v_def_ids
+    FROM op_slot_defs
+    WHERE doctor_id = p_doctor_id
+      AND (
+            DATE(start_time) BETWEEN DATE(p_start_date) AND DATE(p_end_date)
+         OR DATE(end_time) BETWEEN DATE(p_start_date) AND DATE(p_end_date)
+          );
+  END IF;
+
+     case when v_count_def_ids = 0 then set result = 1;   when v_count_def_ids > 0 then
+			
+		 SELECT  count(id) into v_count_def_ids FROM op_slot_defs  
+        WHERE doctor_id = p_doctor_id and id in (v_def_ids)
+        and time(start_time) > time(p_start_time) AND time(start_time) < time(p_end_time)
+		 or time(end_time) > time(p_start_time) AND time(end_time) < time(p_end_time);
+         
+       --  select v_count_def_ids, v_def_ids,1;
+
+	 case when v_count_def_ids > 0 then set result = 0; 
+     else set result = 1;
+       END case;
+	END case;
+    
+    if result = 1 then
+
+-- First delete patterns linked to sessions
+DELETE p
+FROM op_slot_pattern p
+JOIN op_slot_session s ON p.session_id = s.id
+WHERE s.doctor_id = p_doctor_id
+  AND s.is_slot_defined = 0;
+
+-- Then delete the sessions
+DELETE FROM op_slot_session
+WHERE doctor_id = p_doctor_id
+  AND is_slot_defined = 0;
+
+
+     SET v_session_id = UUID();
+     INSERT INTO `op_slot_session`
+(`id`,
+`doctor_id`,
+`start_date`,
+`end_date`,
+`duration_secs`,
+`is_weekend_enabled`,
+`weekends`,
+`start_time`,
+`end_time`,
+`is_slot_defined`)
+VALUES
+(v_session_id,
+p_doctor_id,
+p_start_date,
+p_end_date,
+p_duration_secs,
+p_is_weekend_enabled,
+v_weekends,
+p_start_time,
+p_end_time,
+0);
+
+      SET v_from_time = p_start_time;
+
+WHILE v_from_time < p_end_time DO
+  SET v_to_time = ADDTIME(v_from_time, SEC_TO_TIME(p_duration_secs));
+
+  IF v_to_time > p_end_time THEN
+    SET v_to_time = p_end_time;
+  END IF;
+
+  INSERT INTO op_slot_pattern
+  (
+    id,
+    doctor_id,
+    session_id,
+    from_time,
+    to_time
+  )
+  VALUES
+  (
+    UUID(),
+    p_doctor_id,
+    v_session_id,
+    v_from_time,
+    v_to_time
+  );
+
+  -- move to next slot
+  SET v_from_time = v_to_time;
+END WHILE;
+end if;
+ select result, v_session_id;
+END
+"""
+}
+

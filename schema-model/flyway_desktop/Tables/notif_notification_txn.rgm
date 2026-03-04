@@ -1,0 +1,76 @@
+table "flyway_desktop"."notif_notification_txn" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "tenant_id" {
+      type = varchar(50)
+    }
+    column "sender" {
+      type = varchar(50)
+    }
+    column "recipient" {
+      type = varchar(150)
+      null = NOT NULL
+    }
+    column "type" {
+      type = enum('WHATSAPP','EMAIL','SMS','PUSH')
+      null = NOT NULL
+    }
+    column "status" {
+      type = enum('PENDING','SENT','FAILED','DELIVERED')
+      default = 'PENDING'
+    }
+    column "message" {
+      type = text
+      null = NOT NULL
+    }
+    column "subject" {
+      type = varchar(1000)
+    }
+    column "send_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "delivered_on" {
+      type = datetime
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."notif_notification_txn"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

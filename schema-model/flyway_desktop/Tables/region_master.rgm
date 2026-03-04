@@ -1,0 +1,76 @@
+table "flyway_desktop"."region_master" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "region_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "description" {
+      type = text
+    }
+    column "name" {
+      type = varchar(150)
+      null = NOT NULL
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+      default = 'ACTIVE'
+    }
+    column "coordinates_json" {
+      type = text
+    }
+    column "polygon_id" {
+      type = varchar(50)
+    }
+    column "tenant_id" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."region_master"."code" {
+  columns = <
+    {
+      name = region_code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."region_master"."region_code" {
+  columns = <
+    {
+      name = region_code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

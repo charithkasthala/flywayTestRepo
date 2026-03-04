@@ -1,0 +1,4 @@
+view "flyway_desktop"."vw_user_summary" {
+  text = select `um`.`id` AS `id`,`um`.`username` AS `username`,`um`.`display_name` AS `display_name`,`um`.`email_id` AS `email_id`,`um`.`mobile_number` AS `mobile_number`,`fm`.`url` AS `avatar_url`,`um`.`reset_reqd` AS `reset_reqd`,`um`.`status` AS `status`,`um`.`twofactor_enabled` AS `twofactor_enabled`,`um`.`twofactor_type` AS `twofactor_type`,`um`.`twofactor_value` AS `twofactor_value` from (`flyway_desktop`.`sec_user_master` `um` left join `flyway_desktop`.`cdn_file_master` `fm` on((`um`.`avatar_file_id` = `fm`.`id`)))
+}
+

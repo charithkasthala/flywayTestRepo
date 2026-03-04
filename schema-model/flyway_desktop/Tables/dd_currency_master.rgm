@@ -1,0 +1,41 @@
+table "flyway_desktop"."dd_currency_master" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "code" {
+      type = varchar(10)
+    }
+    column "name" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "symbol" {
+      type = varchar(10)
+    }
+    column "country" {
+      type = varchar(50)
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+      default = 'ACTIVE'
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+}
+

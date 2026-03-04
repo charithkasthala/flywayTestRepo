@@ -1,0 +1,68 @@
+table "flyway_desktop"."cart" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "user_id" {
+      type = varchar(50)
+    }
+    column "username" {
+      type = varchar(100)
+    }
+    column "total_mrp" {
+      type = decimal(10,2)
+    }
+    column "total_price" {
+      type = decimal(10,2)
+    }
+    column "disc_amount" {
+      type = decimal(10,2)
+    }
+    column "total_items" {
+      type = int
+    }
+    column "total_qty" {
+      type = int
+    }
+    column "last_modified_on" {
+      type = datetime
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."cart"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

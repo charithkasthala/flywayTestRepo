@@ -1,0 +1,52 @@
+table "flyway_desktop"."doctor_qualification_docs" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "doctor_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "qualification_id" {
+      type = varchar(50)
+    }
+    column "file_id" {
+      type = varchar(500)
+      null = NOT NULL
+    }
+    column "verified_status" {
+      type = enum('PENDING','VERIFIED','REJECTED')
+      default = 'PENDING'
+    }
+    column "uploaded_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

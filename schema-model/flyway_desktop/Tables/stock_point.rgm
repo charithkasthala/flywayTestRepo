@@ -1,0 +1,62 @@
+table "flyway_desktop"."stock_point" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "region_code" {
+      type = varchar(50)
+    }
+    column "name" {
+      type = varchar(100)
+      null = NOT NULL
+    }
+    column "code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "email" {
+      type = varchar(500)
+    }
+    column "address_id" {
+      type = varchar(50)
+    }
+    column "status" {
+      type = enum('ACTIVE','FULL','INACTIVE')
+      default = 'ACTIVE'
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."stock_point"."code" {
+  columns = <
+    {
+      name = code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

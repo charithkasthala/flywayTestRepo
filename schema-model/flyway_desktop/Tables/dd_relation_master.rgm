@@ -1,0 +1,28 @@
+table "flyway_desktop"."dd_relation_master" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "gender" {
+      type = enum('MALE','FEMALE','OTHERS')
+    }
+    column "primary_relation" {
+      type = varchar(500)
+    }
+    column "addon_relation" {
+      type = varchar(500)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

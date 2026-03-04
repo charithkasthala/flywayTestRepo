@@ -1,0 +1,29 @@
+table "flyway_desktop"."dd_medical_university" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "university_code" {
+      type = varchar(50)
+    }
+    column "university_name" {
+      type = varchar(200)
+      null = NOT NULL
+    }
+    column "address_id" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

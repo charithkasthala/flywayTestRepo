@@ -1,0 +1,65 @@
+table "flyway_desktop"."customer_water_intake_summary" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "plan_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "intake_date" {
+      type = datetime
+      null = NOT NULL
+    }
+    column "intake_ml" {
+      type = decimal(10,2)
+      null = NOT NULL
+    }
+    column "target_ml" {
+      type = decimal(10,2)
+    }
+    column "is_achieved" {
+      type = tinyint(1)
+      default = 0
+    }
+    column "streak" {
+      type = int
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."customer_water_intake_summary"."id" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

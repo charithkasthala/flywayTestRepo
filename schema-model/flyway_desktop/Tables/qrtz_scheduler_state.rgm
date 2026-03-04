@@ -1,0 +1,29 @@
+table "flyway_desktop"."qrtz_scheduler_state" {
+  columns = (
+    column "SCHED_NAME" {
+      type = varchar(120)
+      null = NOT NULL
+    }
+    column "INSTANCE_NAME" {
+      type = varchar(200)
+      null = NOT NULL
+    }
+    column "LAST_CHECKIN_TIME" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "CHECKIN_INTERVAL" {
+      type = bigint
+      null = NOT NULL
+    }
+  )
+  primaryKey = {
+    columns = [
+      SCHED_NAME
+      INSTANCE_NAME
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

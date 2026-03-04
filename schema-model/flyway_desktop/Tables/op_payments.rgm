@@ -1,0 +1,63 @@
+table "flyway_desktop"."op_payments" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "booking_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "payment_gateway" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "payment_method" {
+      type = enum('CREDIT_CARD','DEBIT_CARD','UPI','NET_BANKING','PAYPAL','WALLET')
+      null = NOT NULL
+    }
+    column "payment_txn_id" {
+      type = varchar(100)
+      null = NOT NULL
+    }
+    column "txn_reference" {
+      type = varchar(100)
+    }
+    column "amount" {
+      type = decimal(12,2)
+      null = NOT NULL
+    }
+    column "currency" {
+      type = varchar(10)
+      default = 'INR'
+    }
+    column "payment_status" {
+      type = enum('INITIATED','PENDING','SUCCESS','FAILED','REFUND_IN_PROGRESS','REFUNDED')
+      null = NOT NULL
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

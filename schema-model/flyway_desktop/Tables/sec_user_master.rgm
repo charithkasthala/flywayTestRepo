@@ -1,0 +1,152 @@
+table "flyway_desktop"."sec_user_master" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "username" {
+      type = varchar(255)
+    }
+    column "password" {
+      type = varchar(255)
+    }
+    column "display_name" {
+      type = varchar(255)
+    }
+    column "email_id" {
+      type = varchar(255)
+    }
+    column "mobile_number" {
+      type = varchar(15)
+    }
+    column "mpin" {
+      type = varchar(255)
+    }
+    column "avatar_file_id" {
+      type = varchar(50)
+    }
+    column "mob_verified" {
+      type = tinyint
+    }
+    column "email_verified" {
+      type = tinyint
+    }
+    column "reset_reqd" {
+      type = tinyint
+      null = NOT NULL
+      default = 1
+    }
+    column "last_loggedin" {
+      type = datetime
+    }
+    column "pref_login_mode" {
+      type = varchar(50)
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+    }
+    column "is_expired" {
+      type = tinyint
+    }
+    column "is_locked" {
+      type = tinyint
+    }
+    column "subscription" {
+      type = varchar(50)
+    }
+    column "subscribed_on" {
+      type = datetime
+    }
+    column "twofactor_enabled" {
+      type = tinyint
+      default = 0
+    }
+    column "twofactor_type" {
+      type = enum('EMAIL','MOBILE')
+    }
+    column "twofactor_value" {
+      type = varchar(500)
+    }
+    column "is_username_exist" {
+      type = tinyint
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."sec_user_master"."email_id_UNIQUE" {
+  columns = <
+    {
+      name = email_id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."sec_user_master"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."sec_user_master"."mobile_number_UNIQUE" {
+  columns = <
+    {
+      name = mobile_number
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."sec_user_master"."mpin_UNIQUE" {
+  columns = <
+    {
+      name = mpin
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."sec_user_master"."username_UNIQUE" {
+  columns = <
+    {
+      name = username
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

@@ -1,0 +1,50 @@
+table "flyway_desktop"."codedetails_master" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "ref_code" {
+      type = varchar(50)
+    }
+    column "param_key" {
+      type = varchar(50)
+    }
+    column "param_value" {
+      type = varchar(255)
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."codedetails_master"."code_parent_fk" {
+  columns = <
+    {
+      name = ref_code
+    }
+
+  >
+  type = BTREE
+}
+

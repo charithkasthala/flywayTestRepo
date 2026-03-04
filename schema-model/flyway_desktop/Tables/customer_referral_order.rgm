@@ -1,0 +1,49 @@
+table "flyway_desktop"."customer_referral_order" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "customer_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "referral_id" {
+      type = varchar(50)
+    }
+    column "order_id" {
+      type = varchar(50)
+    }
+    column "order_placed_on" {
+      type = datetime
+    }
+    column "order_status" {
+      type = enum('PENDING','ORDER_PLACED','PROCESSING','SHIPPED','DELIVERED','CANCELLED','RETURN_IN_PROGRESS','RETURNED','COMPLETED')
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

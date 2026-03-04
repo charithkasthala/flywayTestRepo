@@ -1,0 +1,66 @@
+table "flyway_desktop"."sec_client_page_master" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "client_code" {
+      type = varchar(50)
+    }
+    column "channel_code" {
+      type = varchar(50)
+    }
+    column "code" {
+      type = varchar(50)
+    }
+    column "title" {
+      type = varchar(100)
+    }
+    column "description" {
+      type = varchar(1000)
+    }
+    column "url" {
+      type = varchar(500)
+    }
+    column "og_title" {
+      type = varchar(100)
+    }
+    column "og_description" {
+      type = varchar(1000)
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."sec_client_page_master"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

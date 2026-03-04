@@ -1,0 +1,83 @@
+table "flyway_desktop"."address_master" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "full_name" {
+      type = varchar(100)
+    }
+    column "phone_number" {
+      type = varchar(20)
+    }
+    column "address_line1" {
+      type = varchar(255)
+      null = NOT NULL
+    }
+    column "address_line2" {
+      type = varchar(255)
+    }
+    column "city" {
+      type = varchar(100)
+      null = NOT NULL
+    }
+    column "state" {
+      type = varchar(100)
+      null = NOT NULL
+    }
+    column "country" {
+      type = varchar(100)
+      null = NOT NULL
+      default = 'India'
+    }
+    column "postal_code" {
+      type = varchar(10)
+      null = NOT NULL
+    }
+    column "latitude" {
+      type = varchar(50)
+    }
+    column "longitude" {
+      type = varchar(50)
+    }
+    column "location" {
+      type = varchar(500)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."address_master"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

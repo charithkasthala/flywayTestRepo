@@ -1,0 +1,34 @@
+table "flyway_desktop"."bot_response" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "type" {
+      type = enum('WELCOME','OPTION_PROMPT','INTERMEDIATE','END')
+    }
+    column "text" {
+      type = varchar(1000)
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

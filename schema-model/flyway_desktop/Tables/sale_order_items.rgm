@@ -1,0 +1,74 @@
+table "flyway_desktop"."sale_order_items" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "order_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "product_id" {
+      type = varchar(50)
+    }
+    column "item_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "batch_id" {
+      type = varchar(50)
+    }
+    column "qty" {
+      type = int
+    }
+    column "unit_price" {
+      type = decimal(10,2)
+    }
+    column "disc_amount" {
+      type = decimal(10,2)
+    }
+    column "total_price" {
+      type = decimal(10,2)
+    }
+    column "total_mrp" {
+      type = decimal(10,2)
+    }
+    column "return_allowed" {
+      type = tinyint
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."sale_order_items"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

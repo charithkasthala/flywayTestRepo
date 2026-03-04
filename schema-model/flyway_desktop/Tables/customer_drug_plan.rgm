@@ -1,0 +1,60 @@
+table "flyway_desktop"."customer_drug_plan" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "customer_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "drug_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "drug_name" {
+      type = varchar(100)
+      null = NOT NULL
+    }
+    column "duration" {
+      type = int
+      null = NOT NULL
+      comment = Duration in days
+    }
+    column "start_date" {
+      type = date
+    }
+    column "end_date" {
+      type = date
+    }
+    column "status" {
+      type = enum('ACTIVE','PAUSED','COMPLETED','CANCELLED')
+    }
+    column "changed_on" {
+      type = datetime
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

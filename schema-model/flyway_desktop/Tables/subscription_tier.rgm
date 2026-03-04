@@ -1,0 +1,44 @@
+table "flyway_desktop"."subscription_tier" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "plan_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "type" {
+      type = enum('FREE','PAID')
+    }
+    column "issued_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "duration_days" {
+      type = int
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."subscription_tier"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

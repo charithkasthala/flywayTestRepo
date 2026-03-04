@@ -1,0 +1,81 @@
+procedure "flyway_desktop"."sp_generate_username_suggestions" {
+  parameters = <
+    {
+      name = fname
+      datatype = varchar(50)
+      mode = IN
+    }
+
+    {
+      name = lname
+      datatype = varchar(50)
+      mode = IN
+    }
+
+  >
+  text = """-
+BEGIN
+    DECLARE base_username VARCHAR(100);
+    DECLARE suffix INT DEFAULT 0;
+    DECLARE suggested_username VARCHAR(100);
+    DECLARE counter INT DEFAULT 0;
+    DECLARE finished BOOLEAN DEFAULT FALSE;
+    DECLARE suggestions_list TEXT DEFAULT '';
+
+    -- Cursor for fixed 8 patterns
+    DECLARE pattern_cursor CURSOR FOR 
+        SELECT pattern FROM (
+            SELECT CONCAT(fname, '.', lname) AS pattern
+            UNION ALL SELECT CONCAT(SUBSTRING(fname, 1, 1), lname)
+            UNION ALL SELECT CONCAT(lname, '.', fname)
+            UNION ALL SELECT CONCAT(fname, '.', lname, DATE_FORMAT(NOW(), '%Y'))
+            UNION ALL SELECT CONCAT(fname, '.', lname, DATE_FORMAT(NOW(), '%d%m'))
+        ) AS patterns;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET finished = TRUE;
+
+    OPEN pattern_cursor;
+
+    read_loop: LOOP
+        FETCH pattern_cursor INTO base_username;
+        IF finished THEN
+            LEAVE read_loop;
+        END IF;
+
+        SET suffix = 0;
+
+        check_loop: WHILE counter < 5 DO
+            SET suggested_username = IF(suffix = 0, base_username, CONCAT(base_username, '.', suffix));
+
+            IF NOT EXISTS (SELECT 1 FROM sec_user_master WHERE username = suggested_username) THEN
+                SET suggestions_list = CONCAT_WS(',', suggestions_list, suggested_username);
+                SET counter = counter + 1;
+                LEAVE check_loop; -- exit only the suffix loop
+            END IF;
+
+            SET suffix = suffix + 1;
+        END WHILE check_loop;
+
+    END LOOP read_loop;
+
+    CLOSE pattern_cursor;
+
+    -- Return as rows
+    SELECT TRIM(suggestion) AS suggestion
+    FROM (
+        SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(suggestions_list, ',', n.n), ',', -1) AS suggestion
+        FROM (
+            SELECT a.N + b.N * 10 + 1 AS n
+            FROM (SELECT 0 N UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4
+                  UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) a
+            CROSS JOIN (SELECT 0 N UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4
+                        UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) b
+        ) n
+        WHERE n.n <= 1 + LENGTH(suggestions_list) - LENGTH(REPLACE(suggestions_list, ',', ''))
+    ) x
+    WHERE suggestion <> ''
+    LIMIT 8;
+END
+"""
+}
+

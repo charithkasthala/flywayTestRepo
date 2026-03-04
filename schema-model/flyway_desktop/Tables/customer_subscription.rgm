@@ -1,0 +1,39 @@
+table "flyway_desktop"."customer_subscription" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "customer_id" {
+      type = varchar(50)
+    }
+    column "plan_code" {
+      type = varchar(50)
+    }
+    column "tier_id" {
+      type = varchar(50)
+    }
+    column "subscribed_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "last_renewed_on" {
+      type = datetime
+    }
+    column "status" {
+      type = enum('ACTIVE','EXPIRED','CANCELLED')
+      default = 'ACTIVE'
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

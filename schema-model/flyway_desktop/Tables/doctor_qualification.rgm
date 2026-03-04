@@ -1,0 +1,78 @@
+table "flyway_desktop"."doctor_qualification" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "doctor_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "qualification_name" {
+      type = varchar(100)
+      null = NOT NULL
+    }
+    column "degree" {
+      type = varchar(100)
+    }
+    column "stream" {
+      type = varchar(100)
+    }
+    column "speciality" {
+      type = varchar(100)
+    }
+    column "university_id" {
+      type = varchar(50)
+    }
+    column "from_year" {
+      type = int
+      null = NOT NULL
+    }
+    column "to_year" {
+      type = int
+      null = NOT NULL
+    }
+    column "verified_status" {
+      type = enum('PENDING','VERIFIED','REJECTED')
+    }
+    column "added_on" {
+      type = datetime
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."doctor_qualification"."added_on_UNIQUE" {
+  columns = <
+    {
+      name = added_on
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

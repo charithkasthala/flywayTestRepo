@@ -1,0 +1,38 @@
+table "flyway_desktop"."smedia_post_comment" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "comment_id" {
+      type = varchar(255)
+    }
+    column "comment_text" {
+      type = varchar(255)
+    }
+    column "commented_on" {
+      type = datetime(6)
+    }
+    column "provider_post_id" {
+      type = bigint
+    }
+    column "provider_type" {
+      type = enum('FACEBOOK','INSTAGRAM','TWITTER','LINKEDIN')
+      null = NOT NULL
+    }
+    column "comment_status" {
+      type = enum('COMMENT_DELETED','COMMENT_POSTED')
+    }
+    column "updated_on" {
+      type = datetime
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

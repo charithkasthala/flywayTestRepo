@@ -1,0 +1,84 @@
+table "flyway_desktop"."op_eprescription" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "customer_uhid" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "doctor_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "consultation_id" {
+      type = varchar(50)
+    }
+    column "booking_id" {
+      type = varchar(50)
+    }
+    column "drug_id" {
+      type = varchar(50)
+    }
+    column "start_date" {
+      type = datetime
+    }
+    column "end_date" {
+      type = datetime
+    }
+    column "duration_days" {
+      type = int
+    }
+    column "dosage_times" {
+      type = int
+    }
+    column "dosage_qty" {
+      type = varchar(50)
+    }
+    column "dosage_code" {
+      type = varchar(20)
+    }
+    column "meal_relation" {
+      type = enum('PRE_MEAL','POST_MEAL')
+    }
+    column "meal_type" {
+      type = enum('BREAKFAST','LUNCH','SNACK','DINNER')
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."op_eprescription"."id" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

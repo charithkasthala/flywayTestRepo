@@ -1,0 +1,53 @@
+table "flyway_desktop"."promotion_wallet_rewards" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "wallet_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "reward_type" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "amount" {
+      type = decimal(10,2)
+      null = NOT NULL
+    }
+    column "expire_on" {
+      type = datetime
+    }
+    column "status" {
+      type = enum('INITIATED','CREDITED','EXPIRED')
+      null = NOT NULL
+      default = 'INITIATED'
+    }
+    column "promo_code" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

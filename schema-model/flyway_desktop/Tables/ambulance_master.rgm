@@ -1,0 +1,64 @@
+table "flyway_desktop"."ambulance_master" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "hospital_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "vehicle_number" {
+      type = varchar(20)
+      null = NOT NULL
+    }
+    column "vehicle_type" {
+      type = enum('BASIC','ADVANCED','ICU','NEONATAL')
+      null = NOT NULL
+    }
+    column "default_driver_id" {
+      type = varchar(50)
+    }
+    column "latitude" {
+      type = decimal(10,8)
+    }
+    column "longitude" {
+      type = decimal(10,8)
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+      default = 'ACTIVE'
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."ambulance_master"."vehicle_number" {
+  columns = <
+    {
+      name = vehicle_number
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

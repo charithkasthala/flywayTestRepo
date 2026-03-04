@@ -1,0 +1,41 @@
+table "flyway_desktop"."smedia_subscriber_account" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "subscriber_code" {
+      type = varchar(255)
+    }
+    column "access_token" {
+      type = text
+    }
+    column "provider_type" {
+      type = enum('FACEBOOK','INSTAGRAM','TWITTER','LINKEDIN')
+      null = NOT NULL
+    }
+    column "app_id" {
+      type = varchar(255)
+    }
+    column "app_secret" {
+      type = varchar(255)
+    }
+    column "redirect_uri" {
+      type = varchar(500)
+    }
+    column "scopes" {
+      type = varchar(1000)
+    }
+    column "refresh_token" {
+      type = text
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

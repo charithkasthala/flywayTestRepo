@@ -1,0 +1,57 @@
+table "flyway_desktop"."notif_device_usage" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "tenant_id" {
+      type = varchar(50)
+    }
+    column "device_id" {
+      type = varchar(50)
+    }
+    column "username" {
+      type = varchar(50)
+    }
+    column "usage_count" {
+      type = int
+    }
+    column "last_used_at" {
+      type = datetime
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."notif_device_usage"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

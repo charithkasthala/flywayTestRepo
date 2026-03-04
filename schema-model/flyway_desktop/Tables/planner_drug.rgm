@@ -1,0 +1,61 @@
+table "flyway_desktop"."planner_drug" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "planner_id" {
+      type = varchar(50)
+    }
+    column "drug_id" {
+      type = varchar(50)
+    }
+    column "drug_name" {
+      type = varchar(100)
+    }
+    column "dosage_count" {
+      type = int
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+    }
+    column "start_date" {
+      type = date
+    }
+    column "end_date" {
+      type = date
+    }
+    column "dosage_form" {
+      type = varchar(50)
+    }
+    column "dosage_unit" {
+      type = varchar(50)
+    }
+    column "dosage_qty" {
+      type = decimal(10,2)
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

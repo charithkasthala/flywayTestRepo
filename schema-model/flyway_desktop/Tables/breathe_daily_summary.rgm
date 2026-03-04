@@ -1,0 +1,58 @@
+table "flyway_desktop"."breathe_daily_summary" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "customer_uhid" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "calm_activity_secs" {
+      type = int
+      null = NOT NULL
+    }
+    column "focus_activity_secs" {
+      type = int
+      null = NOT NULL
+    }
+    column "generated_on" {
+      type = date
+      null = NOT NULL
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."breathe_daily_summary"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

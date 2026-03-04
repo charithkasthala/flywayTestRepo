@@ -1,0 +1,42 @@
+table "flyway_desktop"."ambulance_location" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "ambulance_id" {
+      type = varchar(50)
+    }
+    column "latitude" {
+      type = decimal(10,8)
+    }
+    column "longitude" {
+      type = decimal(10,8)
+    }
+    column "generated_on" {
+      type = datetime
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."ambulance_location"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

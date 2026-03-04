@@ -1,0 +1,59 @@
+table "flyway_desktop"."op_slot_defs" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "doctor_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "session_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "pattern_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "start_time" {
+      type = datetime
+      null = NOT NULL
+    }
+    column "end_time" {
+      type = datetime
+      null = NOT NULL
+    }
+    column "slot_mode" {
+      type = enum('ONLINE','OFFLINE','BOTH')
+    }
+    column "slot_status" {
+      type = enum('ACTIVE','ON_HOLD','OCCUPIED','BOOKED','DISABLED')
+      default = 'ACTIVE'
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

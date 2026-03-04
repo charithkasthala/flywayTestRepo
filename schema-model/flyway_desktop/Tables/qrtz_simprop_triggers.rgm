@@ -1,0 +1,74 @@
+table "flyway_desktop"."qrtz_simprop_triggers" {
+  columns = (
+    column "SCHED_NAME" {
+      type = varchar(120)
+      null = NOT NULL
+    }
+    column "TRIGGER_NAME" {
+      type = varchar(200)
+      null = NOT NULL
+    }
+    column "TRIGGER_GROUP" {
+      type = varchar(200)
+      null = NOT NULL
+    }
+    column "STR_PROP_1" {
+      type = varchar(512)
+    }
+    column "STR_PROP_2" {
+      type = varchar(512)
+    }
+    column "STR_PROP_3" {
+      type = varchar(512)
+    }
+    column "INT_PROP_1" {
+      type = int
+    }
+    column "INT_PROP_2" {
+      type = int
+    }
+    column "LONG_PROP_1" {
+      type = bigint
+    }
+    column "LONG_PROP_2" {
+      type = bigint
+    }
+    column "DEC_PROP_1" {
+      type = decimal(13,4)
+    }
+    column "DEC_PROP_2" {
+      type = decimal(13,4)
+    }
+    column "BOOL_PROP_1" {
+      type = tinyint(1)
+    }
+    column "BOOL_PROP_2" {
+      type = tinyint(1)
+    }
+  )
+  primaryKey = {
+    columns = [
+      SCHED_NAME
+      TRIGGER_NAME
+      TRIGGER_GROUP
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."qrtz_simprop_triggers"."FK_QRTZ_SIMPROP_TRIGGERS_QRTZ_TRIGGERS" {
+  columns = [
+    "SCHED_NAME"
+    "TRIGGER_NAME"
+    "TRIGGER_GROUP"
+  ]
+  referencedTable = "flyway_desktop"."qrtz_triggers"
+  referencedColumns = [
+    "SCHED_NAME"
+    "TRIGGER_NAME"
+    "TRIGGER_GROUP"
+  ]
+  onDelete = CASCADE
+}
+

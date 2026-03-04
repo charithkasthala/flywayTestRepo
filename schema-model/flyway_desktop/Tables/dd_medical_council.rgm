@@ -1,0 +1,41 @@
+table "flyway_desktop"."dd_medical_council" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "council_name" {
+      type = varchar(150)
+      null = NOT NULL
+    }
+    column "level" {
+      type = enum('STATE','CENTRAL')
+    }
+    column "governing_field" {
+      type = enum('ALLOPATHY','DENTAL','AYURVEDA','HOMEOPATHY','PHARMACY','UNANI','SIDDHA','YOGA_NATUROPATHY')
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

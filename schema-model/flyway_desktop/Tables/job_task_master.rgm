@@ -1,0 +1,66 @@
+table "flyway_desktop"."job_task_master" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "task_code" {
+      type = varchar(50)
+    }
+    column "task_class" {
+      type = varchar(100)
+    }
+    column "method" {
+      type = varchar(50)
+    }
+    column "title" {
+      type = varchar(50)
+    }
+    column "description" {
+      type = varchar(255)
+    }
+    column "task_group" {
+      type = varchar(50)
+    }
+    column "type" {
+      type = enum('PROCESS','NOTIFICATION')
+    }
+    column "tenant_id" {
+      type = varchar(50)
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."job_task_master"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

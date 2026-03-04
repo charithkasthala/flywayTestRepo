@@ -1,0 +1,62 @@
+table "flyway_desktop"."customer_drug_dosage" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "plan_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "slot" {
+      type = enum('MORNING','AFTERNOON','EVENING','NIGHT')
+      null = NOT NULL
+    }
+    column "slot_time" {
+      type = time
+      null = NOT NULL
+    }
+    column "meal_relation" {
+      type = enum('PRE_MEAL','POST_MEAL','WITH_MEAL','IRRELEVANT')
+      default = 'IRRELEVANT'
+    }
+    column "meal_type" {
+      type = enum('BREAKFAST','LUNCH','DINNER','SNACK','ANY')
+      default = 'LUNCH'
+    }
+    column "dosage" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "scheduled_date" {
+      type = date
+      null = NOT NULL
+    }
+    column "changed_on" {
+      type = datetime
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

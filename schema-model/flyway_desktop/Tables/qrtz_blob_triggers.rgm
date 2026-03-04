@@ -1,0 +1,20 @@
+table "flyway_desktop"."qrtz_blob_triggers" {
+  columns = (
+    column "SCHED_NAME" {
+      type = varchar(120)
+      null = NOT NULL
+    }
+    column "TRIGGER_NAME" {
+      type = varchar(200)
+      null = NOT NULL
+    }
+    column "TRIGGER_GROUP" {
+      type = varchar(200)
+      null = NOT NULL
+    }
+    column "BLOB_DATA" {
+      type = blob
+    }
+  )
+}
+

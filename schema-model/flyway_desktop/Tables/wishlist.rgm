@@ -1,0 +1,79 @@
+table "flyway_desktop"."wishlist" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "customer_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "name" {
+      type = varchar(100)
+    }
+    column "sharable" {
+      type = tinyint
+      null = NOT NULL
+      default = 1
+    }
+    column "is_default" {
+      type = tinyint
+      null = NOT NULL
+      default = 0
+    }
+    column "default_image_url" {
+      type = varchar(500)
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."wishlist"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."wishlist"."name_UNIQUE" {
+  columns = <
+    {
+      name = customer_id
+    }
+
+    {
+      name = name
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

@@ -1,0 +1,62 @@
+table "flyway_desktop"."medicine_form" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "form_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "form_name" {
+      type = varchar(100)
+      null = NOT NULL
+    }
+    column "description" {
+      type = varchar(255)
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+      default = 'ACTIVE'
+    }
+    column "unit" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."medicine_form"."form_code" {
+  columns = <
+    {
+      name = form_code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
