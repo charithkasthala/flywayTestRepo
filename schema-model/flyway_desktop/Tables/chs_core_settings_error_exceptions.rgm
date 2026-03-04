@@ -1,0 +1,61 @@
+table "flyway_desktop"."chs_core_settings_error_exceptions" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "error_code" {
+      type = varchar(50)
+    }
+    column "functionality" {
+      type = varchar(100)
+    }
+    column "language" {
+      type = varchar(20)
+    }
+    column "exception_message" {
+      type = varchar(500)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_settings_error_exceptions"."composite_unique_key" {
+  columns = <
+    {
+      name = error_code
+    }
+
+    {
+      name = functionality
+    }
+
+    {
+      name = language
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_core_settings_error_exceptions"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

@@ -1,0 +1,119 @@
+table "flyway_desktop"."chs_core_marketing_campaign_schedule" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "campaign_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "schedule_type" {
+      type = enum('ONE_TIME','RECURRING','SEASONAL','EVENT_BASED','TRIGGER_BASED')
+      null = NOT NULL
+    }
+    column "trigger_type" {
+      type = enum('DATE_TIME','USER_ACTION','BEHAVIORAL','EXTERNAL_EVENT','SYSTEM_EVENT','PRODUCT_EVENT','ORDER_EVENT','CART_EVENT','SEGMENT_EVENT','TIME_BASED')
+    }
+    column "trigger_condition" {
+      type = json
+    }
+    column "execution_time" {
+      type = datetime
+    }
+    column "timezone" {
+      type = varchar(50)
+      default = 'UTC'
+    }
+    column "status" {
+      type = enum('PENDING','SCHEDULED','EXECUTING','EXECUTED','FAILED','CANCELLED','SKIPPED')
+      default = 'PENDING'
+    }
+    column "retry_count" {
+      type = int
+      default = 0
+    }
+    column "max_retries" {
+      type = int
+      default = 3
+    }
+    column "next_execution" {
+      type = datetime
+    }
+    column "execution_log" {
+      type = text
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_campaign_schedule"."chs_core_marketing_campaign_schedule_ibfk_1" {
+  columns = [
+    "campaign_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_campaign"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = CASCADE
+}
+
+index "flyway_desktop"."chs_core_marketing_campaign_schedule"."campaign_id" {
+  columns = <
+    {
+      name = campaign_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_campaign_schedule"."idx_execution_time" {
+  columns = <
+    {
+      name = execution_time
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_campaign_schedule"."idx_next_execution" {
+  columns = <
+    {
+      name = next_execution
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_campaign_schedule"."idx_schedule_status" {
+  columns = <
+    {
+      name = status
+    }
+
+  >
+  type = BTREE
+}
+

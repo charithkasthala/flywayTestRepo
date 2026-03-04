@@ -1,0 +1,74 @@
+table "flyway_desktop"."chs_core_marketing_discount_master" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "discount_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "title" {
+      type = varchar(50)
+    }
+    column "description" {
+      type = text
+    }
+    column "status" {
+      type = enum('SCHEDULED','ACTIVE','DISABLED')
+    }
+    column "image_url" {
+      type = varchar(500)
+    }
+    column "file_id" {
+      type = varchar(50)
+    }
+    column "is_displayed" {
+      type = tinyint
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_marketing_discount_master"."discount_code_UNIQUE" {
+  columns = <
+    {
+      name = discount_code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_core_marketing_discount_master"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

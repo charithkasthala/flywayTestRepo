@@ -1,0 +1,75 @@
+table "flyway_desktop"."chs_core_hrms_leave_modification" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "leave_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "start_date" {
+      type = date
+    }
+    column "end_date" {
+      type = date
+    }
+    column "altered_on" {
+      type = datetime
+    }
+    column "requested_by" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_hrms_leave_modification"."fk_leave_mod_req" {
+  columns = [
+    "leave_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_hrms_leave_request"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_core_hrms_leave_modification"."fk_leave_mod_req" {
+  columns = <
+    {
+      name = leave_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_hrms_leave_modification"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

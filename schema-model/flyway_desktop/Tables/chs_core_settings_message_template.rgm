@@ -1,0 +1,86 @@
+table "flyway_desktop"."chs_core_settings_message_template" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "message_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "channel_code" {
+      type = varchar(30)
+      null = NOT NULL
+    }
+    column "lang_code" {
+      type = varchar(5)
+      null = NOT NULL
+    }
+    column "subject" {
+      type = varchar(255)
+    }
+    column "body" {
+      type = text
+      null = NOT NULL
+    }
+    column "template_engine" {
+      type = enum('PLAIN','FREEMARKER','VELOCITY','HANDLEBARS')
+    }
+    column "contains_sensitive_data" {
+      type = tinyint
+      default = 0
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+      default = 'ACTIVE'
+    }
+    column "version" {
+      type = int
+      default = 1
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(100)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(100)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_settings_message_template"."uk_template" {
+  columns = <
+    {
+      name = message_code
+    }
+
+    {
+      name = channel_code
+    }
+
+    {
+      name = lang_code
+    }
+
+    {
+      name = version
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

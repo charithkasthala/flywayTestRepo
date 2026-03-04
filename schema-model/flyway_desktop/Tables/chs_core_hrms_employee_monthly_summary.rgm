@@ -1,0 +1,90 @@
+table "flyway_desktop"."chs_core_hrms_employee_monthly_summary" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "employee_code" {
+      type = varchar(20)
+    }
+    column "employee_name" {
+      type = varchar(50)
+    }
+    column "summary_month" {
+      type = int
+    }
+    column "summary_year" {
+      type = int
+    }
+    column "paid_leaves" {
+      type = int
+    }
+    column "unpaid_leaves" {
+      type = int
+    }
+    column "total_leaves" {
+      type = int
+    }
+    column "working_hours" {
+      type = bigint
+    }
+    column "ot_hours" {
+      type = bigint
+    }
+    column "deficit_hours" {
+      type = bigint
+    }
+    column "monthly_lates" {
+      type = int
+    }
+    column "previous_lates" {
+      type = int
+    }
+    column "total_lates" {
+      type = int
+    }
+    column "late_deduction" {
+      type = int
+    }
+    column "deficit_deduction" {
+      type = int
+    }
+    column "month_days" {
+      type = int
+    }
+    column "payable_days" {
+      type = int
+    }
+    column "working_days" {
+      type = int
+    }
+    column "paid_days" {
+      type = int
+    }
+    column "holidays" {
+      type = int
+    }
+    column "weekoffs" {
+      type = int
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_hrms_employee_monthly_summary"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

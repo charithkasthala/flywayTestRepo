@@ -1,0 +1,110 @@
+table "flyway_desktop"."chs_ecom_sales_cart_items" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "cart_id" {
+      type = bigint
+    }
+    column "customer_id" {
+      type = varchar(50)
+    }
+    column "product_id" {
+      type = bigint
+    }
+    column "item_id" {
+      type = bigint
+    }
+    column "volume_value" {
+      type = decimal(10,2)
+    }
+    column "unit_mrp" {
+      type = decimal(10,2)
+    }
+    column "qty" {
+      type = int
+    }
+    column "unit_price" {
+      type = decimal(10,2)
+      null = NOT NULL
+      default = 0.00
+    }
+    column "total_mrp" {
+      type = decimal(10,2)
+      null = NOT NULL
+      default = 0.00
+    }
+    column "disc_amount" {
+      type = decimal(10,2)
+      null = NOT NULL
+      default = 0.00
+    }
+    column "total_price" {
+      type = decimal(10,2)
+      null = NOT NULL
+      default = 0.00
+    }
+    column "image_url" {
+      type = varchar(500)
+    }
+    column "file_id" {
+      type = varchar(50)
+    }
+    column "unit_of_measure" {
+      type = enum('KILOGRAM','GRAM','LITER','MILLILITER','PIECE','BOX','PACK')
+    }
+    column "recompute" {
+      type = tinyint
+    }
+    column "exchange_allowed" {
+      type = tinyint
+      null = NOT NULL
+      default = 0
+    }
+    column "subscription_interval_type" {
+      type = varchar(50)
+    }
+    column "subscription_interval_value" {
+      type = int
+      default = 0
+    }
+    column "subscription_enabled" {
+      type = tinyint(1)
+      default = 0
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_ecom_sales_cart_items"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

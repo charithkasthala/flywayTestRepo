@@ -1,0 +1,77 @@
+table "flyway_desktop"."chs_ecom_pms_item_dimensions" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "batch_code" {
+      type = varchar(50)
+    }
+    column "item_id" {
+      type = bigint unsigned
+    }
+    column "length" {
+      type = decimal(10,2)
+    }
+    column "width" {
+      type = decimal(10,2)
+    }
+    column "height" {
+      type = decimal(10,2)
+    }
+    column "weight" {
+      type = decimal(10,2)
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_ecom_pms_item_dimensions"."fk_item_dimensions_item" {
+  columns = [
+    "item_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_ecom_pms_product_item"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_ecom_pms_item_dimensions"."fk_item_dimensions_item" {
+  columns = <
+    {
+      name = item_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_ecom_pms_item_dimensions"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

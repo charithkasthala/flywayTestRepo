@@ -1,0 +1,77 @@
+table "flyway_desktop"."chs_ecom_wms_stock_adjustment" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "warehouse_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "storage_code" {
+      type = varchar(100)
+    }
+    column "sku_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "unit" {
+      type = enum('KILOGRAMS','GRAMS','LITERS','MILLILITERS','METERS','CENTIMETERS','INCHES','PIECE')
+    }
+    column "movement_date" {
+      type = datetime
+    }
+    column "generated_on" {
+      type = datetime
+    }
+    column "quantity" {
+      type = int
+      null = NOT NULL
+    }
+    column "reason_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "remarks" {
+      type = text
+    }
+    column "is_proof_attached" {
+      type = tinyint
+    }
+    column "movement" {
+      type = enum('IN','OUT')
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_ecom_wms_stock_adjustment"."id" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

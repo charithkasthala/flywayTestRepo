@@ -1,0 +1,77 @@
+table "flyway_desktop"."chs_ecom_dms_shipment_order_items" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "shipment_order_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "item_id" {
+      type = bigint
+    }
+    column "sku" {
+      type = varchar(100)
+    }
+    column "name" {
+      type = varchar(500)
+    }
+    column "units" {
+      type = int
+      null = NOT NULL
+    }
+    column "unit_price" {
+      type = decimal(15,2)
+      null = NOT NULL
+    }
+    column "hsn" {
+      type = int
+    }
+    column "tax_percent" {
+      type = int
+    }
+    column "created_on" {
+      type = datetime
+      null = NOT NULL
+    }
+    column "created_by" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_ecom_dms_shipment_order_items"."fk_dms_shipment_order_items_order" {
+  columns = [
+    "shipment_order_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_ecom_dms_shipment_orders"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_ecom_dms_shipment_order_items"."idx_shipment_order_id" {
+  columns = <
+    {
+      name = shipment_order_id
+    }
+
+  >
+  type = BTREE
+}
+

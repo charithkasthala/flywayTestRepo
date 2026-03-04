@@ -1,0 +1,27 @@
+table "flyway_desktop"."batch_job_instance" {
+  columns = (
+    column "JOB_INSTANCE_ID" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "VERSION" {
+      type = bigint
+    }
+    column "JOB_NAME" {
+      type = varchar(100)
+      null = NOT NULL
+    }
+    column "JOB_KEY" {
+      type = varchar(32)
+      null = NOT NULL
+    }
+  )
+  primaryKey = {
+    columns = [
+      JOB_INSTANCE_ID
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

@@ -1,0 +1,74 @@
+table "flyway_desktop"."chs_core_hrms_employee_txns" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "emp_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "emp_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "field_name" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "old_value" {
+      type = text
+    }
+    column "new_value" {
+      type = text
+    }
+    column "changed_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "changed_by" {
+      type = varchar(50)
+    }
+    column "change_reason" {
+      type = varchar(200)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_hrms_employee_txns"."fk_emp_txns_master" {
+  columns = [
+    "emp_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_hrms_employee_master"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_core_hrms_employee_txns"."idx_emp_txns_code" {
+  columns = <
+    {
+      name = emp_code
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_hrms_employee_txns"."idx_emp_txns_emp" {
+  columns = <
+    {
+      name = emp_id
+    }
+
+  >
+  type = BTREE
+}
+

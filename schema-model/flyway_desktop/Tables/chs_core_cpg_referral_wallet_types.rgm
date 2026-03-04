@@ -1,0 +1,64 @@
+table "flyway_desktop"."chs_core_cpg_referral_wallet_types" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "txn_type" {
+      type = varchar(45)
+    }
+    column "description" {
+      type = varchar(255)
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+      null = NOT NULL
+      default = 'ACTIVE'
+    }
+    column "referrer_bonus_amount" {
+      type = decimal(12,2)
+    }
+    column "referee_bonus_amount" {
+      type = decimal(12,2)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_cpg_referral_wallet_types"."code" {
+  columns = <
+    {
+      name = code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

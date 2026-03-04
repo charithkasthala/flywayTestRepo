@@ -1,0 +1,62 @@
+table "flyway_desktop"."chs_core_settings_language_master" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "lang_code" {
+      type = varchar(5)
+      null = NOT NULL
+    }
+    column "lang_name" {
+      type = varchar(50)
+    }
+    column "native_name" {
+      type = varchar(50)
+    }
+    column "is_default" {
+      type = tinyint
+      default = 0
+    }
+    column "is_rtl" {
+      type = tinyint
+      default = 0
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(100)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(100)
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+      default = 'ACTIVE'
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_settings_language_master"."uk_lang_code" {
+  columns = <
+    {
+      name = lang_code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

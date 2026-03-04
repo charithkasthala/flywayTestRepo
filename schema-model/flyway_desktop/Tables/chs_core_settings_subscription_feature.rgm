@@ -1,0 +1,48 @@
+table "flyway_desktop"."chs_core_settings_subscription_feature" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "name" {
+      type = varchar(255)
+      null = NOT NULL
+    }
+    column "description" {
+      type = text
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_settings_subscription_feature"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

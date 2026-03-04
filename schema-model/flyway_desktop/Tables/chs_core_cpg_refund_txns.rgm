@@ -1,0 +1,66 @@
+table "flyway_desktop"."chs_core_cpg_refund_txns" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "refund_id" {
+      type = varchar(255)
+    }
+    column "payment_id" {
+      type = varchar(255)
+    }
+    column "status" {
+      type = varchar(50)
+    }
+    column "refunded_on" {
+      type = datetime
+    }
+    column "amount_refunded" {
+      type = decimal(10,2)
+    }
+    column "currency" {
+      type = varchar(5)
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_cpg_refund_txns"."fk_cpg_refund_payment" {
+  columns = [
+    "payment_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_cpg_payment_txns"
+  referencedColumns = [
+    "payment_id"
+  ]
+}
+
+index "flyway_desktop"."chs_core_cpg_refund_txns"."fk_cpg_refund_payment" {
+  columns = <
+    {
+      name = payment_id
+    }
+
+  >
+  type = BTREE
+}
+

@@ -1,0 +1,72 @@
+table "flyway_desktop"."chs_core_crm_ad_poster_placeholders" {
+  columns = (
+    column "id" {
+      type = int unsigned
+      null = NOT NULL
+    }
+    column "poster_id" {
+      type = int unsigned
+      null = NOT NULL
+    }
+    column "shape" {
+      type = enum('CIRCLE','SQUARE','STAR','PENTAGON','HEXAGON','RECTANGLE','OVAL')
+    }
+    column "lay_type" {
+      type = enum('TOP','BOTTOM')
+    }
+    column "width" {
+      type = int
+    }
+    column "height" {
+      type = int
+    }
+    column "position_x" {
+      type = int
+    }
+    column "position_y" {
+      type = int
+    }
+    column "created_by" {
+      type = varchar(100)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(100)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_crm_ad_poster_placeholders"."fk_placeholder_poster" {
+  columns = [
+    "poster_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_crm_ad_poster"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_core_crm_ad_poster_placeholders"."fk_placeholder_poster" {
+  columns = <
+    {
+      name = poster_id
+    }
+
+  >
+  type = BTREE
+}
+

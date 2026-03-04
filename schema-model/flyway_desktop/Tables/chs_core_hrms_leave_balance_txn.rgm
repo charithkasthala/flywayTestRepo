@@ -1,0 +1,62 @@
+table "flyway_desktop"."chs_core_hrms_leave_balance_txn" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "employee_code" {
+      type = varchar(50)
+    }
+    column "leave_type" {
+      type = varchar(20)
+    }
+    column "balance_from" {
+      type = int
+    }
+    column "balance_to" {
+      type = int
+    }
+    column "generated_on" {
+      type = datetime
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_hrms_leave_balance_txn"."fk_leave_balance_txn_emp" {
+  columns = [
+    "employee_code"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_hrms_employee_master"
+  referencedColumns = [
+    "emp_code"
+  ]
+}
+
+index "flyway_desktop"."chs_core_hrms_leave_balance_txn"."fk_leave_balance_txn_emp" {
+  columns = <
+    {
+      name = employee_code
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_hrms_leave_balance_txn"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

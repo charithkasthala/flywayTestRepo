@@ -1,0 +1,70 @@
+table "flyway_desktop"."chs_ecom_pms_product_ingredients" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "product_id" {
+      type = bigint unsigned
+    }
+    column "ingredient_id" {
+      type = bigint unsigned
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_ecom_pms_product_ingredients"."fk_prod_ingredients_product" {
+  columns = [
+    "product_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_ecom_pms_product_master"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_ecom_pms_product_ingredients"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_ecom_pms_product_ingredients"."prod_ing_unq" {
+  columns = <
+    {
+      name = product_id
+    }
+
+    {
+      name = ingredient_id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

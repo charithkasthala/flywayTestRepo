@@ -1,0 +1,28 @@
+table "flyway_desktop"."chs_ecom_customer_watch_item" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "customer_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "product_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "notification_type" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

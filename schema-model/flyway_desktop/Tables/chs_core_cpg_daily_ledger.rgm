@@ -1,0 +1,89 @@
+table "flyway_desktop"."chs_core_cpg_daily_ledger" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "ledger_date" {
+      type = date
+      null = NOT NULL
+    }
+    column "entity_type" {
+      type = enum('PAYMENT','REFUND','WALLET','REWARD','ADJUSTMENT')
+      null = NOT NULL
+    }
+    column "entity_id" {
+      type = varchar(50)
+      null = NOT NULL
+      comment = payment_id / refund_id / wallet_txn_id
+    }
+    column "credit_amount" {
+      type = decimal(14,2)
+      default = 0.00
+    }
+    column "debit_amount" {
+      type = decimal(14,2)
+      default = 0.00
+    }
+    column "currency" {
+      type = varchar(5)
+      default = 'INR'
+    }
+    column "gateway_code" {
+      type = varchar(50)
+    }
+    column "user_id" {
+      type = varchar(50)
+    }
+    column "narration" {
+      type = varchar(255)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_cpg_daily_ledger"."idx_ledger_date" {
+  columns = <
+    {
+      name = ledger_date
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_cpg_daily_ledger"."idx_ledger_user" {
+  columns = <
+    {
+      name = user_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_cpg_daily_ledger"."uk_ledger_entry" {
+  columns = <
+    {
+      name = ledger_date
+    }
+
+    {
+      name = entity_type
+    }
+
+    {
+      name = entity_id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

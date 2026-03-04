@@ -1,0 +1,86 @@
+table "flyway_desktop"."chs_core_marketing_campaign_channel" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "campaign_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "channel" {
+      type = enum('EMAIL','SMS','WHATSAPP','PUSH','SOCIAL_MEDIA','DISPLAY_ADS','VIDEO_ADS','SEARCH_ADS','AFFILIATE','REFERRAL','LOYALTY','DIRECT_MAIL','IN_STORE','TELEMARKETING','MOBILE_APP','WEB','PARTNER','OTHER')
+      null = NOT NULL
+    }
+    column "channel_specific_config" {
+      type = json
+    }
+    column "budget_allocation" {
+      type = decimal(10,2)
+    }
+    column "status" {
+      type = enum('ACTIVE','PAUSED','COMPLETED')
+      default = 'ACTIVE'
+    }
+    column "performance_data" {
+      type = json
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_campaign_channel"."chs_core_marketing_campaign_channel_ibfk_1" {
+  columns = [
+    "campaign_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_campaign"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = CASCADE
+}
+
+index "flyway_desktop"."chs_core_marketing_campaign_channel"."idx_campaign_channel_status" {
+  columns = <
+    {
+      name = status
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_campaign_channel"."uk_campaign_channel" {
+  columns = <
+    {
+      name = campaign_id
+    }
+
+    {
+      name = channel
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

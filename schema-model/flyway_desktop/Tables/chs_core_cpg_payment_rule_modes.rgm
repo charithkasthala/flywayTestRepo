@@ -1,0 +1,47 @@
+table "flyway_desktop"."chs_core_cpg_payment_rule_modes" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "payment_rule_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "payment_mode" {
+      type = varchar(50)
+      null = NOT NULL
+      comment = CARD, UPI, NETBANKING, WALLET
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_cpg_payment_rule_modes"."uk_payment_rule_mode" {
+  columns = <
+    {
+      name = payment_rule_code
+    }
+
+    {
+      name = payment_mode
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

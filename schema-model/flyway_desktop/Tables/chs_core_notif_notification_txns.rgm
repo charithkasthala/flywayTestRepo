@@ -1,0 +1,78 @@
+table "flyway_desktop"."chs_core_notif_notification_txns" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "sender" {
+      type = varchar(50)
+    }
+    column "recipient_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "status" {
+      type = enum('PENDING','SENT','FAILED','DELIVERED')
+      default = 'PENDING'
+    }
+    column "message" {
+      type = text
+      null = NOT NULL
+    }
+    column "subject" {
+      type = varchar(1000)
+    }
+    column "send_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "delivered_on" {
+      type = datetime
+    }
+    column "template_id" {
+      type = varchar(50)
+    }
+    column "event_code" {
+      type = varchar(50)
+    }
+    column "channel" {
+      type = varchar(50)
+    }
+    column "tenant_id" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_notif_notification_txns"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

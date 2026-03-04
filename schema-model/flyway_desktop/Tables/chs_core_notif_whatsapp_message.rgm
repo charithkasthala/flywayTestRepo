@@ -1,0 +1,39 @@
+table "flyway_desktop"."chs_core_notif_whatsapp_message" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "twilio_sid" {
+      type = varchar(225)
+    }
+    column "recipient" {
+      type = varchar(255)
+      null = NOT NULL
+    }
+    column "message" {
+      type = text
+    }
+    column "media_url" {
+      type = varchar(512)
+    }
+    column "link" {
+      type = varchar(512)
+    }
+    column "sent_at" {
+      type = datetime
+      null = NOT NULL
+    }
+    column "status" {
+      type = varchar(225)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

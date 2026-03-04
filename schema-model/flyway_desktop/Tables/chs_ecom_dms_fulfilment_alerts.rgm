@@ -1,0 +1,50 @@
+table "flyway_desktop"."chs_ecom_dms_fulfilment_alerts" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "shipment_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "alert_type" {
+      type = enum('DELAY','FAILED','RTO','COD_DELAY')
+    }
+    column "message" {
+      type = varchar(255)
+    }
+    column "triggered_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_ecom_dms_fulfilment_alerts"."fk_dms_fulfilment_alert_shipment" {
+  columns = [
+    "shipment_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_ecom_dms_shipment"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_ecom_dms_fulfilment_alerts"."fk_dms_fulfilment_alert_shipment" {
+  columns = <
+    {
+      name = shipment_id
+    }
+
+  >
+  type = BTREE
+}
+

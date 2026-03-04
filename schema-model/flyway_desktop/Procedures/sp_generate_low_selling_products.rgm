@@ -1,0 +1,45 @@
+procedure "flyway_desktop"."sp_generate_low_selling_products" {
+  parameters = <
+    {
+      name = p_report_date
+      datatype = date
+      mode = IN
+    }
+
+  >
+  text = """-
+BEGIN
+     DELETE FROM chs_ecom_sales_low_selling_products WHERE report_date = p_report_date;
+
+    INSERT INTO chs_ecom_sales_low_selling_products (report_date, generated_on, item_title, item_slug, img_url, item_sku, value_type, value)
+    SELECT p_report_date, NOW(), pi.title, pi.slug, ig.file_url, pi.sku,
+           'REVENUE', SUM(oi.qty * oi.unit_price) AS revenue
+    FROM chs_ecom_sales_order_master om
+    left JOIN chs_ecom_sales_order_items oi ON om.id = oi.order_id
+    right JOIN chs_ecom_pms_product_item pi ON pi.id = oi.item_id
+    left join chs_ecom_pms_item_gallery ig on pi.id=ig.item_id
+    WHERE DATE(om.placed_on) = p_report_date
+      -- AND om.order_status IN ('DELIVERED','COMPLETED') 
+      and ig.is_default = 1 -- and  SUM(oi.qty * oi.unit_price) is not null
+    GROUP BY pi.id 
+    ORDER BY SUM(oi.qty * oi.unit_price) ASC
+    LIMIT 10;
+
+    -- Bottom 10 by quantity (but sold > 0)
+	INSERT INTO chs_ecom_sales_low_selling_products (report_date, generated_on, item_title, item_slug, img_url, item_sku, value_type, value)
+    SELECT p_report_date, NOW(), pi.title, pi.slug, ig.file_url, pi.sku,
+           'QUANTITY', SUM(oi.qty) AS qty_sold
+    FROM chs_ecom_sales_order_master om
+    JOIN chs_ecom_sales_order_items oi ON om.id = oi.order_id
+    RIGHT JOIN chs_ecom_pms_product_item pi ON pi.id = oi.item_id
+    LEFT JOIN chs_ecom_pms_item_gallery ig ON pi.id = ig.item_id AND ig.is_default = 1
+    WHERE DATE(om.placed_on) = p_report_date
+   --   AND om.order_status IN ('DELIVERED','COMPLETED')
+    GROUP BY pi.id
+    HAVING qty_sold > 0
+    ORDER BY qty_sold ASC
+    LIMIT 10;
+END
+"""
+}
+

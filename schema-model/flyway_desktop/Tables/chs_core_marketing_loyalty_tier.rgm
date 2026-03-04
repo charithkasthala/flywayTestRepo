@@ -1,0 +1,121 @@
+table "flyway_desktop"."chs_core_marketing_loyalty_tier" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "program_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "tier_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "tier_name" {
+      type = varchar(100)
+      null = NOT NULL
+    }
+    column "tier_level" {
+      type = tinyint
+      null = NOT NULL
+    }
+    column "min_points_required" {
+      type = int
+      default = 0
+    }
+    column "min_purchase_amount" {
+      type = decimal(15,2)
+      default = 0.00
+    }
+    column "min_orders_count" {
+      type = int
+      default = 0
+    }
+    column "benefits" {
+      type = json
+    }
+    column "badge_url" {
+      type = varchar(500)
+    }
+    column "color_code" {
+      type = varchar(7)
+    }
+    column "is_default" {
+      type = tinyint(1)
+      default = 0
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_loyalty_tier"."chs_core_marketing_loyalty_tier_ibfk_1" {
+  columns = [
+    "program_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_loyalty_program"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = CASCADE
+}
+
+index "flyway_desktop"."chs_core_marketing_loyalty_tier"."idx_tier_level" {
+  columns = <
+    {
+      name = tier_level
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_loyalty_tier"."uk_program_level" {
+  columns = <
+    {
+      name = program_id
+    }
+
+    {
+      name = tier_level
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_core_marketing_loyalty_tier"."uk_program_tier" {
+  columns = <
+    {
+      name = program_id
+    }
+
+    {
+      name = tier_code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

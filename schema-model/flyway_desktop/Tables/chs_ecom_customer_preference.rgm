@@ -1,0 +1,56 @@
+table "flyway_desktop"."chs_ecom_customer_preference" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "customer_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "preference_key" {
+      type = varchar(100)
+      null = NOT NULL
+    }
+    column "preference_value" {
+      type = varchar(255)
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_ecom_customer_preference"."uk_customer_pref" {
+  columns = <
+    {
+      name = customer_id
+    }
+
+    {
+      name = preference_key
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

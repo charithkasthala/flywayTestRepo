@@ -1,0 +1,56 @@
+table "flyway_desktop"."chs_core_hrms_grade_master" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "code" {
+      type = varchar(20)
+      null = NOT NULL
+    }
+    column "title" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "grade" {
+      type = int
+      null = NOT NULL
+    }
+    column "department_code" {
+      type = varchar(20)
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLE')
+      default = 'ACTIVE'
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_hrms_grade_master"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_core_hrms_grade_master"."idx_grade_master_code" {
+  columns = <
+    {
+      name = code
+    }
+
+  >
+  type = BTREE
+}
+

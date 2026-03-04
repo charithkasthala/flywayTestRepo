@@ -1,0 +1,50 @@
+table "flyway_desktop"."chs_core_cpg_reward_rule_applicability" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "reward_rule_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "apply_on" {
+      type = enum('PAYMENT_MODE','PRODUCT','CATEGORY')
+      null = NOT NULL
+    }
+    column "apply_value" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_cpg_reward_rule_applicability"."uk_reward_rule_apply" {
+  columns = <
+    {
+      name = reward_rule_code
+    }
+
+    {
+      name = apply_on
+    }
+
+    {
+      name = apply_value
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

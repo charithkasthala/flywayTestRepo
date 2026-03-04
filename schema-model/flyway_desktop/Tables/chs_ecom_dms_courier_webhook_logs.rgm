@@ -1,0 +1,49 @@
+table "flyway_desktop"."chs_ecom_dms_courier_webhook_logs" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "courier_partner_id" {
+      type = bigint
+    }
+    column "event_type" {
+      type = varchar(100)
+    }
+    column "payload" {
+      type = json
+    }
+    column "received_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_ecom_dms_courier_webhook_logs"."fk_dms_webhook_partner" {
+  columns = [
+    "courier_partner_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_ecom_dms_courier_partner"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_ecom_dms_courier_webhook_logs"."fk_dms_webhook_partner" {
+  columns = <
+    {
+      name = courier_partner_id
+    }
+
+  >
+  type = BTREE
+}
+

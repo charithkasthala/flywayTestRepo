@@ -1,0 +1,75 @@
+table "flyway_desktop"."chs_core_notif_otp_records" {
+  columns = (
+    column "txn_id" {
+      type = varchar(100)
+      null = NOT NULL
+    }
+    column "username" {
+      type = varchar(50)
+    }
+    column "user_id" {
+      type = varchar(50)
+    }
+    column "mobile_number" {
+      type = varchar(15)
+    }
+    column "email_id" {
+      type = varchar(250)
+    }
+    column "otp" {
+      type = varchar(8)
+      null = NOT NULL
+    }
+    column "purpose" {
+      type = enum('RESET','DOWNLOAD','AUTHENTICATE','AUTHORISE','SETTLE','ADD','DELETE','ENABLE','SIGNUP','MODIFY_REQUEST','DEREGISTRATION','ENQUIRY')
+      null = NOT NULL
+    }
+    column "generated_on" {
+      type = datetime
+      null = NOT NULL
+    }
+    column "expire_on" {
+      type = datetime
+      null = NOT NULL
+    }
+    column "status" {
+      type = enum('OPEN','VALIDATED','EXPIRED')
+      null = NOT NULL
+      default = 'OPEN'
+    }
+    column "tenant_id" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      txn_id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_notif_otp_records"."txn_id_UNIQUE" {
+  columns = <
+    {
+      name = txn_id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

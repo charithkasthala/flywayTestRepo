@@ -1,0 +1,45 @@
+table "flyway_desktop"."chs_core_notif_notification_delivery_logs" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "notification_txn_id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "channel" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "vendor_code" {
+      type = varchar(50)
+    }
+    column "attempt_no" {
+      type = int
+      default = 1
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

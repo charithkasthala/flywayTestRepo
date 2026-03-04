@@ -1,0 +1,30 @@
+procedure "flyway_desktop"."sp_get_indents" {
+  parameters = [
+  ]
+  text = """-
+BEGIN
+ SELECT JSON_ARRAYAGG(indent_json) AS all_indents_json
+    FROM (
+    SELECT JSON_OBJECT(
+        'id', i.id,
+        'sourceWarehouseId',i.source_warehouse_id,
+        'sourceData',JSON_OBJECT(
+                    'id', wm1.id, 'name', wm1.name, 'code', wm1.code, 
+                    'status', wm1.status, 'latitude', wm1.latitude, 'longitude', wm1.longitude
+                ),
+        'destinationWarehouseId', i.destination_warehouse_id,
+        'destinationData',JSON_OBJECT(
+                    'id', wm2.id, 'name', wm2.name, 'code', wm2.code,
+                    'status', wm2.status, 'latitude', wm2.latitude, 'longitude', wm2.longitude
+                ),
+		'movementDate', DATE_FORMAT(i.movement_date, '%Y-%m-%dT%H:%i:%s'),
+        'notes', i.notes
+    ) AS indent_json
+    FROM chs_ecom_wms_indent i
+    LEFT JOIN chs_ecom_wms_warehouse wm1 on i.source_warehouse_id = wm1.id
+    LEFT JOIN chs_ecom_wms_warehouse wm2 on i.destination_warehouse_id = wm2.id
+    ) t;
+END
+"""
+}
+

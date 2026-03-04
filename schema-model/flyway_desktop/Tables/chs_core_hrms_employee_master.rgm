@@ -1,0 +1,214 @@
+table "flyway_desktop"."chs_core_hrms_employee_master" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "emp_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "username" {
+      type = varchar(50)
+    }
+    column "first_name" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "middle_name" {
+      type = varchar(50)
+    }
+    column "last_name" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "dob_official" {
+      type = date
+    }
+    column "dob_original" {
+      type = date
+    }
+    column "gender" {
+      type = enum('MALE','FEMALE','OTHERS')
+      null = NOT NULL
+    }
+    column "mother_name" {
+      type = varchar(50)
+    }
+    column "father_name" {
+      type = varchar(50)
+    }
+    column "mobile_primary" {
+      type = varchar(15)
+      null = NOT NULL
+    }
+    column "email_personal" {
+      type = varchar(100)
+    }
+    column "mobile_alternative" {
+      type = varchar(15)
+    }
+    column "address_id" {
+      type = bigint
+    }
+    column "emergency_contact_name" {
+      type = varchar(50)
+    }
+    column "emergency_contact_relationship" {
+      type = varchar(45)
+    }
+    column "emergency_contact_number" {
+      type = varchar(15)
+    }
+    column "pan" {
+      type = varchar(10)
+    }
+    column "aadhar" {
+      type = varchar(12)
+    }
+    column "highest_degree" {
+      type = varchar(50)
+    }
+    column "blood_group" {
+      type = varchar(5)
+    }
+    column "marital_status" {
+      type = tinyint
+    }
+    column "spouse_name" {
+      type = varchar(50)
+    }
+    column "children_if_any" {
+      type = tinyint
+    }
+    column "department_code" {
+      type = varchar(20)
+    }
+    column "grade_code" {
+      type = varchar(20)
+    }
+    column "branch_code" {
+      type = varchar(20)
+    }
+    column "doj" {
+      type = date
+    }
+    column "email_work" {
+      type = varchar(100)
+    }
+    column "bank_id" {
+      type = bigint
+    }
+    column "working_model" {
+      type = enum('ONSITE','REMOTE','HYBRID')
+    }
+    column "employment_type" {
+      type = enum('CONTRACT','TEMPORARY','INTERN','FREELANCE','PERMANENT')
+    }
+    column "employment_status" {
+      type = enum('PROBATION','BENCH','ON_PROJECT','NOTICE_PERIOD','TERMINATED','RELIEVED')
+    }
+    column "rehired" {
+      type = tinyint
+    }
+    column "relieving_date" {
+      type = date
+    }
+    column "reporting_manager" {
+      type = varchar(50)
+    }
+    column "photo_file_ref" {
+      type = bigint
+      default = 218
+    }
+    column "photo_url" {
+      type = varchar(500)
+    }
+    column "linkedin_profile" {
+      type = varchar(100)
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+      default = 'ACTIVE'
+    }
+    column "region_code" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_hrms_employee_master"."idx_employee_master_emp_code" {
+  columns = <
+    {
+      name = emp_code
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_hrms_employee_master"."uk_email_personal" {
+  columns = <
+    {
+      name = email_personal
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_core_hrms_employee_master"."uk_email_work" {
+  columns = <
+    {
+      name = email_work
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_core_hrms_employee_master"."uk_emp_code" {
+  columns = <
+    {
+      name = emp_code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_core_hrms_employee_master"."uk_mobile_primary" {
+  columns = <
+    {
+      name = mobile_primary
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

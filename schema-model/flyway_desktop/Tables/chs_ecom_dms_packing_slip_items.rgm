@@ -1,0 +1,60 @@
+table "flyway_desktop"."chs_ecom_dms_packing_slip_items" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "packing_slip_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "sku" {
+      type = varchar(50)
+    }
+    column "packed_qty" {
+      type = int
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_ecom_dms_packing_slip_items"."fk_dms_packing_slip_items_slip" {
+  columns = [
+    "packing_slip_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_ecom_dms_packing_slip"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_ecom_dms_packing_slip_items"."fk_dms_packing_slip_items_slip" {
+  columns = <
+    {
+      name = packing_slip_id
+    }
+
+  >
+  type = BTREE
+}
+

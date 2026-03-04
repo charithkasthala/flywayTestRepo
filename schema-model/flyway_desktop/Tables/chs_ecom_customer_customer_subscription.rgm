@@ -1,0 +1,56 @@
+table "flyway_desktop"."chs_ecom_customer_customer_subscription" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "customer_id" {
+      type = varchar(50)
+    }
+    column "plan_code" {
+      type = varchar(50)
+    }
+    column "tier_id" {
+      type = bigint unsigned
+    }
+    column "subscribed_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "last_renewed_on" {
+      type = datetime
+    }
+    column "status" {
+      type = enum('ACTIVE','EXPIRED','CANCELLED')
+      default = 'ACTIVE'
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_ecom_customer_customer_subscription"."fk_sub_tier" {
+  columns = [
+    "tier_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_settings_subscription_tier"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_ecom_customer_customer_subscription"."fk_sub_tier" {
+  columns = <
+    {
+      name = tier_id
+    }
+
+  >
+  type = BTREE
+}
+

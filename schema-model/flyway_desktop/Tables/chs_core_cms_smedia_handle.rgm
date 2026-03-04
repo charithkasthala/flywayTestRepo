@@ -1,0 +1,48 @@
+table "flyway_desktop"."chs_core_cms_smedia_handle" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "title" {
+      type = varchar(100)
+    }
+    column "link" {
+      type = varchar(500)
+    }
+    column "platform" {
+      type = enum('FACEBOOK','INSTAGRAM','X','LINKEDIN','YOUTUBE')
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_cms_smedia_handle"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

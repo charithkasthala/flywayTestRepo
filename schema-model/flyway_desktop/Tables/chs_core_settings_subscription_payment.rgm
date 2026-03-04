@@ -1,0 +1,45 @@
+table "flyway_desktop"."chs_core_settings_subscription_payment" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "subscription_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "amount" {
+      type = decimal(10,2)
+    }
+    column "paid_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "payment_status" {
+      type = enum('PENDING','COMPLETED','FAILED')
+      default = 'PENDING'
+    }
+    column "txn_id" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_settings_subscription_payment"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

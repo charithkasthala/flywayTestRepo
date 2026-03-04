@@ -1,0 +1,63 @@
+table "flyway_desktop"."chs_core_cpg_summary_lifetime_payment" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "user_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "currency" {
+      type = varchar(5)
+      default = 'INR'
+    }
+    column "total_paid" {
+      type = decimal(14,2)
+      default = 0.00
+    }
+    column "total_refunded" {
+      type = decimal(14,2)
+      default = 0.00
+    }
+    column "total_rewards" {
+      type = decimal(14,2)
+      default = 0.00
+    }
+    column "successful_txns" {
+      type = int
+      default = 0
+    }
+    column "failed_txns" {
+      type = int
+      default = 0
+    }
+    column "first_txn_on" {
+      type = datetime
+    }
+    column "last_txn_on" {
+      type = datetime
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

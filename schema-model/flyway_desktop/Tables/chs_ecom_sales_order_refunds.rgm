@@ -1,0 +1,95 @@
+table "flyway_desktop"."chs_ecom_sales_order_refunds" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "order_id" {
+      type = bigint unsigned
+    }
+    column "payment_txn_id" {
+      type = varchar(100)
+    }
+    column "amount" {
+      type = decimal(10,2)
+      null = NOT NULL
+    }
+    column "payment_status" {
+      type = enum('PENDING','COMPLETED','FAILED','REFUND_IN_PROGRESS','REFUNDED')
+      default = 'PENDING'
+    }
+    column "purpose_type" {
+      type = enum('CANCLELLATION','RETURN')
+    }
+    column "wallet_txn_id" {
+      type = varchar(50)
+    }
+    column "wallet_amount" {
+      type = decimal(10,2)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_ecom_sales_order_refunds"."fk_so_refund_order" {
+  columns = [
+    "order_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_ecom_sales_order_master"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_ecom_sales_order_refunds"."fk_so_refund_order" {
+  columns = <
+    {
+      name = order_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_ecom_sales_order_refunds"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_ecom_sales_order_refunds"."payment_txn_id" {
+  columns = <
+    {
+      name = payment_txn_id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

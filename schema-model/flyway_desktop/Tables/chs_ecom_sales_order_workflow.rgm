@@ -1,0 +1,77 @@
+table "flyway_desktop"."chs_ecom_sales_order_workflow" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "order_id" {
+      type = bigint unsigned
+    }
+    column "from_status" {
+      type = varchar(50)
+    }
+    column "to_status" {
+      type = varchar(50)
+    }
+    column "changed_on" {
+      type = datetime
+    }
+    column "changed_by" {
+      type = varchar(100)
+    }
+    column "notes" {
+      type = varchar(500)
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_ecom_sales_order_workflow"."fk_so_workflow_order" {
+  columns = [
+    "order_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_ecom_sales_order_master"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_ecom_sales_order_workflow"."fk_so_workflow_order" {
+  columns = <
+    {
+      name = order_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_ecom_sales_order_workflow"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

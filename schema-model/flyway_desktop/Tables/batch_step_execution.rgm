@@ -1,0 +1,94 @@
+table "flyway_desktop"."batch_step_execution" {
+  columns = (
+    column "STEP_EXECUTION_ID" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "VERSION" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "STEP_NAME" {
+      type = varchar(100)
+      null = NOT NULL
+    }
+    column "JOB_EXECUTION_ID" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "CREATE_TIME" {
+      type = timestamp
+      null = NOT NULL
+    }
+    column "START_TIME" {
+      type = timestamp
+    }
+    column "END_TIME" {
+      type = timestamp
+    }
+    column "STATUS" {
+      type = varchar(10)
+    }
+    column "COMMIT_COUNT" {
+      type = bigint
+    }
+    column "READ_COUNT" {
+      type = bigint
+    }
+    column "FILTER_COUNT" {
+      type = bigint
+    }
+    column "WRITE_COUNT" {
+      type = bigint
+    }
+    column "READ_SKIP_COUNT" {
+      type = bigint
+    }
+    column "WRITE_SKIP_COUNT" {
+      type = bigint
+    }
+    column "PROCESS_SKIP_COUNT" {
+      type = bigint
+    }
+    column "ROLLBACK_COUNT" {
+      type = bigint
+    }
+    column "EXIT_CODE" {
+      type = varchar(20)
+    }
+    column "EXIT_MESSAGE" {
+      type = varchar(2500)
+    }
+    column "LAST_UPDATED" {
+      type = timestamp
+    }
+  )
+  primaryKey = {
+    columns = [
+      STEP_EXECUTION_ID
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."batch_step_execution"."JOB_EXECUTION_STEP_FK" {
+  columns = [
+    "JOB_EXECUTION_ID"
+  ]
+  referencedTable = "flyway_desktop"."batch_job_execution"
+  referencedColumns = [
+    "JOB_EXECUTION_ID"
+  ]
+}
+
+index "flyway_desktop"."batch_step_execution"."JOB_EXECUTION_STEP_FK" {
+  columns = <
+    {
+      name = JOB_EXECUTION_ID
+    }
+
+  >
+  type = BTREE
+}
+

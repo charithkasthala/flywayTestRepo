@@ -1,0 +1,79 @@
+table "flyway_desktop"."chs_core_account_receivable_payable" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "reference_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "party_type" {
+      type = enum('CUSTOMER','VENDOR','MARKETPLACE','COURIER','GOVERNMENT','EMPLOYEE')
+      null = NOT NULL
+    }
+    column "amount" {
+      type = decimal(14,2)
+      null = NOT NULL
+    }
+    column "direction" {
+      type = enum('RECEIVABLE','PAYABLE')
+      null = NOT NULL
+    }
+    column "due_date" {
+      type = date
+    }
+    column "status" {
+      type = enum('OPEN','PARTIALLY_SETTLED','SETTLED','OVERDUE')
+      default = 'OPEN'
+    }
+    column "invoice_id" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_account_receivable_payable"."fk_rp_invoice" {
+  columns = [
+    "invoice_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_account_invoices"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_core_account_receivable_payable"."fk_rp_invoice" {
+  columns = <
+    {
+      name = invoice_id
+    }
+
+  >
+  type = BTREE
+}
+

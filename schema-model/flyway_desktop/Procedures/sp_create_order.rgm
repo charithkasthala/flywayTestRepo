@@ -1,0 +1,499 @@
+procedure "flyway_desktop"."sp_create_order" {
+  parameters = <
+    {
+      name = order_json
+      datatype = json
+      mode = IN
+    }
+
+  >
+  text = """-
+BEGIN
+    DECLARE v_order_id BIGINT;
+    DECLARE i INT DEFAULT 0;
+    DECLARE item_count INT DEFAULT 0;
+    DECLARE v_shipping_address_id BIGINT DEFAULT NULL;
+	DECLARE v_billing_address_id BIGINT DEFAULT NULL;
+    DECLARE v_order_num varchar(50);
+    DECLARE v_return_order varchar(10);
+    DECLARE v_returnable tinyint;
+	DECLARE payment_retry INT DEFAULT 0;
+    DECLARE current_date_time datetime;
+	DECLARE retry_payment_time datetime;
+    DECLARE v_total_item_weight DECIMAL(10,2);
+    
+    DECLARE v_item_id varchar(50);
+    DECLARE v_inventory_model varchar(50);
+    DECLARE v_wallet_debit_type varchar(100);
+    DECLARE v_exchange_allowed tinyint;
+    DECLARE v_item_title VARCHAR(255) ;
+	DECLARE v_item_image VARCHAR(500);
+	DECLARE v_item_slug VARCHAR(255) ;
+	DECLARE v_unit_mrp DECIMAL(10,2);
+    DECLARE v_unit_price DECIMAL(10,2);
+	DECLARE v_tax_amt DECIMAL(10,2);
+	DECLARE v_subscription_enabled tinyint;
+    
+    
+
+    START TRANSACTION;
+    set v_order_num=NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.orderNum')),'null'),'');
+	--  if not exists(select 1 from chs_ecom_sales_order_master where order_num=v_order_num)
+    -- actual if start
+    if v_order_num is null
+    then
+    
+     SET v_order_num = UPPER(SUBSTRING(UUID(), 1, 6));
+
+
+   WHILE EXISTS (SELECT 1 FROM chs_ecom_sales_order_master WHERE order_num = v_order_num) DO
+   SET v_order_num = UPPER(SUBSTRING(UUID(), 1, 6));END WHILE;
+
+    set v_wallet_debit_type=NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.walletDebitType')),'null'),'');
+	SET payment_retry=(SELECT param_value FROM chs_core_settings_code_details WHERE code_id=2 AND param_key="RETRY_PAYMENT_MINUTES");
+	SET current_date_time = now();
+    SET retry_payment_time = DATE_ADD(current_date_time, INTERVAL payment_retry MINUTE);
+    INSERT INTO chs_ecom_sales_order_master(
+		order_num, 
+        cpg_order_id,
+        username, 
+        customer_id, 
+        order_status,
+        total_price,
+        total_mrp,
+        final_price,
+        total_items,
+        total_qty,
+        disc_amount, 
+        coupon_disc_amount,
+        tax_amount, 
+        shipping_charge, 
+        payment_status, 
+        payment_method,
+        retry_payment_time,
+      --  billing_address_id,
+        placed_on,
+        is_wallet_included, 
+		wallet_txn_id,
+		wallet_amount, 
+		amount,
+		wallet_debit_type,
+        supply_model
+    ) VALUES (
+        v_order_num,
+        -- concat(SUBSTRING_INDEX(NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.checkoutDetails.username')),'null'),''), '-', -1),DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')),
+        NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.cpgOrderId')),'null'),''),
+        NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.checkoutDetails.username')),'null'),''),
+        (select id from chs_ecom_customer_customer where username=NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.checkoutDetails.username')),'null'),'')),
+        CASE WHEN v_wallet_debit_type='FULL' then 'ORDER_PLACED' ELSE 'CREATED' END,
+        NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.checkoutDetails.totalPrice')),0.0),''),
+        NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.checkoutDetails.totalMrp')),0.0),''),
+        NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.finalPrice')),0.0),''),
+        NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.checkoutDetails.totalItems')),0),''),
+        NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.checkoutDetails.totalQty')),0),''),
+        COALESCE(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.checkoutDetails.discAmount')),''),0.0),
+        COALESCE(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.couponDiscAmount')),''),0.0),
+        COALESCE(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.taxAmount')),''),0.0),
+        COALESCE(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.shippingCharge')),''),0.0),
+        CASE WHEN v_wallet_debit_type='FULL' then 'COMPLETED' ELSE 'PENDING' END,
+        NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.paymentMethod')),'null'),''),
+      --  NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.billingAddressId')),'null'),''),
+        retry_payment_time,
+        current_date_time,
+        NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.walletInclude')),0),''),
+        NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.walletTxnId')),'null'),''),
+        NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.walletAmount')),0.0),''),
+        COALESCE(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.amount')),''),0.0),
+        v_wallet_debit_type,
+        COALESCE(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.supplyModel')),''),0.0)
+    );
+    
+    SET v_order_id = LAST_INSERT_ID();
+    
+    INSERT INTO chs_ecom_sales_order_workflow
+    (
+		order_id, 
+        from_status, 
+        to_status, 
+        changed_on, 
+        changed_by, 
+        notes
+    ) VALUES (
+		v_order_id,
+        'CREATED',
+		'CREATED',
+		now(),
+        'system',
+        'Order has been successfully placed'
+    );
+     
+    INSERT INTO chs_ecom_sales_order_shipping
+    (
+		order_id, 
+        -- shipping_address_id, 
+        method, 
+        tracking_number, 
+        carrier, 
+        est_delivery_date, 
+        shipping_charge, 
+        created_on
+    )
+    values (
+		v_order_id,
+        -- NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.shippingAddressId')),'null'),''),
+        'STANDARD',
+        concat(SUBSTRING_INDEX(NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.checkoutDetails.username')),'null'),''), '-', -1),DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')),
+        null,
+        DATE_ADD(CURDATE(), INTERVAL 7 DAY),
+        NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.shippingCharge')),0.0),''),
+        now()
+    );
+    
+        INSERT INTO chs_ecom_sales_order_discounts
+    (
+		order_id, 
+        disc_code, 
+        coupon_txn_id, 
+        disc_value, 
+        created_at
+    )
+    values (
+		v_order_id, 
+		(select discount_code from chs_core_marketing_discount_usage where  discount_txn_id= NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.couponTxnId')),'null'),'')),
+        NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.couponTxnId')),'null'),''),
+        NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.couponDiscAmount')),0.0),''),
+        now()
+    );
+    
+    set v_inventory_model= (NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.inventoryModel')),'null'),''));
+    SET i = 0;
+SET item_count = JSON_LENGTH(order_json, '$.checkoutDetails.checkoutItems');
+
+WHILE i < item_count DO
+ SET v_item_id = NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, CONCAT('$.checkoutDetails.checkoutItems[', i, '].itemId'))), 'null'), '');
+    -- SET @v_qty = NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, CONCAT('$.checkoutDetails.checkoutItems[', i, '].qty'))), 'null'), '');
+
+	SELECT item_title,item_image,item_slug,item_mrp,item_price,exchange_allowed,subscription_enabled
+INTO v_item_title,v_item_image,v_item_slug,v_unit_mrp,v_unit_price,v_exchange_allowed,v_subscription_enabled
+FROM chs_ecom_pms_product_card
+WHERE item_id = v_item_id 
+and inventory_model= v_inventory_model;
+
+
+    -- Extract returnAllowed (a BOOLEAN value in JSON)
+    SET v_return_order = NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, CONCAT('$.checkoutDetails.checkoutItems[', i, '].returnAllowed'))), 'null'), '');
+    SET v_returnable = CASE WHEN v_return_order = 'true' THEN 1 ELSE 0 END;
+
+    INSERT INTO chs_ecom_sales_order_items (
+        order_id,
+        customer_id,
+        product_id,
+        item_id,
+		item_title ,
+		item_image ,
+		item_slug ,
+        batch_id,
+        qty,
+        unit_price,
+        unit_mrp,
+        volume_unit_price,
+        volume_unit_mrp,
+        tax_amt,
+        disc_amount,
+        total_price,
+        total_mrp,
+        return_allowed,
+        reserved_qty,
+        volume_value,
+		exchange_allowed,
+        subscription_enabled
+    ) VALUES (
+        v_order_id,
+        NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, CONCAT('$.checkoutDetails.checkoutItems[', i, '].customerId'))), 'null'),''),
+        NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, CONCAT('$.checkoutDetails.checkoutItems[', i, '].productId'))), 'null'), ''),
+        v_item_id,
+        
+        
+       v_item_title,v_item_image,v_item_slug,
+        
+        NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, CONCAT('$.checkoutDetails.checkoutItems[', i, '].batchId'))), 'null'), ''),
+        NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, CONCAT('$.checkoutDetails.checkoutItems[', i, '].qty'))), 0), ''),
+        
+		v_unit_price,v_unit_mrp,
+        COALESCE(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, CONCAT('$.checkoutDetails.checkoutItems[', i, '].volumeUnitPrice'))),  ''), 0.0),
+        COALESCE(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, CONCAT('$.checkoutDetails.checkoutItems[', i, '].volumeUnitMrp'))), ''), 0.0),
+        COALESCE(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, CONCAT('$.checkoutDetails.checkoutItems[', i, '].taxAmt'))),  ''), 0.0),
+
+        
+        
+        COALESCE(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, CONCAT('$.checkoutDetails.checkoutItems[', i, '].discAmount'))),  ''), 0.0),
+        COALESCE(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, CONCAT('$.checkoutDetails.checkoutItems[', i, '].totalPrice'))),  ''), 0.0),
+        COALESCE(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, CONCAT('$.checkoutDetails.checkoutItems[', i, '].totalMrp'))),  ''), 0.0),
+        v_returnable,
+        COALESCE(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, CONCAT('$.checkoutDetails.checkoutItems[', i, '].reservedQty'))),  ''), 0.0),
+        COALESCE(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, CONCAT('$.checkoutDetails.checkoutItems[', i, '].volumeValue'))),  ''), 1.0),
+		v_exchange_allowed,
+        v_subscription_enabled
+    );
+
+    SET i = i + 1;
+
+END WHILE;
+
+-- SET v_total_item_weight = (
+ --   SELECT SUM(pi.weight_in_gms * oi.qty) FROM chs_ecom_sales_order_items oi
+ --   JOIN chs_ecom_pms_product_item pi ON oi.item_id = pi.id WHERE oi.order_id = v_order_id);
+ 
+set v_total_item_weight=0.0;
+
+UPDATE chs_ecom_sales_order_master SET order_weight = v_total_item_weight WHERE id = v_order_id;
+
+
+
+    case when JSON_EXTRACT(order_json, '$.shippingAddressId') <> JSON_EXTRACT(order_json, '$.billingAddressId') then
+     INSERT INTO chs_core_utils_address_master (
+        full_name, phone_number, address_line1, address_line2, city, state, country, postal_code
+    ) select full_name, phone_number, address_line1, address_line2, city, state, country, postal_code from chs_core_utils_address_master 
+    where id=JSON_EXTRACT(order_json, '$.shippingAddressId');
+    SET v_shipping_address_id = LAST_INSERT_ID();
+
+   INSERT INTO chs_core_utils_address_master (
+        full_name, phone_number, address_line1, address_line2, city, state, country, postal_code
+    ) select full_name, phone_number, address_line1, address_line2, city, state, country, postal_code from chs_core_utils_address_master 
+    where id=JSON_EXTRACT(order_json, '$.billingAddressId');
+    SET v_billing_address_id = LAST_INSERT_ID();
+    
+    else 
+    INSERT INTO chs_core_utils_address_master (
+        full_name, phone_number, address_line1, address_line2, city, state, country, postal_code
+    ) select full_name, phone_number, address_line1, address_line2, city, state, country, postal_code from chs_core_utils_address_master 
+    where id=JSON_EXTRACT(order_json, '$.shippingAddressId');
+    SET v_shipping_address_id = LAST_INSERT_ID();
+    set v_billing_address_id = v_shipping_address_id;
+    
+    end case;
+    
+INSERT INTO chs_ecom_sales_order_address (
+    order_id,
+    shipping_address_id,
+    billing_address_id
+) VALUES (
+    v_order_id,
+    v_shipping_address_id,
+    v_billing_address_id
+);
+	
+    INSERT INTO chs_ecom_sales_order_summary (
+    order_num,
+    username,
+    customer_id,
+    full_name,
+    email,
+    mobile_num,
+    order_status,
+    total_mrp,
+    final_price,
+    coupon_disc_amount,
+    total_price,
+    disc_amount,
+    tax_amount,
+    shipping_charge,
+    payment_status,
+    payment_method,
+    invoice_url,
+    placed_on,
+    billing_address,
+    shipping_address
+)
+SELECT 
+    om.order_num,
+    om.username,
+    om.customer_id,
+    c.full_name,
+    c.email_id,
+    c.mobile_number,
+    om.order_status,
+    om.total_mrp,
+    om.final_price,
+    om.coupon_disc_amount,
+    om.total_price,
+    om.disc_amount,
+    om.tax_amount,
+    om.shipping_charge,
+    om.payment_status,
+    om.payment_method,
+    NULL AS invoice_url,
+    om.placed_on,
+
+    -- Billing Address JSON
+    (SELECT JSON_OBJECT(
+        'fullName', a.full_name,
+        'phoneNumber', a.phone_number,
+        'addressLine1', a.address_line1,
+        'addressLine2', a.address_line2,
+        'city', a.city,
+        'state', a.state,
+        'country', a.country,
+        'postalCode', a.postal_code
+    )
+    FROM chs_core_utils_address_master a 
+    WHERE a.id = oa.billing_address_id),
+
+    -- Shipping Address JSON
+    (SELECT JSON_OBJECT(
+        'fullName', a.full_name,
+        'phoneNumber', a.phone_number,
+        'addressLine1', a.address_line1,
+        'addressLine2', a.address_line2,
+        'city', a.city,
+        'state', a.state,
+        'country', a.country,
+        'postalCode', a.postal_code
+    )
+    FROM chs_core_utils_address_master a 
+    WHERE a.id = oa.shipping_address_id)
+
+FROM chs_ecom_sales_order_master om
+left JOIN chs_ecom_customer_customer_summary c ON c.customer_id = om.customer_id
+JOIN chs_ecom_sales_order_address oa ON oa.order_id = om.id
+WHERE om.id = v_order_id;
+
+    
+    IF JSON_EXTRACT(order_json, '$.checkoutDetails.cartId') IS NOT NULL THEN
+    delete from chs_ecom_sales_cart_items where cart_id=(NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.checkoutDetails.cartId')),'null'),''));
+    delete from chs_ecom_sales_cart where id=(NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.checkoutDetails.cartId')),'null'),''));
+    end if;
+    
+    
+    
+    -- Actual else case
+    else if exists(select 1 from chs_ecom_sales_order_master where order_num=v_order_num) then
+    set v_order_id=(select id from chs_ecom_sales_order_master where order_num=v_order_num);
+    if not exists(select 1 from chs_ecom_sales_order_master where id=v_order_id and 
+    payment_method=NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.paymentMethod')),'null'),'')) then
+    update chs_ecom_sales_order_master
+    set payment_method=NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.paymentMethod')),'null'),'') where id=v_order_id;
+    end if;
+    
+    if not exists(select 1 from chs_ecom_sales_order_discounts where order_id=v_order_id and coupon_txn_id=NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.couponTxnId')),'null'),''))
+    then
+    update chs_ecom_sales_order_discounts
+    set coupon_txn_id=NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.couponTxnId')),'null'),''), 
+    disc_code=(select discount_code from chs_core_marketing_discount_usage
+    where discount_txn_id= NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.couponTxnId')),'null'),''))
+	,disc_value= NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.couponDiscAmount')),'null'),'')
+	where order_id=v_order_id;
+    
+    update chs_ecom_sales_order_master
+    set final_price=NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.finalPrice')),'null'),'')
+    ,coupon_disc_amount=NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.couponDiscAmount')),'null'),'')
+    ,amount = NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.amount')),'null'),'')
+    ,cpg_order_id = NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.cpgOrderId')),'null'),'')
+    ,wallet_txn_id = NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.walletTxnId')),'null'),'')
+    ,wallet_debit_type = NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.walletDebitType')),'null'),'')
+    ,wallet_amount = NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.walletAmount')),'null'),'')
+    ,payment_status = NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.paymentStatus')),'null'),'')
+    where id=v_order_id;
+    end if;
+    
+    if exists (select 1 from chs_ecom_sales_order_address where JSON_EXTRACT(order_json, '$.billingAddressId')=JSON_EXTRACT(order_json, '$.shippingAddressId') 
+    and order_id=v_order_id and (JSON_EXTRACT(order_json, '$.billingAddressId')<>billing_address_id or JSON_EXTRACT(order_json, '$.shippingAddressId')<>shipping_address_id))
+    then 
+    INSERT INTO chs_core_utils_address_master (
+        full_name, phone_number, address_line1, address_line2, city, state, country, postal_code
+    ) select full_name, phone_number, address_line1, address_line2, city, state, country, postal_code from chs_core_utils_address_master 
+    where id=JSON_EXTRACT(order_json, '$.shippingAddressId');
+    SET v_shipping_address_id = LAST_INSERT_ID();
+    set v_billing_address_id = v_shipping_address_id;
+	
+update chs_ecom_sales_order_address
+set shipping_address_id=v_shipping_address_id , billing_address_id=v_billing_address_id
+where order_id=v_order_id;
+		
+        else 
+        if exists (select 1 from chs_ecom_sales_order_address where order_id=v_order_id and (JSON_EXTRACT(order_json, '$.billingAddressId')<>billing_address_id and JSON_EXTRACT(order_json, '$.shippingAddressId')=shipping_address_id))
+    then 
+    INSERT INTO chs_core_utils_address_master (
+        full_name, phone_number, address_line1, address_line2, city, state, country, postal_code
+    ) select full_name, phone_number, address_line1, address_line2, city, state, country, postal_code from chs_core_utils_address_master 
+    where id=JSON_EXTRACT(order_json, '$.billingAddressId');
+    SET v_billing_address_id = LAST_INSERT_ID();
+    update chs_ecom_sales_order_address
+set billing_address_id=v_billing_address_id where order_id=v_order_id;
+  
+  else if exists (select 1 from chs_ecom_sales_order_address where order_id=v_order_id and (JSON_EXTRACT(order_json, '$.billingAddressId')=billing_address_id and JSON_EXTRACT(order_json, '$.shippingAddressId')<>shipping_address_id))
+    then 
+    INSERT INTO chs_core_utils_address_master (
+        full_name, phone_number, address_line1, address_line2, city, state, country, postal_code
+    ) select full_name, phone_number, address_line1, address_line2, city, state, country, postal_code from chs_core_utils_address_master 
+    where id=JSON_EXTRACT(order_json, '$.shippingAddressId');
+    SET v_shipping_address_id = LAST_INSERT_ID();
+    update chs_ecom_sales_order_address
+set shipping_address_id=v_shipping_address_id where order_id=v_order_id;
+end if;
+end if;
+    end if;
+        end if;
+        end if;
+
+    update chs_core_marketing_discount_usage set status='APPLIED' where discount_txn_id=NULLIF(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(order_json, '$.couponTxnId')),'null'),'');
+    
+    COMMIT;
+    
+    SELECT JSON_OBJECT(
+        'id', om.id,
+        'orderNum', om.order_num,
+        'cpgOrderId',om.cpg_order_id,
+        'username', om.username,
+        'customerId', om.customer_id,
+        'orderStatus', om.order_status,
+        'totalPrice', om.total_price,
+        'totalMrp', om.total_mrp,
+        'finalPrice',om.final_price,
+        'totalItems', om.total_items,
+        'totalQty', om.total_qty,
+        'discAmount', om.disc_amount,
+        'couponDiscAmount',om.coupon_disc_amount,
+        'taxAmount', om.tax_amount,
+        'shippingCharge', om.shipping_charge,
+        'paymentStatus', om.payment_status,
+        'paymentMethod', om.payment_method,
+        'billingAddressId', oa.billing_address_id,
+        'placedOn',DATE_FORMAT(om.placed_on, '%Y-%m-%dT%H:%i:%s'),
+        'orderWeight', om.order_weight,
+        'amount',om.amount,
+        'supplyModel',om.supply_model,
+        'orderItems', 
+        (SELECT JSON_ARRAYAGG(
+            JSON_OBJECT(
+                'id', oi.id,
+                'orderId', oi.order_id, 
+                'customerId',oi.customer_id,
+                'productId', oi.product_id, 
+                'itemId', oi.item_id, 
+                'itemTitle',oi.item_title,
+                'itemImage',oi.item_image,
+                'item_slug',oi.item_slug,
+                'batchId', oi.batch_id, 
+                'qty',oi.qty,
+                'unitPrice', oi.unit_price,
+				'unit_mrp', oi.unit_mrp,
+				'volume_unit_price', oi.volume_unit_price,
+				'volume_unit_mrp', oi.volume_unit_mrp,
+				'tax_amt', oi.tax_amt,
+				'total_mrp', oi.total_mrp,
+                'discAmount', oi.disc_amount, 
+                'totalPrice', oi.total_price,
+                'returnAllowed',oi.return_allowed,
+                'exchangeAllowed',oi.exchange_allowed,
+                'subscriptionEnabled',oi.subscription_enabled
+            )
+        ) FROM chs_ecom_sales_order_items oi WHERE oi.order_id = om.id)
+    ) AS output_json
+    FROM chs_ecom_sales_order_master om join chs_ecom_sales_order_address oa on om.id=oa.order_id
+	WHERE om.id = v_order_id;
+
+END
+"""
+}
+

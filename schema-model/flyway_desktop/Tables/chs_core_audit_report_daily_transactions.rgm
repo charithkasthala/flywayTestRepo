@@ -1,0 +1,44 @@
+table "flyway_desktop"."chs_core_audit_report_daily_transactions" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "report_date" {
+      type = date
+      null = NOT NULL
+    }
+    column "total_txns" {
+      type = int
+      default = 0
+    }
+    column "success_txns" {
+      type = int
+      default = 0
+    }
+    column "failed_txns" {
+      type = int
+      default = 0
+    }
+    column "avg_duration_ms" {
+      type = bigint
+      default = 0
+    }
+    column "max_duration_ms" {
+      type = bigint
+      default = 0
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

@@ -1,0 +1,111 @@
+table "flyway_desktop"."chs_ecom_pms_product_master" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "def_id" {
+      type = int
+      null = NOT NULL
+    }
+    column "brand_id" {
+      type = bigint
+    }
+    column "slug" {
+      type = varchar(500)
+    }
+    column "code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "title" {
+      type = varchar(100)
+    }
+    column "description" {
+      type = varchar(1000)
+    }
+    column "status" {
+      type = enum('ACTIVE','OUT_OF_STOCK','DISCONTINUED','DISABLED')
+      null = NOT NULL
+      default = 'ACTIVE'
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_ecom_pms_product_master"."fk_product_brand" {
+  columns = [
+    "brand_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_ecom_pms_brand_master"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_ecom_pms_product_master"."code_UNIQUE" {
+  columns = <
+    {
+      name = code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_ecom_pms_product_master"."fk_product_brand" {
+  columns = <
+    {
+      name = brand_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_ecom_pms_product_master"."ft_fulltext" {
+  columns = <
+    {
+      name = title
+    }
+
+    {
+      name = slug
+    }
+
+  >
+  type = FULLTEXT
+}
+
+index "flyway_desktop"."chs_ecom_pms_product_master"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

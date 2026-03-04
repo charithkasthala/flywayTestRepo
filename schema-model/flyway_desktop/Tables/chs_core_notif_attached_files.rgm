@@ -1,0 +1,41 @@
+table "flyway_desktop"."chs_core_notif_attached_files" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "notification_txn_id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "file_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "file_url" {
+      type = varchar(500)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

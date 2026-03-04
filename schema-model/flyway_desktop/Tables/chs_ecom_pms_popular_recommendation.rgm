@@ -1,0 +1,54 @@
+table "flyway_desktop"."chs_ecom_pms_popular_recommendation" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "type" {
+      type = enum('CATEGORY','SECTION')
+    }
+    column "title" {
+      type = varchar(50)
+    }
+    column "pic_id" {
+      type = bigint
+    }
+    column "pic_url" {
+      type = varchar(500)
+    }
+    column "slug" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_ecom_pms_popular_recommendation"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

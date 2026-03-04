@@ -1,0 +1,32 @@
+table "flyway_desktop"."chs_core_job_queue_snapshot" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "snapshot_time" {
+      type = datetime
+      null = NOT NULL
+    }
+    column "pending_jobs" {
+      type = int
+      default = 0
+    }
+    column "running_jobs" {
+      type = int
+      default = 0
+    }
+    column "failed_jobs" {
+      type = int
+      default = 0
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

@@ -1,0 +1,84 @@
+table "flyway_desktop"."chs_core_notif_campaign_schedule" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "campaign_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "trigger_type" {
+      type = enum('ONE_TIME','SCHEDULED','RECURRING','EVENT_BASED')
+    }
+    column "cron_expression" {
+      type = varchar(100)
+    }
+    column "event_code" {
+      type = varchar(100)
+    }
+    column "timezone" {
+      type = varchar(50)
+      default = 'Asia/Kolkata'
+    }
+    column "next_run_at" {
+      type = datetime
+    }
+    column "is_active" {
+      type = tinyint
+      default = 1
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+      default = 'ACTIVE'
+    }
+    column "tenant_id" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_notif_campaign_schedule"."fk_campaign_schedule_campaign" {
+  columns = [
+    "campaign_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_notif_campaign"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_core_notif_campaign_schedule"."fk_campaign_schedule_campaign" {
+  columns = <
+    {
+      name = campaign_id
+    }
+
+  >
+  type = BTREE
+}
+

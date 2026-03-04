@@ -1,0 +1,135 @@
+table "flyway_desktop"."chs_core_marketing_loyalty_txn" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "loyalty_account_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "txn_type" {
+      type = enum('EARN','REDEEM','EXPIRE','ADJUST','BONUS','PENALTY','TRANSFER','TIER_UPGRADE','TIER_DOWNGRADE')
+      null = NOT NULL
+    }
+    column "points" {
+      type = int
+      null = NOT NULL
+    }
+    column "balance_after" {
+      type = int
+    }
+    column "reference_type" {
+      type = enum('ORDER','ADJUSTMENT','REDEMPTION','EXPIRY','TIER_CHANGE','MANUAL','SYSTEM','REFERRAL')
+      null = NOT NULL
+    }
+    column "reference_id" {
+      type = bigint
+    }
+    column "reference_code" {
+      type = varchar(100)
+    }
+    column "description" {
+      type = text
+    }
+    column "txn_date" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "effective_date" {
+      type = date
+    }
+    column "expiry_date" {
+      type = datetime
+    }
+    column "channel" {
+      type = enum('WEB','MOBILE_APP','POS','CALL_CENTER','CHAT','EMAIL','SMS','SOCIAL_MEDIA','API')
+      default = 'WEB'
+    }
+    column "location_id" {
+      type = bigint
+    }
+    column "staff_id" {
+      type = bigint
+    }
+    column "metadata" {
+      type = json
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_loyalty_txn"."chs_core_marketing_loyalty_txn_ibfk_1" {
+  columns = [
+    "loyalty_account_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_loyalty_account"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = CASCADE
+}
+
+index "flyway_desktop"."chs_core_marketing_loyalty_txn"."idx_txn_date" {
+  columns = <
+    {
+      name = txn_date
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_loyalty_txn"."idx_txn_reference" {
+  columns = <
+    {
+      name = reference_type
+    }
+
+    {
+      name = reference_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_loyalty_txn"."idx_txn_type" {
+  columns = <
+    {
+      name = txn_type
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_loyalty_txn"."loyalty_account_id" {
+  columns = <
+    {
+      name = loyalty_account_id
+    }
+
+  >
+  type = BTREE
+}
+

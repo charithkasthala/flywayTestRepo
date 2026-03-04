@@ -1,0 +1,67 @@
+table "flyway_desktop"."chs_core_cdn_directories" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "tenant_id" {
+      type = varchar(50)
+    }
+    column "folder_id" {
+      type = varchar(50)
+    }
+    column "name" {
+      type = varchar(50)
+    }
+    column "path" {
+      type = varchar(500)
+    }
+    column "description" {
+      type = varchar(50)
+    }
+    column "is_public" {
+      type = tinyint
+    }
+    column "registered_date" {
+      type = datetime
+    }
+    column "parent_id" {
+      type = varchar(50)
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+      default = 'ACTIVE'
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_cdn_directories"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

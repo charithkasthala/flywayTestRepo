@@ -1,0 +1,81 @@
+table "flyway_desktop"."chs_core_cpg_wallet_rewards" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "wallet_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "promo_type" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "amount" {
+      type = decimal(12,2)
+      null = NOT NULL
+    }
+    column "expire_on" {
+      type = datetime
+    }
+    column "status" {
+      type = enum('ACTIVE','CLAIMED')
+      null = NOT NULL
+      default = 'ACTIVE'
+    }
+    column "issued_on" {
+      type = datetime
+      null = NOT NULL
+      default = CURRENT_TIMESTAMP
+    }
+    column "claimed_on" {
+      type = datetime
+    }
+    column "created_on" {
+      type = datetime
+      null = NOT NULL
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_cpg_wallet_rewards"."fk_cpg_wallet_reward_wallet" {
+  columns = [
+    "wallet_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_cpg_wallet"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_core_cpg_wallet_rewards"."fk_cpg_wallet_reward_wallet" {
+  columns = <
+    {
+      name = wallet_id
+    }
+
+  >
+  type = BTREE
+}
+

@@ -1,0 +1,67 @@
+table "flyway_desktop"."chs_ecom_pms_flag_master" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "flag" {
+      type = varchar(20)
+      null = NOT NULL
+    }
+    column "description" {
+      type = varchar(500)
+    }
+    column "flag_colour" {
+      type = varchar(10)
+    }
+    column "text_colour" {
+      type = varchar(10)
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+      default = 'ACTIVE'
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_ecom_pms_flag_master"."flag_UNIQUE" {
+  columns = <
+    {
+      name = flag
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_ecom_pms_flag_master"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

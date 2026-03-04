@@ -1,0 +1,117 @@
+table "flyway_desktop"."chs_core_marketing_referral_reward" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "program_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "reward_type" {
+      type = enum('REFERRER','REFEREE','BOTH')
+      default = 'REFERRER'
+    }
+    column "reward_trigger" {
+      type = enum('SIGNUP','FIRST_PURCHASE','EVERY_PURCHASE','MINIMUM_PURCHASE','TIER_ACHIEVED','SOCIAL_SHARE','REFERRAL_COUNT')
+      null = NOT NULL
+    }
+    column "reward_value_type" {
+      type = enum('PERCENTAGE','FIXED_AMOUNT','POINTS','COUPON','FREE_PRODUCT','FREE_SHIPPING','CASHBACK')
+      null = NOT NULL
+    }
+    column "reward_value" {
+      type = decimal(10,2)
+    }
+    column "reward_coupon_id" {
+      type = bigint
+    }
+    column "min_purchase_amount" {
+      type = decimal(10,2)
+      default = 0.00
+    }
+    column "max_rewards_per_user" {
+      type = int
+    }
+    column "reward_expiry_days" {
+      type = int
+    }
+    column "is_auto_issued" {
+      type = tinyint(1)
+      default = 1
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_referral_reward"."chs_core_marketing_referral_reward_ibfk_1" {
+  columns = [
+    "program_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_referral_program"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = CASCADE
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_referral_reward"."chs_core_marketing_referral_reward_ibfk_2" {
+  columns = [
+    "reward_coupon_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_coupon"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = SET NULL
+}
+
+index "flyway_desktop"."chs_core_marketing_referral_reward"."idx_reward_trigger" {
+  columns = <
+    {
+      name = reward_trigger
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_referral_reward"."program_id" {
+  columns = <
+    {
+      name = program_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_referral_reward"."reward_coupon_id" {
+  columns = <
+    {
+      name = reward_coupon_id
+    }
+
+  >
+  type = BTREE
+}
+

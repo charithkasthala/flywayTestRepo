@@ -1,0 +1,170 @@
+table "flyway_desktop"."chs_core_marketing_social_post" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "social_account_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "campaign_id" {
+      type = bigint
+    }
+    column "post_type" {
+      type = enum('IMAGE','VIDEO','CAROUSEL','REEL','STORY','LIVE','POLL','TEXT','LINK','EVENT')
+      null = NOT NULL
+    }
+    column "post_external_id" {
+      type = varchar(100)
+    }
+    column "content" {
+      type = text
+    }
+    column "media_urls" {
+      type = json
+    }
+    column "scheduled_on" {
+      type = datetime
+    }
+    column "published_on" {
+      type = datetime
+    }
+    column "status" {
+      type = enum('DRAFT','SCHEDULED','PUBLISHED','FAILED','DELETED')
+      default = 'DRAFT'
+    }
+    column "impressions" {
+      type = int
+      default = 0
+    }
+    column "reach" {
+      type = int
+      default = 0
+    }
+    column "engagements" {
+      type = int
+      default = 0
+    }
+    column "likes" {
+      type = int
+      default = 0
+    }
+    column "comments" {
+      type = int
+      default = 0
+    }
+    column "shares" {
+      type = int
+      default = 0
+    }
+    column "clicks" {
+      type = int
+      default = 0
+    }
+    column "saves" {
+      type = int
+      default = 0
+    }
+    column "video_views" {
+      type = int
+      default = 0
+    }
+    column "engagement_rate" {
+      type = decimal(5,2)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_social_post"."chs_core_marketing_social_post_ibfk_1" {
+  columns = [
+    "social_account_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_social_account"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = CASCADE
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_social_post"."chs_core_marketing_social_post_ibfk_2" {
+  columns = [
+    "campaign_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_campaign"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = SET NULL
+}
+
+index "flyway_desktop"."chs_core_marketing_social_post"."campaign_id" {
+  columns = <
+    {
+      name = campaign_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_social_post"."idx_post_published" {
+  columns = <
+    {
+      name = published_on
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_social_post"."idx_post_scheduled" {
+  columns = <
+    {
+      name = scheduled_on
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_social_post"."idx_post_status" {
+  columns = <
+    {
+      name = status
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_social_post"."social_account_id" {
+  columns = <
+    {
+      name = social_account_id
+    }
+
+  >
+  type = BTREE
+}
+

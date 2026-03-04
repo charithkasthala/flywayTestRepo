@@ -1,0 +1,107 @@
+table "flyway_desktop"."chs_core_security_app_master" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "client_id" {
+      type = varchar(50)
+    }
+    column "channel_id" {
+      type = varchar(50)
+    }
+    column "title" {
+      type = varchar(50)
+    }
+    column "description" {
+      type = varchar(255)
+    }
+    column "link" {
+      type = text
+    }
+    column "app_type" {
+      type = enum('ANDROID','IOS','WEB')
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+      default = 'ACTIVE'
+    }
+    column "released_on" {
+      type = datetime
+    }
+    column "latest_version" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_security_app_master"."fk_appmaster_channel" {
+  columns = [
+    "channel_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_security_channel_master"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+foreignKey "flyway_desktop"."chs_core_security_app_master"."fk_appmaster_client" {
+  columns = [
+    "client_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_security_client_master"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_core_security_app_master"."fk_appmaster_channel" {
+  columns = <
+    {
+      name = channel_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_security_app_master"."fk_appmaster_client" {
+  columns = <
+    {
+      name = client_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_security_app_master"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

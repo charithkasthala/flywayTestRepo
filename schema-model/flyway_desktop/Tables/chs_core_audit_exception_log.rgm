@@ -1,0 +1,66 @@
+table "flyway_desktop"."chs_core_audit_exception_log" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "txn_id" {
+      type = varchar(50)
+    }
+    column "message" {
+      type = mediumtext
+    }
+    column "stack_trace" {
+      type = mediumtext
+    }
+    column "class_name" {
+      type = varchar(255)
+    }
+    column "timestamp" {
+      type = datetime
+    }
+    column "tenant_id" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_audit_exception_log"."fk_exceptionlog_txn" {
+  columns = [
+    "txn_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_audit_transactions"
+  referencedColumns = [
+    "txn_id"
+  ]
+}
+
+index "flyway_desktop"."chs_core_audit_exception_log"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_core_audit_exception_log"."txn_id_UNIQUE" {
+  columns = <
+    {
+      name = txn_id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

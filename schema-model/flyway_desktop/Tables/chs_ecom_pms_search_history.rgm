@@ -1,0 +1,42 @@
+table "flyway_desktop"."chs_ecom_pms_search_history" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "username" {
+      type = varchar(50)
+    }
+    column "session_id" {
+      type = varchar(20)
+    }
+    column "search_query" {
+      type = varchar(255)
+    }
+    column "filters_applied" {
+      type = json
+    }
+    column "search_timestamp" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_ecom_pms_search_history"."idx_search_query" {
+  columns = <
+    {
+      name = search_query
+    }
+
+  >
+  type = BTREE
+}
+

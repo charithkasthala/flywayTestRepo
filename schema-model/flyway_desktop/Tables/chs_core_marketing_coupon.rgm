@@ -1,0 +1,165 @@
+table "flyway_desktop"."chs_core_marketing_coupon" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "coupon_code" {
+      type = varchar(100)
+      null = NOT NULL
+    }
+    column "promotion_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "coupon_type" {
+      type = enum('PUBLIC','PRIVATE','PERSONALIZED','ONE_TIME_USE','MULTI_USE','BULK_GENERATED')
+      null = NOT NULL
+    }
+    column "coupon_name" {
+      type = varchar(200)
+    }
+    column "description" {
+      type = text
+    }
+    column "usage_limit_total" {
+      type = int
+    }
+    column "usage_limit_per_user" {
+      type = int
+      default = 1
+    }
+    column "usage_count" {
+      type = int
+      default = 0
+    }
+    column "valid_from" {
+      type = datetime
+    }
+    column "valid_to" {
+      type = datetime
+    }
+    column "activation_date" {
+      type = datetime
+    }
+    column "expiration_type" {
+      type = enum('DATE_BASED','USAGE_BASED','CAMPAIGN_BASED','MANUAL')
+      default = 'DATE_BASED'
+    }
+    column "status" {
+      type = enum('DRAFT','ACTIVE','PAUSED','EXPIRED','ARCHIVED','DELETED')
+      default = 'DRAFT'
+    }
+    column "visibility" {
+      type = enum('PUBLIC','PRIVATE','HIDDEN','SEGMENT_SPECIFIC')
+      default = 'PUBLIC'
+    }
+    column "generation_source" {
+      type = enum('MANUAL','BULK_GENERATE','API','AUTOMATED','IMPORT','REFERRAL','LOYALTY')
+      default = 'MANUAL'
+    }
+    column "prefix" {
+      type = varchar(20)
+    }
+    column "suffix" {
+      type = varchar(20)
+    }
+    column "pattern" {
+      type = varchar(100)
+    }
+    column "is_restricted" {
+      type = tinyint(1)
+      default = 0
+    }
+    column "restriction_conditions" {
+      type = json
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_coupon"."chs_core_marketing_coupon_ibfk_1" {
+  columns = [
+    "promotion_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_promotion"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = CASCADE
+}
+
+index "flyway_desktop"."chs_core_marketing_coupon"."coupon_code" {
+  columns = <
+    {
+      name = coupon_code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_core_marketing_coupon"."idx_coupon_dates" {
+  columns = <
+    {
+      name = valid_from
+    }
+
+    {
+      name = valid_to
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_coupon"."idx_coupon_status" {
+  columns = <
+    {
+      name = status
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_coupon"."idx_coupon_type" {
+  columns = <
+    {
+      name = coupon_type
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_coupon"."promotion_id" {
+  columns = <
+    {
+      name = promotion_id
+    }
+
+  >
+  type = BTREE
+}
+

@@ -1,0 +1,78 @@
+table "flyway_desktop"."chs_core_cdn_summary_analytics_daily" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "tenant_id" {
+      type = varchar(50)
+    }
+    column "vendor_id" {
+      type = varchar(50)
+    }
+    column "asset_id" {
+      type = varchar(50)
+    }
+    column "metric_date" {
+      type = date
+      null = NOT NULL
+    }
+    column "requests" {
+      type = bigint
+      default = 0
+    }
+    column "cache_hits" {
+      type = bigint
+      default = 0
+    }
+    column "cache_misses" {
+      type = bigint
+      default = 0
+    }
+    column "bandwidth_bytes" {
+      type = bigint
+      default = 0
+    }
+    column "error_4xx" {
+      type = bigint
+      default = 0
+    }
+    column "error_5xx" {
+      type = bigint
+      default = 0
+    }
+    column "avg_latency_ms" {
+      type = int
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_cdn_summary_analytics_daily"."uk_cdn_analytics_day" {
+  columns = <
+    {
+      name = metric_date
+    }
+
+    {
+      name = vendor_id
+    }
+
+    {
+      name = asset_id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

@@ -1,0 +1,36 @@
+table "flyway_desktop"."chs_core_settings_code_param_type" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "code" {
+      type = varchar(50)
+    }
+    column "regular_expression" {
+      type = varchar(100)
+    }
+    column "description" {
+      type = varchar(100)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_settings_code_param_type"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

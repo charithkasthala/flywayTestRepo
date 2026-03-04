@@ -1,0 +1,48 @@
+table "flyway_desktop"."chs_ecom_dms_shipment_tracking" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "shipment_id" {
+      type = bigint
+    }
+    column "tracking_number" {
+      type = varchar(50)
+    }
+    column "courier_service" {
+      type = varchar(255)
+    }
+    column "shipment_status" {
+      type = enum('SHIPPED','IN_TRANSIT','DELIVERED','DELAYED','CANCELLED','OUT_FOR_DELIVERY','RETURNED','PICKED_UP')
+    }
+    column "estimated_arrival" {
+      type = date
+    }
+    column "actual_arrival" {
+      type = date
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

@@ -1,0 +1,82 @@
+table "flyway_desktop"."chs_ecom_customer_customer_summary" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "customer_id" {
+      type = varchar(50)
+    }
+    column "full_name" {
+      type = varchar(50)
+    }
+    column "username" {
+      type = varchar(100)
+    }
+    column "gender" {
+      type = varchar(20)
+    }
+    column "dob" {
+      type = date
+    }
+    column "anniversary" {
+      type = date
+    }
+    column "mobile_number" {
+      type = varchar(20)
+    }
+    column "email_id" {
+      type = varchar(50)
+    }
+    column "referred_by" {
+      type = bigint unsigned
+    }
+    column "registered_on" {
+      type = datetime
+    }
+    column "referral_count" {
+      type = int
+    }
+    column "total_orders" {
+      type = int
+    }
+    column "deliverd_orders" {
+      type = int
+    }
+    column "cancelled_orders" {
+      type = int
+    }
+    column "returned_orders" {
+      type = int
+    }
+    column "total_price" {
+      type = decimal(12,2)
+    }
+    column "last_ordered_on" {
+      type = date
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

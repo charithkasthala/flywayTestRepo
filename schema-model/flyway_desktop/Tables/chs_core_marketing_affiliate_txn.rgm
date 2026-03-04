@@ -1,0 +1,153 @@
+table "flyway_desktop"."chs_core_marketing_affiliate_txn" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "affiliate_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "affiliate_click_id" {
+      type = bigint
+    }
+    column "order_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "order_amount" {
+      type = decimal(15,2)
+      null = NOT NULL
+    }
+    column "commission_rate" {
+      type = decimal(5,2)
+    }
+    column "commission_amount" {
+      type = decimal(15,2)
+      null = NOT NULL
+    }
+    column "commission_type" {
+      type = enum('PERCENTAGE','FIXED','TIERED','BONUS','PENALTY')
+      default = 'PERCENTAGE'
+    }
+    column "txn_date" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "status" {
+      type = enum('PENDING','APPROVED','PAID','CANCELLED','REVERSED','HOLD','DISPUTED')
+      default = 'PENDING'
+    }
+    column "payment_date" {
+      type = datetime
+    }
+    column "payment_reference" {
+      type = varchar(100)
+    }
+    column "notes" {
+      type = text
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_affiliate_txn"."chs_core_marketing_affiliate_txn_ibfk_1" {
+  columns = [
+    "affiliate_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_affiliate"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = CASCADE
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_affiliate_txn"."chs_core_marketing_affiliate_txn_ibfk_2" {
+  columns = [
+    "affiliate_click_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_affiliate_click"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = SET NULL
+}
+
+index "flyway_desktop"."chs_core_marketing_affiliate_txn"."affiliate_click_id" {
+  columns = <
+    {
+      name = affiliate_click_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_affiliate_txn"."idx_affiliate_pending" {
+  columns = <
+    {
+      name = affiliate_id
+    }
+
+    {
+      name = status
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_affiliate_txn"."idx_txn_date" {
+  columns = <
+    {
+      name = txn_date
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_affiliate_txn"."idx_txn_status" {
+  columns = <
+    {
+      name = status
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_affiliate_txn"."uk_affiliate_order" {
+  columns = <
+    {
+      name = affiliate_id
+    }
+
+    {
+      name = order_id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

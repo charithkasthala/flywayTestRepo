@@ -1,0 +1,66 @@
+table "flyway_desktop"."chs_ecom_sales_order_ratings_details" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "order_id" {
+      type = bigint unsigned
+    }
+    column "element_id" {
+      type = bigint unsigned
+    }
+    column "rating" {
+      type = decimal(10,2)
+    }
+    column "generated_on" {
+      type = datetime
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_ecom_sales_order_ratings_details"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_ecom_sales_order_ratings_details"."order_element_UNQ" {
+  columns = <
+    {
+      name = order_id
+    }
+
+    {
+      name = element_id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

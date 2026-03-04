@@ -1,0 +1,234 @@
+table "flyway_desktop"."chs_core_marketing_metrics_daily" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "metric_date" {
+      type = date
+      null = NOT NULL
+    }
+    column "metric_type_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "campaign_id" {
+      type = bigint
+    }
+    column "promotion_id" {
+      type = bigint
+    }
+    column "coupon_id" {
+      type = bigint
+    }
+    column "affiliate_id" {
+      type = bigint
+    }
+    column "loyalty_program_id" {
+      type = bigint
+    }
+    column "referral_program_id" {
+      type = bigint
+    }
+    column "segment_id" {
+      type = bigint
+    }
+    column "channel" {
+      type = enum('EMAIL','SMS','WHATSAPP','PUSH','SOCIAL','AFFILIATE','DIRECT','ORGANIC','PAID_SEARCH','DISPLAY_ADS','VIDEO_ADS','REFERRAL','LOYALTY','IN_STORE','MOBILE_APP','WEB','PARTNER','OTHER')
+      default = 'OTHER'
+    }
+    column "value" {
+      type = decimal(15,4)
+      null = NOT NULL
+    }
+    column "previous_value" {
+      type = decimal(15,4)
+    }
+    column "change_percentage" {
+      type = decimal(10,2)
+    }
+    column "target_value" {
+      type = decimal(15,4)
+    }
+    column "performance_status" {
+      type = enum('BELOW_TARGET','ON_TARGET','ABOVE_TARGET','EXCEEDED','FAILED')
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_metrics_daily"."chs_core_marketing_metrics_daily_ibfk_1" {
+  columns = [
+    "metric_type_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_metric_type"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = CASCADE
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_metrics_daily"."chs_core_marketing_metrics_daily_ibfk_2" {
+  columns = [
+    "campaign_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_campaign"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = SET NULL
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_metrics_daily"."chs_core_marketing_metrics_daily_ibfk_3" {
+  columns = [
+    "promotion_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_promotion"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = SET NULL
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_metrics_daily"."chs_core_marketing_metrics_daily_ibfk_4" {
+  columns = [
+    "coupon_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_coupon"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = SET NULL
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_metrics_daily"."chs_core_marketing_metrics_daily_ibfk_5" {
+  columns = [
+    "affiliate_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_affiliate"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = SET NULL
+}
+
+index "flyway_desktop"."chs_core_marketing_metrics_daily"."affiliate_id" {
+  columns = <
+    {
+      name = affiliate_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_metrics_daily"."coupon_id" {
+  columns = <
+    {
+      name = coupon_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_metrics_daily"."idx_metric_campaign" {
+  columns = <
+    {
+      name = campaign_id
+    }
+
+    {
+      name = metric_date
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_metrics_daily"."idx_metric_channel" {
+  columns = <
+    {
+      name = channel
+    }
+
+    {
+      name = metric_date
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_metrics_daily"."idx_metric_date" {
+  columns = <
+    {
+      name = metric_date
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_metrics_daily"."metric_type_id" {
+  columns = <
+    {
+      name = metric_type_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_metrics_daily"."promotion_id" {
+  columns = <
+    {
+      name = promotion_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_metrics_daily"."uk_metric_date_type" {
+  columns = <
+    {
+      name = metric_date
+    }
+
+    {
+      name = metric_type_id
+    }
+
+    {
+      name = campaign_id
+    }
+
+    {
+      name = channel
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

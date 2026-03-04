@@ -1,0 +1,51 @@
+table "flyway_desktop"."chs_core_notif_report_vendor_performance" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "vendor_code" {
+      type = varchar(50)
+    }
+    column "channel" {
+      type = enum('EMAIL','SMS','WHATSAPP','PUSH')
+    }
+    column "report_period" {
+      type = varchar(20)
+    }
+    column "success_rate" {
+      type = decimal(5,2)
+    }
+    column "avg_latency_ms" {
+      type = bigint
+    }
+    column "total_failures" {
+      type = int
+    }
+    column "tenant_id" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

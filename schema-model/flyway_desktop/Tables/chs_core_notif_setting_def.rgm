@@ -1,0 +1,62 @@
+table "flyway_desktop"."chs_core_notif_setting_def" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "setting_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "description" {
+      type = varchar(255)
+    }
+    column "value_type" {
+      type = enum('INT','DECIMAL','STRING','BOOLEAN','JSON')
+      null = NOT NULL
+    }
+    column "default_value" {
+      type = varchar(255)
+    }
+    column "unit" {
+      type = varchar(20)
+    }
+    column "is_active" {
+      type = tinyint
+      default = 1
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_notif_setting_def"."uk_notif_setting_code" {
+  columns = <
+    {
+      name = setting_code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

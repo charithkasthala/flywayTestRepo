@@ -1,0 +1,51 @@
+table "flyway_desktop"."chs_core_hrms_holiday_calendar" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "branch_code" {
+      type = varchar(20)
+    }
+    column "title" {
+      type = varchar(50)
+    }
+    column "holiday_date" {
+      type = date
+    }
+    column "holiday_type" {
+      type = enum('MANDATORY','OPTIONAL')
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_hrms_holiday_calendar"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

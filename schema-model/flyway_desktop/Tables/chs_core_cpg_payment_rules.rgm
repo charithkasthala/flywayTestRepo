@@ -1,0 +1,103 @@
+table "flyway_desktop"."chs_core_cpg_payment_rules" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "rule_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "scope_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "scope_ref_id" {
+      type = varchar(50)
+      comment = tenant_id / user_id / plan_id
+    }
+    column "min_amount" {
+      type = decimal(12,2)
+    }
+    column "max_amount" {
+      type = decimal(12,2)
+    }
+    column "currency" {
+      type = varchar(5)
+    }
+    column "allow_international" {
+      type = tinyint
+      default = 0
+    }
+    column "start_on" {
+      type = datetime
+    }
+    column "end_on" {
+      type = datetime
+    }
+    column "priority" {
+      type = int
+      default = 100
+      comment = lower = higher priority
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+      default = 'ACTIVE'
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_cpg_payment_rules"."fk_payment_rule_scope" {
+  columns = [
+    "scope_code"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_cpg_rule_scope"
+  referencedColumns = [
+    "scope_code"
+  ]
+}
+
+index "flyway_desktop"."chs_core_cpg_payment_rules"."fk_payment_rule_scope" {
+  columns = <
+    {
+      name = scope_code
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_cpg_payment_rules"."uk_payment_rule" {
+  columns = <
+    {
+      name = rule_code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

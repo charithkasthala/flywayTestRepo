@@ -1,0 +1,83 @@
+table "flyway_desktop"."chs_core_security_device_info" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "tenant_id" {
+      type = varchar(50)
+    }
+    column "unique_id" {
+      type = varchar(255)
+    }
+    column "device_id" {
+      type = varchar(255)
+    }
+    column "brand" {
+      type = varchar(100)
+    }
+    column "model" {
+      type = varchar(100)
+    }
+    column "system_name" {
+      type = varchar(100)
+    }
+    column "system_version" {
+      type = varchar(100)
+    }
+    column "build_number" {
+      type = varchar(100)
+    }
+    column "version" {
+      type = varchar(100)
+    }
+    column "device_type" {
+      type = varchar(100)
+    }
+    column "readable_version" {
+      type = varchar(100)
+    }
+    column "manufacturer" {
+      type = varchar(100)
+    }
+    column "user_agent" {
+      type = text
+    }
+    column "is_tablet" {
+      type = tinyint(1)
+    }
+    column "is_emulator" {
+      type = tinyint(1)
+    }
+    column "is_battery_charging" {
+      type = tinyint(1)
+    }
+    column "is_pin_or_fingerprint_set" {
+      type = tinyint(1)
+    }
+    column "total_memory" {
+      type = bigint
+    }
+    column "total_disk_capacity" {
+      type = bigint
+    }
+    column "ip_address" {
+      type = varchar(50)
+    }
+    column "battery_level" {
+      type = double
+    }
+    column "is_revoked" {
+      type = tinyint(1)
+      default = 0
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

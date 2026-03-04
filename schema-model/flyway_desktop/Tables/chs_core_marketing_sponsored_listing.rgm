@@ -1,0 +1,155 @@
+table "flyway_desktop"."chs_core_marketing_sponsored_listing" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "campaign_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "product_id" {
+      type = bigint
+    }
+    column "category_id" {
+      type = bigint
+    }
+    column "bid_type" {
+      type = enum('CPC','CPM','CPA')
+      default = 'CPC'
+    }
+    column "bid_amount" {
+      type = decimal(15,2)
+      null = NOT NULL
+    }
+    column "daily_budget" {
+      type = decimal(15,2)
+    }
+    column "max_bid" {
+      type = decimal(15,2)
+    }
+    column "targeting_criteria" {
+      type = json
+    }
+    column "ad_copy" {
+      type = text
+    }
+    column "ad_image_url" {
+      type = varchar(500)
+    }
+    column "ad_url" {
+      type = varchar(500)
+    }
+    column "status" {
+      type = enum('DRAFT','PENDING_APPROVAL','ACTIVE','PAUSED','STOPPED','REJECTED','ARCHIVED')
+      default = 'DRAFT'
+    }
+    column "start_date" {
+      type = datetime
+    }
+    column "end_date" {
+      type = datetime
+    }
+    column "impressions" {
+      type = int
+      default = 0
+    }
+    column "clicks" {
+      type = int
+      default = 0
+    }
+    column "conversions" {
+      type = int
+      default = 0
+    }
+    column "spend" {
+      type = decimal(15,2)
+      default = 0.00
+    }
+    column "ctr" {
+      type = decimal(10,2)
+    }
+    column "conversion_rate" {
+      type = decimal(10,2)
+    }
+    column "roas" {
+      type = decimal(10,2)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_sponsored_listing"."chs_core_marketing_sponsored_listing_ibfk_1" {
+  columns = [
+    "campaign_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_campaign"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = CASCADE
+}
+
+index "flyway_desktop"."chs_core_marketing_sponsored_listing"."campaign_id" {
+  columns = <
+    {
+      name = campaign_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_sponsored_listing"."idx_sponsored_dates" {
+  columns = <
+    {
+      name = start_date
+    }
+
+    {
+      name = end_date
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_sponsored_listing"."idx_sponsored_product" {
+  columns = <
+    {
+      name = product_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_sponsored_listing"."idx_sponsored_status" {
+  columns = <
+    {
+      name = status
+    }
+
+  >
+  type = BTREE
+}
+

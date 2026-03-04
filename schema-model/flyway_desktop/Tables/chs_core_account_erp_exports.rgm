@@ -1,0 +1,55 @@
+table "flyway_desktop"."chs_core_account_erp_exports" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "export_type" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "reference_period" {
+      type = varchar(20)
+      null = NOT NULL
+    }
+    column "file_path" {
+      type = varchar(500)
+    }
+    column "record_count" {
+      type = int
+      default = 0
+    }
+    column "status" {
+      type = enum('PENDING','PROCESSING','SUCCESS','FAILED')
+      default = 'PENDING'
+    }
+    column "error_message" {
+      type = text
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

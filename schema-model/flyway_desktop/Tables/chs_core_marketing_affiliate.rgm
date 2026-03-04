@@ -1,0 +1,165 @@
+table "flyway_desktop"."chs_core_marketing_affiliate" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "program_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "affiliate_code" {
+      type = varchar(100)
+      null = NOT NULL
+    }
+    column "affiliate_type" {
+      type = enum('INDIVIDUAL','AGENCY','INFLUENCER','WEBSITE','BLOG','SOCIAL_MEDIA','COUPON_SITE','LOYALTY_PROGRAM')
+      null = NOT NULL
+    }
+    column "affiliate_name" {
+      type = varchar(200)
+      null = NOT NULL
+    }
+    column "contact_email" {
+      type = varchar(150)
+    }
+    column "contact_phone" {
+      type = varchar(20)
+    }
+    column "website_url" {
+      type = varchar(500)
+    }
+    column "social_media_profiles" {
+      type = json
+    }
+    column "tax_id" {
+      type = varchar(50)
+    }
+    column "payment_method" {
+      type = enum('BANK_TRANSFER','PAYPAL','CHECK','CRYPTO','OTHER')
+      null = NOT NULL
+    }
+    column "payment_details" {
+      type = json
+    }
+    column "status" {
+      type = enum('PENDING','APPROVED','ACTIVE','SUSPENDED','TERMINATED','DECLINED')
+      default = 'PENDING'
+    }
+    column "approval_date" {
+      type = datetime
+    }
+    column "commission_rate" {
+      type = decimal(5,2)
+    }
+    column "additional_commission_rules" {
+      type = json
+    }
+    column "total_commission_earned" {
+      type = decimal(15,2)
+      default = 0.00
+    }
+    column "total_commission_paid" {
+      type = decimal(15,2)
+      default = 0.00
+    }
+    column "total_clicks" {
+      type = int
+      default = 0
+    }
+    column "total_conversions" {
+      type = int
+      default = 0
+    }
+    column "conversion_rate" {
+      type = decimal(5,2)
+    }
+    column "performance_tier" {
+      type = enum('BRONZE','SILVER','GOLD','PLATINUM','DIAMOND')
+      default = 'BRONZE'
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_affiliate"."chs_core_marketing_affiliate_ibfk_1" {
+  columns = [
+    "program_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_affiliate_program"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = CASCADE
+}
+
+index "flyway_desktop"."chs_core_marketing_affiliate"."affiliate_code" {
+  columns = <
+    {
+      name = affiliate_code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_core_marketing_affiliate"."idx_affiliate_code" {
+  columns = <
+    {
+      name = affiliate_code
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_affiliate"."idx_affiliate_status" {
+  columns = <
+    {
+      name = status
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_affiliate"."idx_affiliate_type" {
+  columns = <
+    {
+      name = affiliate_type
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_affiliate"."program_id" {
+  columns = <
+    {
+      name = program_id
+    }
+
+  >
+  type = BTREE
+}
+

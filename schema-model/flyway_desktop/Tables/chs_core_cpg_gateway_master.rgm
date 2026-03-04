@@ -1,0 +1,75 @@
+table "flyway_desktop"."chs_core_cpg_gateway_master" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "gateway_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "gateway_name" {
+      type = varchar(100)
+      null = NOT NULL
+    }
+    column "environment" {
+      type = enum('TEST','LIVE')
+      null = NOT NULL
+    }
+    column "supports_payment" {
+      type = tinyint
+      default = 1
+    }
+    column "supports_refund" {
+      type = tinyint
+      default = 1
+    }
+    column "supports_payout" {
+      type = tinyint
+      default = 0
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+      default = 'ACTIVE'
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_cpg_gateway_master"."uk_gateway_env" {
+  columns = <
+    {
+      name = gateway_code
+    }
+
+    {
+      name = environment
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

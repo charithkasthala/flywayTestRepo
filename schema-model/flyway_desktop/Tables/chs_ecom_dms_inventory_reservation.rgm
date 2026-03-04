@@ -1,0 +1,51 @@
+table "flyway_desktop"."chs_ecom_dms_inventory_reservation" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "order_num" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "sku" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "reserved_qty" {
+      type = int
+      null = NOT NULL
+    }
+    column "reservation_status" {
+      type = enum('RESERVED','RELEASED','CONSUMED')
+    }
+    column "reserved_on" {
+      type = datetime
+    }
+    column "released_on" {
+      type = datetime
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

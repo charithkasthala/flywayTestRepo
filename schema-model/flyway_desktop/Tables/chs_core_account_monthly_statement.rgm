@@ -1,0 +1,80 @@
+table "flyway_desktop"."chs_core_account_monthly_statement" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "statement_month" {
+      type = varchar(7)
+      null = NOT NULL
+    }
+    column "total_revenue" {
+      type = decimal(18,2)
+      default = 0.00
+    }
+    column "total_tax" {
+      type = decimal(18,2)
+      default = 0.00
+    }
+    column "total_expense" {
+      type = decimal(18,2)
+      default = 0.00
+    }
+    column "gross_profit" {
+      type = decimal(18,2)
+      default = 0.00
+    }
+    column "net_profit" {
+      type = decimal(18,2)
+      default = 0.00
+    }
+    column "assets_total" {
+      type = decimal(18,2)
+      default = 0.00
+    }
+    column "liabilities_total" {
+      type = decimal(18,2)
+      default = 0.00
+    }
+    column "equity_total" {
+      type = decimal(18,2)
+      default = 0.00
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_account_monthly_statement"."uk_statement_month" {
+  columns = <
+    {
+      name = statement_month
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

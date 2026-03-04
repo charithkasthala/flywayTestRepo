@@ -1,0 +1,136 @@
+table "flyway_desktop"."chs_core_marketing_referral_usage" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "referral_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "referred_user_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "referral_source" {
+      type = enum('DIRECT_LINK','COUPON_CODE','QR_CODE','SOCIAL_MEDIA','EMAIL','SMS','WHATSAPP','IN_PERSON')
+      null = NOT NULL
+    }
+    column "referral_date" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "first_visit_date" {
+      type = datetime
+    }
+    column "signup_date" {
+      type = datetime
+    }
+    column "first_order_date" {
+      type = datetime
+    }
+    column "first_order_id" {
+      type = bigint
+    }
+    column "first_order_amount" {
+      type = decimal(15,2)
+    }
+    column "conversion_status" {
+      type = enum('VISITED','SIGNED_UP','FIRST_PURCHASE','MULTIPLE_PURCHASES','INACTIVE')
+      default = 'VISITED'
+    }
+    column "reward_status" {
+      type = enum('PENDING','QUALIFIED','ISSUED','PAID','EXPIRED','FORFEITED')
+      default = 'PENDING'
+    }
+    column "reward_issued_date" {
+      type = datetime
+    }
+    column "reward_amount" {
+      type = decimal(15,2)
+    }
+    column "reward_description" {
+      type = varchar(200)
+    }
+    column "tracking_metadata" {
+      type = json
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_referral_usage"."chs_core_marketing_referral_usage_ibfk_1" {
+  columns = [
+    "referral_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_referral"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = CASCADE
+}
+
+index "flyway_desktop"."chs_core_marketing_referral_usage"."idx_referral_conversion" {
+  columns = <
+    {
+      name = conversion_status
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_referral_usage"."idx_referral_date" {
+  columns = <
+    {
+      name = referral_date
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_referral_usage"."referral_id" {
+  columns = <
+    {
+      name = referral_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_referral_usage"."uk_referred_user" {
+  columns = <
+    {
+      name = referred_user_id
+    }
+
+    {
+      name = referral_id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

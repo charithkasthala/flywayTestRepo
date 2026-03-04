@@ -1,0 +1,130 @@
+table "flyway_desktop"."chs_core_marketing_personalization" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "campaign_id" {
+      type = bigint
+    }
+    column "segment_id" {
+      type = bigint
+    }
+    column "personalization_type" {
+      type = enum('CONTENT','OFFER','PRICING','MESSAGE','UI','RECOMMENDATION','PROMOTION','BANNER','POPUP','NOTIFICATION','EMAIL','SMS','PUSH','WHATSAPP')
+      null = NOT NULL
+    }
+    column "element_name" {
+      type = varchar(200)
+    }
+    column "element_selector" {
+      type = varchar(500)
+    }
+    column "content_variant" {
+      type = text
+    }
+    column "priority" {
+      type = int
+      default = 1
+    }
+    column "display_conditions" {
+      type = json
+    }
+    column "start_date" {
+      type = datetime
+    }
+    column "end_date" {
+      type = datetime
+    }
+    column "is_active" {
+      type = tinyint(1)
+      default = 1
+    }
+    column "performance_data" {
+      type = json
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_personalization"."chs_core_marketing_personalization_ibfk_1" {
+  columns = [
+    "campaign_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_campaign"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = SET NULL
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_personalization"."chs_core_marketing_personalization_ibfk_2" {
+  columns = [
+    "segment_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_segment"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = SET NULL
+}
+
+index "flyway_desktop"."chs_core_marketing_personalization"."campaign_id" {
+  columns = <
+    {
+      name = campaign_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_personalization"."idx_personalization_active" {
+  columns = <
+    {
+      name = is_active
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_personalization"."idx_personalization_type" {
+  columns = <
+    {
+      name = personalization_type
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_personalization"."segment_id" {
+  columns = <
+    {
+      name = segment_id
+    }
+
+  >
+  type = BTREE
+}
+

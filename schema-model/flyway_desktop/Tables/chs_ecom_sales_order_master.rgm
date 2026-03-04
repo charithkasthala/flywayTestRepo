@@ -1,0 +1,167 @@
+table "flyway_desktop"."chs_ecom_sales_order_master" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "order_num" {
+      type = varchar(50)
+    }
+    column "cpg_order_id" {
+      type = varchar(50)
+    }
+    column "username" {
+      type = varchar(100)
+    }
+    column "customer_id" {
+      type = varchar(50)
+    }
+    column "order_status" {
+      type = enum('CREATED','ORDER_PLACED','PROCESSING','SHIPPED','ABANDONED','DELIVERED','CANCELLED','RETURN_IN_PROGRESS','RETURNED','COMPLETED')
+      default = 'CREATED'
+    }
+    column "order_type" {
+      type = enum('ONE_TIME','SUBSCRIPTION','DELIVERY_QUOTA')
+      default = 'ONE_TIME'
+    }
+    column "total_price" {
+      type = decimal(10,2)
+    }
+    column "total_mrp" {
+      type = decimal(10,2)
+    }
+    column "final_price" {
+      type = decimal(10,2)
+    }
+    column "total_items" {
+      type = int
+    }
+    column "total_qty" {
+      type = int
+    }
+    column "disc_amount" {
+      type = decimal(10,2)
+      default = 0.00
+    }
+    column "coupon_disc_amount" {
+      type = decimal(10,2)
+    }
+    column "tax_amount" {
+      type = decimal(10,2)
+      default = 0.00
+    }
+    column "shipping_charge" {
+      type = decimal(10,2)
+      default = 0.00
+    }
+    column "payment_status" {
+      type = enum('PENDING','COMPLETED','FAILED','REFUND_IN_PROGRESS','REFUNDED')
+      default = 'PENDING'
+    }
+    column "payment_method" {
+      type = enum('CREDIT_CARD','DEBIT_CARD','PAYPAL','UPI','NET_BANKING','WALLET')
+      default = 'UPI'
+    }
+    column "billing_address_id" {
+      type = bigint
+    }
+    column "placed_on" {
+      type = datetime
+    }
+    column "file_id" {
+      type = varchar(50)
+    }
+    column "invoice_url" {
+      type = varchar(500)
+    }
+    column "return_term" {
+      type = datetime
+    }
+    column "order_rating" {
+      type = decimal(10,2)
+    }
+    column "is_reviewed" {
+      type = tinyint
+      default = 0
+    }
+    column "awb_code" {
+      type = varchar(50)
+    }
+    column "retry_payment_time" {
+      type = datetime
+    }
+    column "order_weight" {
+      type = decimal(10,2)
+    }
+    column "package_weight" {
+      type = decimal(10,2)
+    }
+    column "total_weight" {
+      type = decimal(10,2)
+    }
+    column "is_wallet_included" {
+      type = tinyint
+    }
+    column "wallet_txn_id" {
+      type = varchar(50)
+    }
+    column "wallet_amount" {
+      type = decimal(10,2)
+    }
+    column "amount" {
+      type = varchar(45)
+    }
+    column "wallet_debit_type" {
+      type = enum('FULL','PARTIAL','NONE')
+    }
+    column "inventory_model" {
+      type = varchar(50)
+    }
+    column "supply_model" {
+      type = enum('QUICK_COMMERCE','E_COMMERCE')
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_ecom_sales_order_master"."ft_fulltext" {
+  columns = <
+    {
+      name = order_num
+    }
+
+  >
+  type = FULLTEXT
+}
+
+index "flyway_desktop"."chs_ecom_sales_order_master"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

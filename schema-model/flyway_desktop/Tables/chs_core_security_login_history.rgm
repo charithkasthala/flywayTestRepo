@@ -1,0 +1,115 @@
+table "flyway_desktop"."chs_core_security_login_history" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "username" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "user_id" {
+      type = varchar(50)
+    }
+    column "client_code" {
+      type = varchar(50)
+    }
+    column "channel_code" {
+      type = varchar(50)
+    }
+    column "login_time" {
+      type = datetime
+    }
+    column "logout_time" {
+      type = datetime
+    }
+    column "login_type" {
+      type = enum('MOBILE','EMAIL','USERNAME')
+      null = NOT NULL
+    }
+    column "is_logged_in" {
+      type = tinyint
+      default = 0
+    }
+    column "duration_ms" {
+      type = bigint
+    }
+    column "token" {
+      type = varchar(255)
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_security_login_history"."fk_login_history_channel" {
+  columns = [
+    "channel_code"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_security_channel_master"
+  referencedColumns = [
+    "code"
+  ]
+}
+
+foreignKey "flyway_desktop"."chs_core_security_login_history"."fk_login_history_client" {
+  columns = [
+    "client_code"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_security_client_master"
+  referencedColumns = [
+    "code"
+  ]
+}
+
+index "flyway_desktop"."chs_core_security_login_history"."fk_login_history_channel" {
+  columns = <
+    {
+      name = channel_code
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_security_login_history"."fk_login_history_client" {
+  columns = <
+    {
+      name = client_code
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_security_login_history"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

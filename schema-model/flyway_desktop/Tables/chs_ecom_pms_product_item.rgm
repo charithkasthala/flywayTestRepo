@@ -1,0 +1,173 @@
+table "flyway_desktop"."chs_ecom_pms_product_item" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "seo_code" {
+      type = varchar(50)
+    }
+    column "product_id" {
+      type = bigint unsigned
+    }
+    column "slug" {
+      type = varchar(500)
+    }
+    column "sku_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "gtin" {
+      type = varchar(20)
+      null = NOT NULL
+    }
+    column "title" {
+      type = varchar(100)
+    }
+    column "description" {
+      type = varchar(1000)
+    }
+    column "status" {
+      type = enum('ACTIVE','OUT_OF_STOCK','DISCONTINUED','DISABLED')
+      null = NOT NULL
+      default = 'ACTIVE'
+    }
+    column "total_ratings" {
+      type = int
+    }
+    column "avg_rating" {
+      type = decimal(10,2)
+    }
+    column "is_default" {
+      type = tinyint
+      null = NOT NULL
+      default = 0
+    }
+    column "return_allowed" {
+      type = tinyint
+    }
+    column "exchange_allowed" {
+      type = tinyint
+    }
+    column "is_seo_exist" {
+      type = tinyint
+    }
+    column "tax_profile_id" {
+      type = bigint
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+    column "subscription_enabled" {
+      type = tinyint(1)
+      null = NOT NULL
+      default = 0
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_ecom_pms_product_item"."fk_item_tax_profile" {
+  columns = [
+    "tax_profile_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_ecom_ims_tax_profile_master"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+foreignKey "flyway_desktop"."chs_ecom_pms_product_item"."fk_product_item_product" {
+  columns = [
+    "product_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_ecom_pms_product_master"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_ecom_pms_product_item"."fk_item_tax_profile" {
+  columns = <
+    {
+      name = tax_profile_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_ecom_pms_product_item"."fk_product_item_product" {
+  columns = <
+    {
+      name = product_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_ecom_pms_product_item"."ft_ngram" {
+  columns = <
+    {
+      name = title
+    }
+
+    {
+      name = slug
+    }
+
+  >
+  type = FULLTEXT
+}
+
+index "flyway_desktop"."chs_ecom_pms_product_item"."gtin_UNIQUE" {
+  columns = <
+    {
+      name = gtin
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_ecom_pms_product_item"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_ecom_pms_product_item"."slug_UNIQUE" {
+  columns = <
+    {
+      name = slug
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

@@ -1,0 +1,53 @@
+table "flyway_desktop"."chs_core_cpg_fraud_rule_conditions" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "rule_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "attribute" {
+      type = enum('TXN_COUNT','TXN_AMOUNT','TXN_VELOCITY','IP_ADDRESS','COUNTRY','DEVICE_ID','CARD_BIN','UPI_ID')
+      null = NOT NULL
+    }
+    column "operator" {
+      type = enum('EQ','NEQ','GT','GTE','LT','LTE','IN','NOT_IN')
+      null = NOT NULL
+    }
+    column "comparison_value" {
+      type = varchar(255)
+      null = NOT NULL
+    }
+    column "time_window_minutes" {
+      type = int
+      comment = Required for velocity rules
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_cpg_fraud_rule_conditions"."idx_fraud_rule_cond" {
+  columns = <
+    {
+      name = rule_code
+    }
+
+  >
+  type = BTREE
+}
+

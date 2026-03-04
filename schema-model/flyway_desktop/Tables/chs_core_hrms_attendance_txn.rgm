@@ -1,0 +1,64 @@
+table "flyway_desktop"."chs_core_hrms_attendance_txn" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "employee_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "action" {
+      type = enum('IN','OUT')
+      null = NOT NULL
+    }
+    column "action_time" {
+      type = datetime
+      null = NOT NULL
+    }
+    column "source" {
+      type = enum('BIOMETRIC','MOBILE','WEB','ADMIN')
+      default = 'BIOMETRIC'
+    }
+    column "latitude" {
+      type = decimal(10,7)
+    }
+    column "longitude" {
+      type = decimal(10,7)
+    }
+    column "device_id" {
+      type = varchar(50)
+    }
+    column "remarks" {
+      type = varchar(200)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_hrms_attendance_txn"."fk_att_txn_emp" {
+  columns = [
+    "employee_code"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_hrms_employee_master"
+  referencedColumns = [
+    "emp_code"
+  ]
+}
+
+index "flyway_desktop"."chs_core_hrms_attendance_txn"."fk_att_txn_emp" {
+  columns = <
+    {
+      name = employee_code
+    }
+
+  >
+  type = BTREE
+}
+

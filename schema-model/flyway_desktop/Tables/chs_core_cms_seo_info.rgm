@@ -1,0 +1,74 @@
+table "flyway_desktop"."chs_core_cms_seo_info" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "code" {
+      type = varchar(500)
+    }
+    column "title" {
+      type = varchar(100)
+    }
+    column "description" {
+      type = varchar(1000)
+    }
+    column "url" {
+      type = varchar(500)
+    }
+    column "og_title" {
+      type = varchar(100)
+    }
+    column "og_description" {
+      type = varchar(1000)
+    }
+    column "type" {
+      type = enum('INFO','PAGE')
+    }
+    column "keywords" {
+      type = mediumtext
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_cms_seo_info"."code_UNIQUE" {
+  columns = <
+    {
+      name = code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_core_cms_seo_info"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

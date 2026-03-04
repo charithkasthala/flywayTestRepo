@@ -1,0 +1,152 @@
+table "flyway_desktop"."chs_core_marketing_contest" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "contest_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "contest_name" {
+      type = varchar(200)
+      null = NOT NULL
+    }
+    column "contest_type" {
+      type = enum('LUCKY_DRAW','QUIZ','PHOTO','VIDEO','ESSAY','VOTING','PREDICTION','GAMIFICATION','REFERRAL_BASED','PURCHASE_BASED','SOCIAL_MEDIA','CREATIVE_SUBMISSION','INSTANT_WIN','SWEEPSTAKES','SKILL_BASED')
+      null = NOT NULL
+    }
+    column "description" {
+      type = text
+    }
+    column "start_date" {
+      type = datetime
+      null = NOT NULL
+    }
+    column "end_date" {
+      type = datetime
+      null = NOT NULL
+    }
+    column "entry_start_date" {
+      type = datetime
+    }
+    column "entry_end_date" {
+      type = datetime
+    }
+    column "voting_start_date" {
+      type = datetime
+    }
+    column "voting_end_date" {
+      type = datetime
+    }
+    column "announcement_date" {
+      type = datetime
+    }
+    column "status" {
+      type = enum('DRAFT','SCHEDULED','ACTIVE','VOTING','JUDGING','ANNOUNCED','COMPLETED','CANCELLED')
+      default = 'DRAFT'
+    }
+    column "participation_type" {
+      type = enum('FREE','PAID','PURCHASE_REQUIRED','REFERRAL_REQUIRED','SOCIAL_SHARE_REQUIRED')
+      default = 'FREE'
+    }
+    column "entry_fee" {
+      type = decimal(10,2)
+      default = 0.00
+    }
+    column "max_participants" {
+      type = int
+    }
+    column "max_entries_per_participant" {
+      type = int
+      default = 1
+    }
+    column "eligibility_criteria" {
+      type = json
+    }
+    column "judging_criteria" {
+      type = json
+    }
+    column "prizes" {
+      type = json
+    }
+    column "terms_and_conditions" {
+      type = text
+    }
+    column "banner_image_url" {
+      type = varchar(500)
+    }
+    column "landing_page_url" {
+      type = varchar(500)
+    }
+    column "social_sharing_config" {
+      type = json
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_marketing_contest"."contest_code" {
+  columns = <
+    {
+      name = contest_code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_core_marketing_contest"."idx_contest_dates" {
+  columns = <
+    {
+      name = start_date
+    }
+
+    {
+      name = end_date
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_contest"."idx_contest_status" {
+  columns = <
+    {
+      name = status
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_contest"."idx_contest_type" {
+  columns = <
+    {
+      name = contest_type
+    }
+
+  >
+  type = BTREE
+}
+

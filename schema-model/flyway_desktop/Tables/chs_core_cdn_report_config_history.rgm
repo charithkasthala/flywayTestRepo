@@ -1,0 +1,40 @@
+table "flyway_desktop"."chs_core_cdn_report_config_history" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "config_type" {
+      type = enum('ASSET','FIREWALL','SIGNED_URL','MEDIA_OPT','CACHE','PURGE')
+      null = NOT NULL
+    }
+    column "reference_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "old_config" {
+      type = json
+    }
+    column "new_config" {
+      type = json
+    }
+    column "changed_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "changed_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

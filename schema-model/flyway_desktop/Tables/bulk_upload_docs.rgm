@@ -1,0 +1,57 @@
+table "flyway_desktop"."bulk_upload_docs" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "title" {
+      type = varchar(100)
+    }
+    column "description" {
+      type = varchar(1000)
+    }
+    column "templete_file_id" {
+      type = varchar(50)
+    }
+    column "templete_file_url" {
+      type = varchar(500)
+    }
+    column "guide_file_id" {
+      type = varchar(50)
+    }
+    column "guide_file_url" {
+      type = varchar(500)
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+      null = NOT NULL
+      default = 'ACTIVE'
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

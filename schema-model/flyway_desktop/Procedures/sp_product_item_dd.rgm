@@ -1,0 +1,100 @@
+procedure "flyway_desktop"."sp_product_item_dd" {
+  parameters = [
+  ]
+  text = """-
+BEGIN
+    DECLARE done INT DEFAULT 0;
+    DECLARE v_product_code VARCHAR(100);
+    DECLARE v_slug VARCHAR(500);
+    DECLARE v_sku VARCHAR(50);
+    DECLARE v_gtin VARCHAR(12);
+    DECLARE v_title VARCHAR(100);
+    DECLARE v_description VARCHAR(1000);
+    DECLARE v_status VARCHAR(100);
+    DECLARE v_total_ratings INT;
+    DECLARE v_avg_rating DECIMAL(10,2);
+    DECLARE v_is_default TINYINT;
+    DECLARE v_min_order_qty INT;
+    DECLARE v_max_order_qty INT;
+    DECLARE v_return_allowed TINYINT;
+    DECLARE v_min_stock_alert TINYINT;
+    DECLARE v_available_stock INT;
+    DECLARE v_created_by VARCHAR(50) DEFAULT 'system';
+    DECLARE v_modified_by VARCHAR(50) DEFAULT 'system';
+    DECLARE v_product_id BIGINT;
+	DECLARE is_success INT DEFAULT 0;
+    DECLARE insert_count INT DEFAULT 0;
+
+
+    DECLARE cur CURSOR FOR
+        SELECT product_code, slug, sku, gtin, title, description, status, total_ratings, avg_rating, is_default, min_order_qty, max_order_qty, return_allowed, min_stock_alert, available_stock
+        FROM dd_product_item
+        WHERE is_verified = 1;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done=1;
+			DECLARE EXIT HANDLER FOR SQLEXCEPTION
+				BEGIN
+					ROLLBACK;
+					-- SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'An error occurred during the transaction. All executed statements have been rolled back.';
+					 SET @msg='ALL EXECUTED STATEMENTS ARE ROLLBACKED FOR GETTING ERROR';
+					 SET is_success = 0;
+				END;
+
+    START TRANSACTION;
+
+    OPEN cur;
+
+    read_loop: LOOP
+
+        FETCH cur INTO v_product_code, v_slug, v_sku, v_gtin, v_title, v_description, v_status, v_total_ratings, v_avg_rating, v_is_default, v_min_order_qty, v_max_order_qty, v_return_allowed, v_min_stock_alert, v_available_stock;
+
+       IF done THEN
+            LEAVE read_loop;
+        END IF;
+
+        SELECT id INTO v_product_id FROM chs_ecom_pms_product_master WHERE code = v_product_code LIMIT 1;
+        -- IF v_product_id IS NOT NULL THEN
+        IF v_product_id IS NULL THEN
+			SIGNAL SQLSTATE '45000' ;
+            SET @msg =  CONCAT('Product code not found: ', v_product_code);
+		END IF;
+        
+            INSERT INTO product_item (
+                product_id, slug, sku, gtin, title, description, status, total_ratings, avg_rating, is_default, min_order_qty, max_order_qty, return_allowed, min_stock_alert, available_stock
+            ) VALUES (
+                v_product_id, v_slug, v_sku, v_gtin, v_title, v_description, v_status, v_total_ratings, v_avg_rating, v_is_default, v_min_order_qty, v_max_order_qty, v_return_allowed, v_min_stock_alert, v_available_stock
+            );
+		SET insert_count = insert_count + 1;
+            /*
+            ON DUPLICATE KEY UPDATE
+                slug = VALUES(slug),
+                title = VALUES(title),
+                description = VALUES(description),
+                status = VALUES(status),
+                total_ratings = VALUES(total_ratings),
+                avg_rating = VALUES(avg_rating),
+                is_default = VALUES(is_default),
+                min_order_qty = VALUES(min_order_qty),
+                max_order_qty = VALUES(max_order_qty),
+                return_allowed = VALUES(return_allowed),
+                min_stock_alert = VALUES(min_stock_alert),
+                available_stock = VALUES(available_stock);
+                */
+       -- END IF;
+    END LOOP;
+    CLOSE cur;
+    IF insert_count > 0 THEN
+    COMMIT;
+    SET is_success = 1;
+    SET @msg = CONCAT('Success: ', insert_count, ' records inserted and deleted.');
+    DELETE FROM dd_product_item WHERE is_verified = 1;
+ELSE
+    ROLLBACK;
+    SET is_success = 0;
+    SET @msg = 'No inserts performed. Transaction rolled back.';
+END IF;
+    SELECT is_success AS is_success;
+END
+"""
+}
+

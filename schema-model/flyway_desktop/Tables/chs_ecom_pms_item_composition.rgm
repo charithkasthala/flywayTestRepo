@@ -1,0 +1,91 @@
+table "flyway_desktop"."chs_ecom_pms_item_composition" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "item_id" {
+      type = bigint unsigned
+    }
+    column "raw_material_id" {
+      type = bigint unsigned
+    }
+    column "unit_type" {
+      type = enum('KILOGRAMS','GRAMS','LITERS','MILLILITERS','METERS','CENTIMETERS','INCHES','PIECE')
+    }
+    column "unit_value" {
+      type = decimal(10,2)
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_ecom_pms_item_composition"."fk_item_comp_item" {
+  columns = [
+    "item_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_ecom_pms_product_item"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+foreignKey "flyway_desktop"."chs_ecom_pms_item_composition"."fk_item_comp_rawmaterial" {
+  columns = [
+    "raw_material_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_ecom_pms_raw_material"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_ecom_pms_item_composition"."fk_item_comp_item" {
+  columns = <
+    {
+      name = item_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_ecom_pms_item_composition"."fk_item_comp_rawmaterial" {
+  columns = <
+    {
+      name = raw_material_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_ecom_pms_item_composition"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

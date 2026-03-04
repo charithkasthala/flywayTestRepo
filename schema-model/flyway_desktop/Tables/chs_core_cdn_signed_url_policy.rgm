@@ -1,0 +1,71 @@
+table "flyway_desktop"."chs_core_cdn_signed_url_policy" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "asset_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "expiry_seconds" {
+      type = int
+      null = NOT NULL
+    }
+    column "max_uses" {
+      type = int
+    }
+    column "ip_restriction_enabled" {
+      type = tinyint
+      default = 0
+    }
+    column "signing_algorithm" {
+      type = varchar(50)
+    }
+    column "vendor_key_reference" {
+      type = varchar(100)
+    }
+    column "is_enabled" {
+      type = tinyint
+      default = 1
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_cdn_signed_url_policy"."fk_cdn_signed_url_asset" {
+  columns = [
+    "asset_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_cdn_asset"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_core_cdn_signed_url_policy"."fk_cdn_signed_url_asset" {
+  columns = <
+    {
+      name = asset_id
+    }
+
+  >
+  type = BTREE
+}
+

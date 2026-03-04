@@ -1,0 +1,154 @@
+table "flyway_desktop"."chs_ecom_wms_delivery_challan" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "po_id" {
+      type = bigint unsigned
+    }
+    column "vendor_id" {
+      type = bigint unsigned
+    }
+    column "warehouse_id" {
+      type = bigint unsigned
+    }
+    column "challan_doc_url" {
+      type = varchar(500)
+    }
+    column "file_id" {
+      type = varchar(50)
+    }
+    column "dispatched_on" {
+      type = date
+      null = NOT NULL
+    }
+    column "expected_delivery_on" {
+      type = datetime
+    }
+    column "received_status" {
+      type = enum('PENDING','PARTIAL','APPROVED','REJECTED')
+    }
+    column "amount" {
+      type = decimal(10,2)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_ecom_wms_delivery_challan"."fk_dc_po" {
+  columns = [
+    "po_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_ecom_wms_purchase_order"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+foreignKey "flyway_desktop"."chs_ecom_wms_delivery_challan"."fk_dc_vendor" {
+  columns = [
+    "vendor_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_ecom_wms_vendor"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+foreignKey "flyway_desktop"."chs_ecom_wms_delivery_challan"."fk_dc_warehouse" {
+  columns = [
+    "warehouse_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_ecom_wms_warehouse_master"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_ecom_wms_delivery_challan"."code" {
+  columns = <
+    {
+      name = code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_ecom_wms_delivery_challan"."fk_dc_po" {
+  columns = <
+    {
+      name = po_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_ecom_wms_delivery_challan"."fk_dc_vendor" {
+  columns = <
+    {
+      name = vendor_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_ecom_wms_delivery_challan"."fk_dc_warehouse" {
+  columns = <
+    {
+      name = warehouse_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_ecom_wms_delivery_challan"."id" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_ecom_wms_delivery_challan"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

@@ -1,0 +1,31 @@
+procedure "flyway_desktop"."sp_generate_no_sale_products" {
+  parameters = <
+    {
+      name = p_report_date
+      datatype = date
+      mode = IN
+    }
+
+  >
+  text = """-
+BEGIN
+     DELETE FROM chs_ecom_sales_no_sale_products WHERE report_date = p_report_date;
+
+    INSERT INTO chs_ecom_sales_no_sale_products (
+        report_date, generated_on, item_title, item_slug, img_url, item_sku
+    )
+    SELECT p_report_date, NOW(), pi.title, pi.slug, ig.file_url, pi.sku
+    FROM chs_ecom_pms_product_item pi
+    LEFT JOIN chs_ecom_pms_item_gallery ig ON pi.id = ig.item_id AND ig.is_default = 1 
+    WHERE pi.id NOT IN (
+        SELECT DISTINCT oi.item_id
+        FROM chs_ecom_sales_order_master om
+        JOIN chs_ecom_sales_order_items oi ON om.id = oi.order_id
+        WHERE DATE(om.placed_on) = p_report_date
+        --  AND om.order_status IN ('DELIVERED','COMPLETED')
+    ) and pi.status='ACTIVE'
+	LIMIT 10;
+END
+"""
+}
+

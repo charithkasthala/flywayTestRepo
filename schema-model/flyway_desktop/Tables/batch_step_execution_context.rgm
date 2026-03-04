@@ -1,0 +1,33 @@
+table "flyway_desktop"."batch_step_execution_context" {
+  columns = (
+    column "STEP_EXECUTION_ID" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "SHORT_CONTEXT" {
+      type = varchar(2500)
+      null = NOT NULL
+    }
+    column "SERIALIZED_CONTEXT" {
+      type = text
+    }
+  )
+  primaryKey = {
+    columns = [
+      STEP_EXECUTION_ID
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."batch_step_execution_context"."STEP_EXEC_CTX_FK" {
+  columns = [
+    "STEP_EXECUTION_ID"
+  ]
+  referencedTable = "flyway_desktop"."batch_step_execution"
+  referencedColumns = [
+    "STEP_EXECUTION_ID"
+  ]
+}
+

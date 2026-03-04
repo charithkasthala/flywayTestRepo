@@ -1,0 +1,84 @@
+table "flyway_desktop"."chs_core_security_client_menu_groups" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "client_code" {
+      type = varchar(50)
+    }
+    column "title" {
+      type = varchar(255)
+    }
+    column "icon" {
+      type = varchar(255)
+    }
+    column "uri" {
+      type = varchar(50)
+    }
+    column "seq" {
+      type = int
+      null = NOT NULL
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+      default = 'ACTIVE'
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_security_client_menu_groups"."fk_menugroup_client" {
+  columns = [
+    "client_code"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_security_client_master"
+  referencedColumns = [
+    "code"
+  ]
+}
+
+index "flyway_desktop"."chs_core_security_client_menu_groups"."fk_menugroup_client" {
+  columns = <
+    {
+      name = client_code
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_security_client_menu_groups"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

@@ -1,0 +1,98 @@
+procedure "flyway_desktop"."sp_generate_day_sale_summary" {
+  parameters = <
+    {
+      name = p_report_date
+      datatype = date
+      mode = IN
+    }
+
+    {
+      name = p_generated_by
+      datatype = varchar(50)
+      mode = IN
+    }
+
+  >
+  text = """-
+BEGIN
+    DECLARE v_total_products_sold INT DEFAULT 0;
+    DECLARE v_total_sales_value DECIMAL(14,2) DEFAULT 0.00;
+    DECLARE v_total_orders INT DEFAULT 0;
+    DECLARE v_total_products_count INT DEFAULT 0;
+    DECLARE v_total_customers INT DEFAULT 0;
+    DECLARE v_total_cart_value DECIMAL(14,2) DEFAULT 0.00;
+    DECLARE v_avg_order_value DECIMAL(14,2) DEFAULT 0.00;
+    DECLARE v_highest_order_value DECIMAL(14,2) DEFAULT 0.00;
+    DECLARE v_lowest_order_value DECIMAL(14,2) DEFAULT 0.00;
+    DECLARE v_highest_value_product VARCHAR(50);
+    DECLARE v_highest_sale_value_product VARCHAR(50);
+
+    -- Orders & Items
+    SELECT 
+        IFNULL(SUM(oi.qty),0),
+        IFNULL(COUNT(DISTINCT oi.product_id),0)
+    INTO v_total_products_sold, v_total_products_count
+    FROM chs_ecom_sales_order_master om
+    JOIN chs_ecom_sales_order_items oi ON om.id = oi.order_id
+    WHERE DATE(om.placed_on) = p_report_date;
+     -- AND om.order_status IN ('DELIVERED','COMPLETED');
+
+    SELECT 
+        IFNULL(SUM(om.final_price),0),
+        IFNULL(COUNT(DISTINCT om.id),0),
+        IFNULL(COUNT(DISTINCT om.customer_id),0),
+        IFNULL(AVG(om.final_price),0),
+        IFNULL(MAX(om.final_price),0),
+        IFNULL(MIN(om.final_price),0)
+    INTO v_total_sales_value,v_total_orders, v_total_customers, v_avg_order_value, v_highest_order_value, v_lowest_order_value
+    FROM chs_ecom_sales_order_master om
+    WHERE DATE(om.placed_on) = p_report_date;
+   --   AND om.order_status IN ('DELIVERED','COMPLETED');
+
+    SELECT IFNULL(SUM(total_price),0)
+    INTO v_total_cart_value
+    FROM chs_ecom_sales_cart
+    WHERE DATE(last_modified_on) = p_report_date;
+
+    SELECT pi.title
+    INTO v_highest_value_product
+    FROM chs_ecom_sales_order_items oi
+    JOIN chs_ecom_sales_order_master om ON om.id = oi.order_id
+    left join chs_ecom_pms_product_item pi on oi.item_id=pi.id
+    WHERE DATE(om.placed_on) = p_report_date
+    --  AND om.order_status IN ('DELIVERED','COMPLETED')
+    ORDER BY oi.unit_price DESC
+    LIMIT 1;
+
+    SELECT title
+    INTO v_highest_sale_value_product
+    FROM (
+        SELECT pi.title,oi.item_id, SUM(oi.qty * oi.unit_price) AS total_sale
+        FROM chs_ecom_sales_order_items oi
+        JOIN chs_ecom_sales_order_master om ON om.id = oi.order_id
+        left join chs_ecom_pms_product_item pi on oi.item_id=pi.id
+        WHERE DATE(om.placed_on) = p_report_date
+        --  AND om.order_status IN ('DELIVERED','COMPLETED')
+        GROUP BY oi.item_id,pi.title
+        ORDER BY total_sale DESC
+        LIMIT 1
+    ) t;
+
+	 DELETE FROM chs_ecom_sales_day_sale_summary WHERE report_date = p_report_date;
+
+    -- Insert into summary
+    INSERT INTO chs_ecom_sales_day_sale_summary(
+        report_date, generated_on, generated_by,
+        total_products_sold, total_sales_value, total_orders, total_products_count,
+        total_customers, total_cart_value, avg_order_value, highest_order_value,
+        lowest_order_value, highest_value_product, highest_sale_value_product
+    ) VALUES (
+        p_report_date, NOW(), p_generated_by,
+        v_total_products_sold, v_total_sales_value, v_total_orders, v_total_products_count,
+        v_total_customers, v_total_cart_value, v_avg_order_value, v_highest_order_value,
+        v_lowest_order_value, v_highest_value_product, v_highest_sale_value_product
+    );
+END
+"""
+}
+

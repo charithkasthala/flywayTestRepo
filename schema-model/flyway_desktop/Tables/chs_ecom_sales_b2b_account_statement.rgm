@@ -1,0 +1,59 @@
+table "flyway_desktop"."chs_ecom_sales_b2b_account_statement" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "corporate_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "from_date" {
+      type = date
+      null = NOT NULL
+    }
+    column "to_date" {
+      type = date
+      null = NOT NULL
+    }
+    column "opening_balance" {
+      type = decimal(14,2)
+    }
+    column "closing_balance" {
+      type = decimal(14,2)
+    }
+    column "statement_status" {
+      type = enum('GENERATED','SENT','CANCELLED')
+      default = 'GENERATED'
+    }
+    column "generated_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "file_id" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

@@ -1,0 +1,107 @@
+table "flyway_desktop"."chs_core_job_schedule_txns" {
+  columns = (
+    column "txn_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "schedule_code" {
+      type = varchar(50)
+    }
+    column "task_code" {
+      type = varchar(50)
+    }
+    column "state" {
+      type = enum('SUCCESSFUL','FAILURE')
+    }
+    column "last_executed_on" {
+      type = datetime
+    }
+    column "action" {
+      type = enum('CREATED','STARTED','EXECUTED','COMPLETED','ERROR','PAUSED','STOPPED','DELETED')
+    }
+    column "tenant_id" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+  )
+  primaryKey = {
+    columns = [
+      txn_id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_job_schedule_txns"."fk_job_txn_schedule" {
+  columns = [
+    "schedule_code"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_job_schedule_master"
+  referencedColumns = [
+    "schedule_code"
+  ]
+}
+
+foreignKey "flyway_desktop"."chs_core_job_schedule_txns"."fk_schedule_txn_code" {
+  columns = [
+    "schedule_code"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_job_schedule_master"
+  referencedColumns = [
+    "schedule_code"
+  ]
+}
+
+foreignKey "flyway_desktop"."chs_core_job_schedule_txns"."fk_schedule_txn_task" {
+  columns = [
+    "task_code"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_job_task_master"
+  referencedColumns = [
+    "task_code"
+  ]
+}
+
+index "flyway_desktop"."chs_core_job_schedule_txns"."fk_schedule_txn_code" {
+  columns = <
+    {
+      name = schedule_code
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_job_schedule_txns"."fk_schedule_txn_task" {
+  columns = <
+    {
+      name = task_code
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_job_schedule_txns"."txn_id_UNIQUE" {
+  columns = <
+    {
+      name = txn_id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

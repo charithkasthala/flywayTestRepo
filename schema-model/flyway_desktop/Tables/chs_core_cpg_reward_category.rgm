@@ -1,0 +1,58 @@
+table "flyway_desktop"."chs_core_cpg_reward_category" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "category_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "category_name" {
+      type = varchar(100)
+      null = NOT NULL
+    }
+    column "description" {
+      type = varchar(255)
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+      default = 'ACTIVE'
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_cpg_reward_category"."uk_reward_category" {
+  columns = <
+    {
+      name = category_code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

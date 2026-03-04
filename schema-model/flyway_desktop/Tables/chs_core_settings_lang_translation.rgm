@@ -1,0 +1,91 @@
+table "flyway_desktop"."chs_core_settings_lang_translation" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "key_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "lang_code" {
+      type = varchar(5)
+      null = NOT NULL
+    }
+    column "translation" {
+      type = text
+      null = NOT NULL
+    }
+    column "is_fallback" {
+      type = tinyint
+      default = 0
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_settings_lang_translation"."fk_lang_translation_key" {
+  columns = [
+    "key_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_settings_lang_key"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+foreignKey "flyway_desktop"."chs_core_settings_lang_translation"."fk_lang_translation_lang" {
+  columns = [
+    "lang_code"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_settings_language_master"
+  referencedColumns = [
+    "lang_code"
+  ]
+}
+
+index "flyway_desktop"."chs_core_settings_lang_translation"."fk_lang_translation_lang" {
+  columns = <
+    {
+      name = lang_code
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_settings_lang_translation"."uk_translation" {
+  columns = <
+    {
+      name = key_id
+    }
+
+    {
+      name = lang_code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

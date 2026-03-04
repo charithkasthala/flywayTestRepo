@@ -1,0 +1,84 @@
+table "flyway_desktop"."chs_core_hrms_ot_approval" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "ot_request_id" {
+      type = bigint
+    }
+    column "total_minuits" {
+      type = time
+    }
+    column "status" {
+      type = enum('PENDING','APPROVED','DECLINED')
+    }
+    column "approved_by" {
+      type = varchar(50)
+    }
+    column "approved_level" {
+      type = enum('L1','L2')
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_hrms_ot_approval"."fk_ot_approval_req" {
+  columns = [
+    "ot_request_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_hrms_ot_request"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+foreignKey "flyway_desktop"."chs_core_hrms_ot_approval"."fk_ot_req_approval" {
+  columns = [
+    "ot_request_id"
+  ]
+  referencedTable = "flyway_desktop"."ot_request"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_core_hrms_ot_approval"."fk_ot_req_approval_idx" {
+  columns = <
+    {
+      name = ot_request_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_hrms_ot_approval"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

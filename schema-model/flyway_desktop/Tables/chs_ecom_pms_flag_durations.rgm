@@ -1,0 +1,37 @@
+table "flyway_desktop"."chs_ecom_pms_flag_durations" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "flag_id" {
+      type = bigint unsigned
+    }
+    column "start_date" {
+      type = datetime
+    }
+    column "end_date" {
+      type = datetime
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

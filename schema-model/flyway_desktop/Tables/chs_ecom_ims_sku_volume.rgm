@@ -1,0 +1,48 @@
+table "flyway_desktop"."chs_ecom_ims_sku_volume" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "sku_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "volume" {
+      type = decimal(10,2)
+      null = NOT NULL
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_ecom_ims_sku_volume"."fk_sku_volume_sku" {
+  columns = <
+    {
+      name = sku_id
+    }
+
+  >
+  type = BTREE
+}
+

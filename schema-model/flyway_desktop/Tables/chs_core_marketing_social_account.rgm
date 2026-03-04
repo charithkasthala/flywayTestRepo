@@ -1,0 +1,105 @@
+table "flyway_desktop"."chs_core_marketing_social_account" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "platform" {
+      type = enum('FACEBOOK','INSTAGRAM','TWITTER','LINKEDIN','PINTEREST','YOUTUBE','TIKTOK','SNAPCHAT','WHATSAPP_BUSINESS','GOOGLE_MY_BUSINESS')
+      null = NOT NULL
+    }
+    column "account_name" {
+      type = varchar(200)
+      null = NOT NULL
+    }
+    column "account_external_id" {
+      type = varchar(100)
+    }
+    column "account_url" {
+      type = varchar(500)
+    }
+    column "access_token" {
+      type = text
+    }
+    column "refresh_token" {
+      type = text
+    }
+    column "token_expiry" {
+      type = datetime
+    }
+    column "status" {
+      type = enum('ACTIVE','DISCONNECTED','EXPIRED','SUSPENDED')
+      default = 'ACTIVE'
+    }
+    column "is_verified" {
+      type = tinyint(1)
+      default = 0
+    }
+    column "follower_count" {
+      type = int
+      default = 0
+    }
+    column "last_synced" {
+      type = datetime
+    }
+    column "sync_config" {
+      type = json
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_marketing_social_account"."idx_social_platform" {
+  columns = <
+    {
+      name = platform
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_social_account"."idx_social_status" {
+  columns = <
+    {
+      name = status
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_social_account"."uk_platform_account" {
+  columns = <
+    {
+      name = platform
+    }
+
+    {
+      name = account_external_id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

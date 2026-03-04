@@ -1,0 +1,67 @@
+table "flyway_desktop"."chs_core_security_app_build_versions" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "client_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "platform" {
+      type = enum('WEB','MOB')
+      null = NOT NULL
+    }
+    column "build_type" {
+      type = enum('DEV','UAT','PRODUCTION')
+    }
+    column "version_code" {
+      type = int
+      null = NOT NULL
+    }
+    column "version_name" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "build_number" {
+      type = varchar(20)
+    }
+    column "release_notes" {
+      type = text
+    }
+    column "release_date" {
+      type = datetime
+    }
+    column "is_mandatory" {
+      type = tinyint(1)
+      default = 0
+    }
+    column "download_url" {
+      type = text
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(100)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(100)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

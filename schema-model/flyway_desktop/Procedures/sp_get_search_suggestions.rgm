@@ -1,0 +1,46 @@
+procedure "flyway_desktop"."sp_get_search_suggestions" {
+  parameters = <
+    {
+      name = p_search_key
+      datatype = varchar(100)
+      mode = IN
+    }
+
+  >
+  text = """-
+BEGIN
+    DECLARE v_search_key VARCHAR(100);
+
+    SET v_search_key = REPLACE(
+        TRIM(BOTH ' ' FROM REGEXP_REPLACE(LOWER(p_search_key), '[^a-z0-9 ]', '')), ' ', '* +');
+    SET v_search_key = CONCAT('+', v_search_key, '*');
+
+    SELECT JSON_ARRAYAGG(
+        JSON_OBJECT(
+            'itemSlug', p.item_slug,
+            'itemTitle', p.item_title
+        )
+    ) AS result
+    FROM (
+        SELECT DISTINCT p1.item_slug, p1.item_title
+        FROM chs_ecom_pms_product_card p1
+        JOIN (
+            SELECT DISTINCT p.product_id
+            FROM chs_ecom_pms_product_card p
+            LEFT JOIN chs_ecom_pms_search_keywords sk ON sk.product_id = p.product_id
+            WHERE (
+                  MATCH(p.product_title, p.product_slug) AGAINST(v_search_key IN BOOLEAN MODE)
+                  OR MATCH(p.item_title, p.item_slug) AGAINST(v_search_key IN BOOLEAN MODE)
+                  OR MATCH(sk.keyword) AGAINST(v_search_key IN BOOLEAN MODE)
+              )
+            ORDER BY
+                MATCH(p.product_title, p.product_slug) AGAINST(v_search_key IN BOOLEAN MODE) DESC,
+                MATCH(p.item_title, p.item_slug) AGAINST(v_search_key IN BOOLEAN MODE) DESC,
+                MATCH(sk.keyword) AGAINST(v_search_key IN BOOLEAN MODE) DESC,
+                p.product_title
+        ) AS distinct_products ON p1.product_id = distinct_products.product_id
+    ) AS p;
+END
+"""
+}
+

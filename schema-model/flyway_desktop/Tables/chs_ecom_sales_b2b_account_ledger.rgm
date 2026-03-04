@@ -1,0 +1,61 @@
+table "flyway_desktop"."chs_ecom_sales_b2b_account_ledger" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "corporate_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "ref_type" {
+      type = enum('ORDER','PAYMENT','REFUND','ADJUSTMENT')
+      null = NOT NULL
+    }
+    column "ref_id" {
+      type = bigint
+    }
+    column "debit" {
+      type = decimal(14,2)
+      default = 0.00
+    }
+    column "credit" {
+      type = decimal(14,2)
+      default = 0.00
+    }
+    column "balance" {
+      type = decimal(14,2)
+      null = NOT NULL
+    }
+    column "txn_status" {
+      type = enum('POSTED','REVERSED')
+      default = 'POSTED'
+    }
+    column "txn_date" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

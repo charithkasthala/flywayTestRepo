@@ -1,0 +1,123 @@
+table "flyway_desktop"."chs_core_marketing_affiliate_click" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "affiliate_link_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "click_id" {
+      type = varchar(100)
+    }
+    column "visitor_ip" {
+      type = varchar(45)
+    }
+    column "user_agent" {
+      type = text
+    }
+    column "referrer_url" {
+      type = varchar(500)
+    }
+    column "landing_page" {
+      type = varchar(500)
+    }
+    column "device_type" {
+      type = enum('DESKTOP','MOBILE','TABLET','UNKNOWN')
+    }
+    column "browser" {
+      type = varchar(100)
+    }
+    column "os" {
+      type = varchar(100)
+    }
+    column "country_code" {
+      type = varchar(2)
+    }
+    column "region" {
+      type = varchar(100)
+    }
+    column "city" {
+      type = varchar(100)
+    }
+    column "clicked_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "session_id" {
+      type = varchar(100)
+    }
+    column "is_unique_click" {
+      type = tinyint(1)
+      default = 1
+    }
+    column "click_metadata" {
+      type = json
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_affiliate_click"."chs_core_marketing_affiliate_click_ibfk_1" {
+  columns = [
+    "affiliate_link_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_affiliate_link"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = CASCADE
+}
+
+index "flyway_desktop"."chs_core_marketing_affiliate_click"."click_id" {
+  columns = <
+    {
+      name = click_id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_core_marketing_affiliate_click"."idx_click_affiliate" {
+  columns = <
+    {
+      name = affiliate_link_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_affiliate_click"."idx_click_date" {
+  columns = <
+    {
+      name = clicked_on
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_affiliate_click"."idx_click_unique" {
+  columns = <
+    {
+      name = is_unique_click
+    }
+
+  >
+  type = BTREE
+}
+

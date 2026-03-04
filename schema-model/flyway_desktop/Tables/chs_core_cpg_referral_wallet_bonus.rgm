@@ -1,0 +1,83 @@
+table "flyway_desktop"."chs_core_cpg_referral_wallet_bonus" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "ref_wallet_type" {
+      type = varchar(50)
+    }
+    column "amount" {
+      type = decimal(12,2)
+      null = NOT NULL
+    }
+    column "referrer_wallet_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "referee_wallet_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "referrer_bonus_amount" {
+      type = decimal(12,2)
+      null = NOT NULL
+    }
+    column "referee_bonus_amount" {
+      type = decimal(12,2)
+    }
+    column "issued_on" {
+      type = datetime
+      null = NOT NULL
+      default = CURRENT_TIMESTAMP
+    }
+    column "status" {
+      type = enum('INITIATED','CREDITED','EXPIRED')
+    }
+    column "created_on" {
+      type = datetime
+      null = NOT NULL
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_cpg_referral_wallet_bonus"."fk_cpg_ref_bonus_type" {
+  columns = [
+    "ref_wallet_type"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_cpg_referral_wallet_types"
+  referencedColumns = [
+    "code"
+  ]
+}
+
+index "flyway_desktop"."chs_core_cpg_referral_wallet_bonus"."fk_cpg_ref_bonus_type" {
+  columns = <
+    {
+      name = ref_wallet_type
+    }
+
+  >
+  type = BTREE
+}
+

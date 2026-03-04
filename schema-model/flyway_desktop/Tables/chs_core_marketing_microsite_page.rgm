@@ -1,0 +1,114 @@
+table "flyway_desktop"."chs_core_marketing_microsite_page" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "microsite_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "page_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "page_title" {
+      type = varchar(200)
+      null = NOT NULL
+    }
+    column "page_slug" {
+      type = varchar(200)
+    }
+    column "page_content" {
+      type = text
+    }
+    column "page_order" {
+      type = int
+      default = 1
+    }
+    column "is_homepage" {
+      type = tinyint(1)
+      default = 0
+    }
+    column "is_active" {
+      type = tinyint(1)
+      default = 1
+    }
+    column "meta_title" {
+      type = varchar(255)
+    }
+    column "meta_description" {
+      type = varchar(500)
+    }
+    column "meta_keywords" {
+      type = varchar(500)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_microsite_page"."chs_core_marketing_microsite_page_ibfk_1" {
+  columns = [
+    "microsite_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_microsite"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = CASCADE
+}
+
+index "flyway_desktop"."chs_core_marketing_microsite_page"."idx_page_active" {
+  columns = <
+    {
+      name = is_active
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_microsite_page"."idx_page_order" {
+  columns = <
+    {
+      name = page_order
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_microsite_page"."uk_microsite_page" {
+  columns = <
+    {
+      name = microsite_id
+    }
+
+    {
+      name = page_code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

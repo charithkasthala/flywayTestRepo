@@ -1,0 +1,77 @@
+table "flyway_desktop"."chs_ecom_sales_subscription_pricing" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "order_id" {
+      type = bigint unsigned
+    }
+    column "subscription_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "amount" {
+      type = decimal(10,2)
+      null = NOT NULL
+    }
+    column "currency" {
+      type = varchar(10)
+    }
+    column "payment_status" {
+      type = enum('PENDING','COMPLETED','FAILED')
+      default = 'PENDING'
+    }
+    column "wallet_txn_id" {
+      type = varchar(50)
+    }
+    column "wallet_amount" {
+      type = decimal(10,2)
+    }
+    column "paid_on" {
+      type = datetime
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_ecom_sales_subscription_pricing"."fk_sub_price_sub" {
+  columns = [
+    "subscription_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_ecom_sales_subscription_master"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_ecom_sales_subscription_pricing"."fk_sub_price_sub" {
+  columns = <
+    {
+      name = subscription_id
+    }
+
+  >
+  type = BTREE
+}
+

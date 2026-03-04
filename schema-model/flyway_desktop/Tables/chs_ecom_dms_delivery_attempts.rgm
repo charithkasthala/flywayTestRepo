@@ -1,0 +1,55 @@
+table "flyway_desktop"."chs_ecom_dms_delivery_attempts" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "shipment_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "attempt_number" {
+      type = int
+    }
+    column "attempt_status" {
+      type = enum('SUCCESS','FAILED')
+    }
+    column "failure_reason" {
+      type = varchar(255)
+    }
+    column "attempted_on" {
+      type = datetime
+    }
+    column "next_attempt_on" {
+      type = datetime
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_ecom_dms_delivery_attempts"."fk_dms_delivery_attempt_shipment" {
+  columns = [
+    "shipment_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_ecom_dms_shipment"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_ecom_dms_delivery_attempts"."fk_dms_delivery_attempt_shipment" {
+  columns = <
+    {
+      name = shipment_id
+    }
+
+  >
+  type = BTREE
+}
+

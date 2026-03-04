@@ -1,0 +1,44 @@
+table "flyway_desktop"."chs_ecom_sales_order_subscription_items" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "subscription_id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "product_id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "item_id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "quantity" {
+      type = int unsigned
+      null = NOT NULL
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

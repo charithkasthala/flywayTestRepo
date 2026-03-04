@@ -1,0 +1,82 @@
+table "flyway_desktop"."chs_core_notif_notification_event_rules" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "tenant_id" {
+      type = varchar(50)
+    }
+    column "event_id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "channel_code" {
+      type = varchar(50)
+    }
+    column "priority" {
+      type = int
+      default = 1
+    }
+    column "retry_count" {
+      type = int
+      default = 3
+    }
+    column "fallback_channel" {
+      type = enum('EMAIL','SMS','WHATSAPP','PUSH','IN_APP','WEBHOOK')
+    }
+    column "conditions_json" {
+      type = json
+    }
+    column "schedule_type" {
+      type = enum('IMMEDIATE','DELAYED','SCHEDULED')
+    }
+    column "delay_minutes" {
+      type = int
+    }
+    column "is_active" {
+      type = tinyint(1)
+      default = 1
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_notif_notification_event_rules"."fk_rule_event" {
+  columns = [
+    "event_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_notif_notification_events"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_core_notif_notification_event_rules"."fk_rule_event" {
+  columns = <
+    {
+      name = event_id
+    }
+
+  >
+  type = BTREE
+}
+

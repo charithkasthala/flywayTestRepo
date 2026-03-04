@@ -1,0 +1,110 @@
+table "flyway_desktop"."chs_core_marketing_video_ad_engagement" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "video_ad_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "user_id" {
+      type = bigint
+    }
+    column "session_id" {
+      type = varchar(100)
+    }
+    column "watch_start_time" {
+      type = datetime
+    }
+    column "watch_end_time" {
+      type = datetime
+    }
+    column "watch_duration_seconds" {
+      type = int
+    }
+    column "percent_watched" {
+      type = decimal(5,2)
+    }
+    column "is_completed" {
+      type = tinyint(1)
+      default = 0
+    }
+    column "clicked_cta" {
+      type = tinyint(1)
+      default = 0
+    }
+    column "clicked_on" {
+      type = datetime
+    }
+    column "device_type" {
+      type = enum('DESKTOP','MOBILE','TABLET','TV','OTHER')
+    }
+    column "browser" {
+      type = varchar(100)
+    }
+    column "os" {
+      type = varchar(100)
+    }
+    column "ip_address" {
+      type = varchar(45)
+    }
+    column "country_code" {
+      type = varchar(2)
+    }
+    column "engagement_events" {
+      type = json
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_video_ad_engagement"."chs_core_marketing_video_ad_engagement_ibfk_1" {
+  columns = [
+    "video_ad_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_video_ad"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = CASCADE
+}
+
+index "flyway_desktop"."chs_core_marketing_video_ad_engagement"."idx_engagement_user" {
+  columns = <
+    {
+      name = user_id
+    }
+
+    {
+      name = video_ad_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_video_ad_engagement"."idx_engagement_video" {
+  columns = <
+    {
+      name = video_ad_id
+    }
+
+    {
+      name = watch_start_time
+    }
+
+  >
+  type = BTREE
+}
+

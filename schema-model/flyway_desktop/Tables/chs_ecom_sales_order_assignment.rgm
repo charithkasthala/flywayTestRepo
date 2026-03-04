@@ -1,0 +1,45 @@
+table "flyway_desktop"."chs_ecom_sales_order_assignment" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "order_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "assigned_to" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "assigned_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "status" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

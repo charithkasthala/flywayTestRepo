@@ -1,0 +1,84 @@
+table "flyway_desktop"."chs_ecom_wms_vendor" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "name" {
+      type = varchar(255)
+      null = NOT NULL
+    }
+    column "company_name" {
+      type = varchar(200)
+    }
+    column "gstin" {
+      type = varchar(20)
+    }
+    column "contact_person" {
+      type = varchar(255)
+    }
+    column "phone" {
+      type = varchar(15)
+    }
+    column "email_id" {
+      type = varchar(255)
+    }
+    column "vendor_address_id" {
+      type = bigint
+    }
+    column "bank_id" {
+      type = bigint
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+      default = 'ACTIVE'
+    }
+    column "rating" {
+      type = decimal(3,2)
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_ecom_wms_vendor"."email_id" {
+  columns = <
+    {
+      name = email_id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_ecom_wms_vendor"."id" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

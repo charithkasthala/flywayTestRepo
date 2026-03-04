@@ -1,0 +1,109 @@
+table "flyway_desktop"."chs_core_marketing_affiliate_link" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "affiliate_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "link_type" {
+      type = enum('PRODUCT','CATEGORY','HOMEPAGE','SPECIAL_OFFER','LANDING_PAGE','BANNER_AD','TEXT_LINK','DEEP_LINK')
+      null = NOT NULL
+    }
+    column "destination_url" {
+      type = varchar(500)
+    }
+    column "tracking_url" {
+      type = varchar(500)
+      null = NOT NULL
+    }
+    column "link_code" {
+      type = varchar(50)
+    }
+    column "link_name" {
+      type = varchar(150)
+    }
+    column "description" {
+      type = text
+    }
+    column "is_active" {
+      type = tinyint(1)
+      default = 1
+    }
+    column "click_limit" {
+      type = int
+    }
+    column "expiry_date" {
+      type = datetime
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_affiliate_link"."chs_core_marketing_affiliate_link_ibfk_1" {
+  columns = [
+    "affiliate_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_affiliate"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = CASCADE
+}
+
+index "flyway_desktop"."chs_core_marketing_affiliate_link"."idx_affiliate_link" {
+  columns = <
+    {
+      name = affiliate_id
+    }
+
+    {
+      name = link_type
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_affiliate_link"."idx_link_active" {
+  columns = <
+    {
+      name = is_active
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_affiliate_link"."tracking_url" {
+  columns = <
+    {
+      name = tracking_url
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

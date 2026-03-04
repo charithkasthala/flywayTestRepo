@@ -1,0 +1,48 @@
+table "flyway_desktop"."chs_core_crm_ad_poster_txn" {
+  columns = (
+    column "id" {
+      type = int unsigned
+      null = NOT NULL
+    }
+    column "poster_id" {
+      type = int unsigned
+    }
+    column "username" {
+      type = varchar(50)
+    }
+    column "file_url" {
+      type = varchar(500)
+    }
+    column "prepared_on" {
+      type = datetime
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_crm_ad_poster_txn"."fk_txn_poster" {
+  columns = [
+    "poster_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_crm_ad_poster"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_core_crm_ad_poster_txn"."fk_txn_poster" {
+  columns = <
+    {
+      name = poster_id
+    }
+
+  >
+  type = BTREE
+}
+

@@ -1,0 +1,65 @@
+table "flyway_desktop"."chs_core_hrms_department_master" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "code" {
+      type = varchar(20)
+      null = NOT NULL
+    }
+    column "title" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "description" {
+      type = varchar(500)
+      null = NOT NULL
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLE')
+      null = NOT NULL
+      default = 'ACTIVE'
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_hrms_department_master"."code_UNIQUE" {
+  columns = <
+    {
+      name = code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_core_hrms_department_master"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_core_hrms_department_master"."idx_department_master_code" {
+  columns = <
+    {
+      name = code
+    }
+
+  >
+  type = BTREE
+}
+

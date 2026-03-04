@@ -1,0 +1,102 @@
+table "flyway_desktop"."chs_ecom_sales_order_summary" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "order_num" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "username" {
+      type = varchar(100)
+    }
+    column "customer_id" {
+      type = varchar(50)
+    }
+    column "full_name" {
+      type = varchar(150)
+    }
+    column "email" {
+      type = varchar(200)
+    }
+    column "mobile_num" {
+      type = varchar(15)
+    }
+    column "order_status" {
+      type = varchar(50)
+    }
+    column "total_mrp" {
+      type = decimal(10,2)
+    }
+    column "final_price" {
+      type = decimal(10,2)
+    }
+    column "coupon_disc_amount" {
+      type = decimal(10,2)
+    }
+    column "total_price" {
+      type = decimal(10,2)
+    }
+    column "disc_amount" {
+      type = decimal(10,2)
+    }
+    column "tax_amount" {
+      type = decimal(10,2)
+    }
+    column "shipping_charge" {
+      type = decimal(10,2)
+    }
+    column "payment_status" {
+      type = varchar(50)
+    }
+    column "payment_method" {
+      type = varchar(50)
+    }
+    column "invoice_url" {
+      type = varchar(500)
+    }
+    column "placed_on" {
+      type = datetime
+    }
+    column "billing_address" {
+      type = json
+    }
+    column "shipping_address" {
+      type = json
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_ecom_sales_order_summary"."uk_order_summary_order_num" {
+  columns = <
+    {
+      name = order_num
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

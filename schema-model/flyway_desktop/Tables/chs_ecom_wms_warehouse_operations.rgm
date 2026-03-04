@@ -1,0 +1,55 @@
+table "flyway_desktop"."chs_ecom_wms_warehouse_operations" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "warehouse_type_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "operation_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+      default = 'ACTIVE'
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_ecom_wms_warehouse_operations"."uk_type_operation" {
+  columns = <
+    {
+      name = warehouse_type_id
+    }
+
+    {
+      name = operation_code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

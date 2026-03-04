@@ -1,0 +1,67 @@
+table "flyway_desktop"."chs_ecom_pms_product_visibility_rule" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "rule_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "rule_name" {
+      type = varchar(150)
+    }
+    column "visibility_scope" {
+      type = enum('GLOBAL','REGION','USER_TYPE','CHANNEL','USER')
+      null = NOT NULL
+    }
+    column "condition_value" {
+      type = varchar(100)
+    }
+    column "is_visible" {
+      type = tinyint
+      default = 1
+    }
+    column "priority" {
+      type = int
+      default = 1
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+      default = 'ACTIVE'
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_ecom_pms_product_visibility_rule"."uk_visibility_rule_code" {
+  columns = <
+    {
+      name = rule_code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

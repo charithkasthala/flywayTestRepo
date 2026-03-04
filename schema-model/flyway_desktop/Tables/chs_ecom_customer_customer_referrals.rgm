@@ -1,0 +1,75 @@
+table "flyway_desktop"."chs_ecom_customer_customer_referrals" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "customer_id" {
+      type = varchar(50)
+    }
+    column "reference_code" {
+      type = varchar(20)
+      null = NOT NULL
+    }
+    column "referee_name" {
+      type = varchar(100)
+    }
+    column "referee_number" {
+      type = varchar(20)
+    }
+    column "referee_email" {
+      type = varchar(500)
+    }
+    column "referred_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "registered_on" {
+      type = datetime
+    }
+    column "status" {
+      type = enum('PENDING','CONVERTED','REJECTED')
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_ecom_customer_customer_referrals"."fk_ref_customer" {
+  columns = <
+    {
+      name = customer_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_ecom_customer_customer_referrals"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

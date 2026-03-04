@@ -1,0 +1,76 @@
+table "flyway_desktop"."chs_ecom_wms_indent_items" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "indent_id" {
+      type = bigint unsigned
+    }
+    column "sku_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "unit" {
+      type = enum('KILOGRAMS','GRAMS','LITERS','MILLILITERS','METERS','CENTIMETERS','INCHES','PIECE')
+    }
+    column "quantity" {
+      type = int
+      null = NOT NULL
+    }
+    column "batch_number" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_ecom_wms_indent_items"."fk_ii_indent" {
+  columns = [
+    "indent_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_ecom_wms_indent"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_ecom_wms_indent_items"."fk_ii_indent" {
+  columns = <
+    {
+      name = indent_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_ecom_wms_indent_items"."id" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

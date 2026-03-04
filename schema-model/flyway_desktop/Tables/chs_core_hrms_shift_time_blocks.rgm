@@ -1,0 +1,70 @@
+table "flyway_desktop"."chs_core_hrms_shift_time_blocks" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "shift_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "block_order" {
+      type = int
+      null = NOT NULL
+    }
+    column "from_time" {
+      type = time
+      null = NOT NULL
+    }
+    column "to_time" {
+      type = time
+      null = NOT NULL
+    }
+    column "crosses_day" {
+      type = tinyint
+      default = 0
+    }
+    column "min_hours" {
+      type = time
+    }
+    column "max_hours" {
+      type = time
+    }
+    column "buffer_minutes" {
+      type = int
+      default = 0
+    }
+    column "rotation_day" {
+      type = int
+      null = NOT NULL
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_hrms_shift_time_blocks"."chs_core_hrms_shift_time_blocks_ibfk_1" {
+  columns = [
+    "shift_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_hrms_shift_master"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_core_hrms_shift_time_blocks"."shift_id" {
+  columns = <
+    {
+      name = shift_id
+    }
+
+  >
+  type = BTREE
+}
+

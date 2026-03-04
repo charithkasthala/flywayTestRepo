@@ -1,0 +1,72 @@
+table "flyway_desktop"."chs_core_cms_footer_type" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "title" {
+      type = varchar(50)
+    }
+    column "url" {
+      type = varchar(500)
+    }
+    column "file_id" {
+      type = varchar(50)
+    }
+    column "logo_url" {
+      type = varchar(500)
+    }
+    column "sequence" {
+      type = int
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+      default = 'ACTIVE'
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_cms_footer_type"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_core_cms_footer_type"."idx_footer_type_code" {
+  columns = <
+    {
+      name = code
+    }
+
+  >
+  type = BTREE
+}
+

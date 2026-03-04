@@ -1,0 +1,108 @@
+table "flyway_desktop"."chs_core_marketing_asset" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "asset_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "asset_name" {
+      type = varchar(200)
+      null = NOT NULL
+    }
+    column "asset_type" {
+      type = enum('IMAGE','VIDEO','DOCUMENT','AUDIO','HTML','TEMPLATE','LOGO','BANNER','ICON','FONT','COLOR_PALETTE','BRAND_GUIDE','STYLE_GUIDE','COPY_GUIDE','SOC_MEDIA_KIT','PRESENTATION','BROCHURE','FLYER','CATALOG','WHITEPAPER','CASE_STUDY','EBOOK','CHECKLIST','WORKSHEET','INFOGRAPHIC','ANIMATION','GIF','OTHER')
+      null = NOT NULL
+    }
+    column "file_url" {
+      type = varchar(500)
+    }
+    column "file_size" {
+      type = bigint
+    }
+    column "mime_type" {
+      type = varchar(100)
+    }
+    column "dimensions" {
+      type = varchar(50)
+    }
+    column "duration_seconds" {
+      type = int
+    }
+    column "tags" {
+      type = json
+    }
+    column "is_approved" {
+      type = tinyint(1)
+      default = 0
+    }
+    column "approval_date" {
+      type = datetime
+    }
+    column "approved_by" {
+      type = varchar(50)
+    }
+    column "usage_count" {
+      type = int
+      default = 0
+    }
+    column "status" {
+      type = enum('DRAFT','ACTIVE','ARCHIVED','DELETED')
+      default = 'DRAFT'
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_marketing_asset"."asset_code" {
+  columns = <
+    {
+      name = asset_code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_core_marketing_asset"."idx_asset_status" {
+  columns = <
+    {
+      name = status
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_asset"."idx_asset_type" {
+  columns = <
+    {
+      name = asset_type
+    }
+
+  >
+  type = BTREE
+}
+

@@ -1,0 +1,54 @@
+table "flyway_desktop"."chs_core_hrms_shift_type" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "code" {
+      type = varchar(20)
+      null = NOT NULL
+    }
+    column "name" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "description" {
+      type = varchar(250)
+    }
+    column "supports_rotation" {
+      type = tinyint
+      default = 0
+    }
+    column "supports_split" {
+      type = tinyint
+      default = 0
+    }
+    column "supports_flexi" {
+      type = tinyint
+      default = 0
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+      default = 'ACTIVE'
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_hrms_shift_type"."code" {
+  columns = <
+    {
+      name = code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

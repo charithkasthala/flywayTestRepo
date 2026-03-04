@@ -1,0 +1,85 @@
+table "flyway_desktop"."chs_core_notif_setting_values" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "setting_id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "scope_type" {
+      type = enum('GLOBAL','TENANT','CHANNEL','GROUP','TEMPLATE','CAMPAIGN','USER')
+      null = NOT NULL
+    }
+    column "scope_ref_id" {
+      type = varchar(50)
+    }
+    column "channel" {
+      type = varchar(50)
+    }
+    column "setting_value" {
+      type = varchar(255)
+      null = NOT NULL
+    }
+    column "priority" {
+      type = int
+      default = 1
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_notif_setting_values"."fk_notif_setting_scope_master" {
+  columns = [
+    "setting_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_notif_setting_def"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_core_notif_setting_values"."uk_notif_setting_scope" {
+  columns = <
+    {
+      name = setting_id
+    }
+
+    {
+      name = scope_type
+    }
+
+    {
+      name = scope_ref_id
+    }
+
+    {
+      name = channel
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

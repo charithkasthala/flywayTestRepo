@@ -1,0 +1,121 @@
+table "flyway_desktop"."chs_core_marketing_social_lead" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "platform" {
+      type = enum('FACEBOOK','INSTAGRAM','TWITTER','LINKEDIN','PINTEREST','GOOGLE')
+      null = NOT NULL
+    }
+    column "lead_name" {
+      type = varchar(200)
+    }
+    column "lead_email" {
+      type = varchar(150)
+    }
+    column "lead_phone" {
+      type = varchar(20)
+    }
+    column "lead_source" {
+      type = varchar(100)
+    }
+    column "campaign_id" {
+      type = bigint
+    }
+    column "form_id" {
+      type = varchar(100)
+    }
+    column "form_name" {
+      type = varchar(200)
+    }
+    column "submitted_data" {
+      type = json
+    }
+    column "status" {
+      type = enum('NEW','CONTACTED','QUALIFIED','CONVERTED','UNSUBSCRIBED','INVALID')
+      default = 'NEW'
+    }
+    column "assigned_to" {
+      type = bigint
+    }
+    column "follow_up_date" {
+      type = datetime
+    }
+    column "notes" {
+      type = text
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_social_lead"."chs_core_marketing_social_lead_ibfk_1" {
+  columns = [
+    "campaign_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_campaign"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = SET NULL
+}
+
+index "flyway_desktop"."chs_core_marketing_social_lead"."campaign_id" {
+  columns = <
+    {
+      name = campaign_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_social_lead"."idx_lead_created" {
+  columns = <
+    {
+      name = created_on
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_social_lead"."idx_lead_platform" {
+  columns = <
+    {
+      name = platform
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_social_lead"."idx_lead_status" {
+  columns = <
+    {
+      name = status
+    }
+
+  >
+  type = BTREE
+}
+

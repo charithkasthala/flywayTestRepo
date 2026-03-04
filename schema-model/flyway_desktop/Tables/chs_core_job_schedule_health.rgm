@@ -1,0 +1,70 @@
+table "flyway_desktop"."chs_core_job_schedule_health" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "schedule_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "total_runs" {
+      type = int
+      default = 0
+    }
+    column "success_runs" {
+      type = int
+      default = 0
+    }
+    column "failure_runs" {
+      type = int
+      default = 0
+    }
+    column "consecutive_failures" {
+      type = int
+      default = 0
+    }
+    column "last_success_at" {
+      type = datetime
+    }
+    column "last_failure_at" {
+      type = datetime
+    }
+    column "health_status" {
+      type = enum('HEALTHY','DEGRADED','CRITICAL')
+      default = 'HEALTHY'
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_job_schedule_health"."fk_health_schedule" {
+  columns = [
+    "schedule_code"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_job_schedule_master"
+  referencedColumns = [
+    "schedule_code"
+  ]
+}
+
+index "flyway_desktop"."chs_core_job_schedule_health"."fk_health_schedule" {
+  columns = <
+    {
+      name = schedule_code
+    }
+
+  >
+  type = BTREE
+}
+

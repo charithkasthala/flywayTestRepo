@@ -1,0 +1,74 @@
+table "flyway_desktop"."chs_core_settings_tenant_spoc" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "tenant_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "name" {
+      type = varchar(100)
+      null = NOT NULL
+    }
+    column "email" {
+      type = varchar(100)
+      null = NOT NULL
+    }
+    column "mobile" {
+      type = varchar(15)
+    }
+    column "designation" {
+      type = varchar(50)
+    }
+    column "escalation_level" {
+      type = int
+      default = 1
+    }
+    column "is_primary" {
+      type = tinyint
+      default = 1
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+      default = 'ACTIVE'
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(100)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(100)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_settings_tenant_spoc"."uk_tenant_spoc" {
+  columns = <
+    {
+      name = tenant_id
+    }
+
+    {
+      name = email
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

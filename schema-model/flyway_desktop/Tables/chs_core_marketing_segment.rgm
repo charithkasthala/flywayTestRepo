@@ -1,0 +1,97 @@
+table "flyway_desktop"."chs_core_marketing_segment" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "segment_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "segment_name" {
+      type = varchar(200)
+      null = NOT NULL
+    }
+    column "segment_type" {
+      type = enum('STATIC','DYNAMIC','BEHAVIORAL','DEMOGRAPHIC','PSYCHOGRAPHIC','TRANSACTIONAL','LIFECYCLE','GEOGRAPHIC','DEVICE','TECHNOLOGY')
+      null = NOT NULL
+    }
+    column "description" {
+      type = text
+    }
+    column "member_count" {
+      type = int
+      default = 0
+    }
+    column "refresh_frequency" {
+      type = enum('REAL_TIME','HOURLY','DAILY','WEEKLY','MONTHLY','MANUAL')
+      default = 'DAILY'
+    }
+    column "last_refreshed" {
+      type = datetime
+    }
+    column "is_active" {
+      type = tinyint(1)
+      default = 1
+    }
+    column "criteria_logic" {
+      type = enum('AND','OR')
+      default = 'AND'
+    }
+    column "tags" {
+      type = json
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_marketing_segment"."idx_segment_active" {
+  columns = <
+    {
+      name = is_active
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_segment"."idx_segment_type" {
+  columns = <
+    {
+      name = segment_type
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_segment"."segment_code" {
+  columns = <
+    {
+      name = segment_code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

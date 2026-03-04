@@ -1,0 +1,51 @@
+table "flyway_desktop"."chs_core_cpg_summary_daily_payment" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "summary_date" {
+      type = date
+      null = NOT NULL
+    }
+    column "currency" {
+      type = varchar(5)
+      default = 'INR'
+    }
+    column "gateway_code" {
+      type = varchar(50)
+    }
+    column "total_txns" {
+      type = int
+      default = 0
+    }
+    column "success_txns" {
+      type = int
+      default = 0
+    }
+    column "failed_txns" {
+      type = int
+      default = 0
+    }
+    column "success_amount" {
+      type = decimal(14,2)
+      default = 0.00
+    }
+    column "failed_amount" {
+      type = decimal(14,2)
+      default = 0.00
+    }
+    column "refunded_amount" {
+      type = decimal(14,2)
+      default = 0.00
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

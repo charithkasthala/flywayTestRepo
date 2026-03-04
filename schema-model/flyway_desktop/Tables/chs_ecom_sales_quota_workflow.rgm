@@ -1,0 +1,30 @@
+table "flyway_desktop"."chs_ecom_sales_quota_workflow" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "quota_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "from_status" {
+      type = enum('PENDING','ORDER_PLACED','PROCESSING','SHIPPED','ABANDONED','DELIVERED','CANCELLED','RETURN_IN_PROGRESS','RETURNED','COMPLETED')
+    }
+    column "to_status" {
+      type = enum('PENDING','ORDER_PLACED','PROCESSING','SHIPPED','ABANDONED','DELIVERED','CANCELLED','RETURN_IN_PROGRESS','RETURNED','COMPLETED')
+    }
+    column "action_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

@@ -1,0 +1,52 @@
+table "flyway_desktop"."chs_ecom_sales_order_discounts" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "order_id" {
+      type = bigint unsigned
+    }
+    column "disc_code" {
+      type = varchar(50)
+    }
+    column "coupon_txn_id" {
+      type = varchar(50)
+    }
+    column "disc_value" {
+      type = decimal(10,2)
+    }
+    column "created_at" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_ecom_sales_order_discounts"."fk_so_disc_order" {
+  columns = [
+    "order_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_ecom_sales_order_master"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_ecom_sales_order_discounts"."fk_so_disc_order" {
+  columns = <
+    {
+      name = order_id
+    }
+
+  >
+  type = BTREE
+}
+

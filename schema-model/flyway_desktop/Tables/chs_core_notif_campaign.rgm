@@ -1,0 +1,73 @@
+table "flyway_desktop"."chs_core_notif_campaign" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "tenant_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "campaign_code" {
+      type = varchar(100)
+      null = NOT NULL
+    }
+    column "campaign_name" {
+      type = varchar(200)
+      null = NOT NULL
+    }
+    column "campaign_type" {
+      type = enum('PROMOTIONAL','ENGAGEMENT','RETENTION','LIFECYCLE','BEHAVIORAL','INFORMATIONAL')
+      null = NOT NULL
+    }
+    column "objective" {
+      type = varchar(100)
+    }
+    column "status" {
+      type = enum('DRAFT','APPROVED','SCHEDULED','RUNNING','PAUSED','COMPLETED','CANCELLED')
+      default = 'DRAFT'
+    }
+    column "event_code" {
+      type = varchar(50)
+    }
+    column "group_id" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_notif_campaign"."campaign_code" {
+  columns = <
+    {
+      name = campaign_code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

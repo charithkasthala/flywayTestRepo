@@ -1,0 +1,127 @@
+table "flyway_desktop"."chs_core_marketing_referral" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "program_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "referrer_user_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "referral_code" {
+      type = varchar(100)
+      null = NOT NULL
+    }
+    column "referral_link" {
+      type = varchar(500)
+    }
+    column "qr_code_url" {
+      type = varchar(500)
+    }
+    column "sharing_links" {
+      type = json
+    }
+    column "status" {
+      type = enum('ACTIVE','PAUSED','EXPIRED','BLOCKED')
+      default = 'ACTIVE'
+    }
+    column "total_referrals" {
+      type = int
+      default = 0
+    }
+    column "successful_referrals" {
+      type = int
+      default = 0
+    }
+    column "total_rewards_earned" {
+      type = decimal(15,2)
+      default = 0.00
+    }
+    column "rewards_paid" {
+      type = decimal(15,2)
+      default = 0.00
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_referral"."chs_core_marketing_referral_ibfk_1" {
+  columns = [
+    "program_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_referral_program"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = CASCADE
+}
+
+index "flyway_desktop"."chs_core_marketing_referral"."idx_referral_code" {
+  columns = <
+    {
+      name = referral_code
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_referral"."idx_referral_status" {
+  columns = <
+    {
+      name = status
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_referral"."referral_code" {
+  columns = <
+    {
+      name = referral_code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_core_marketing_referral"."uk_referrer_program" {
+  columns = <
+    {
+      name = program_id
+    }
+
+    {
+      name = referrer_user_id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

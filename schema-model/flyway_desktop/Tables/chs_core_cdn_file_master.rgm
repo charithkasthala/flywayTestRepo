@@ -1,0 +1,88 @@
+table "flyway_desktop"."chs_core_cdn_file_master" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "file_name" {
+      type = varchar(50)
+    }
+    column "is_public" {
+      type = tinyint
+    }
+    column "directory_id" {
+      type = varchar(50)
+    }
+    column "directory_name" {
+      type = varchar(50)
+    }
+    column "description" {
+      type = varchar(255)
+    }
+    column "url" {
+      type = varchar(250)
+    }
+    column "mime_type" {
+      type = varchar(50)
+    }
+    column "size_in_bytes" {
+      type = int
+    }
+    column "tenant_id" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_cdn_file_master"."fk_cdn_directory" {
+  columns = [
+    "directory_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_cdn_directories"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_core_cdn_file_master"."idx_directory_id" {
+  columns = <
+    {
+      name = directory_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_cdn_file_master"."test_id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

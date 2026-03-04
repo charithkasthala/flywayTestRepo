@@ -1,0 +1,111 @@
+table "flyway_desktop"."chs_core_marketing_budget" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "budget_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "budget_name" {
+      type = varchar(200)
+      null = NOT NULL
+    }
+    column "budget_type" {
+      type = enum('CAMPAIGN','CHANNEL','PRODUCT','REGION','SEASONAL','QUARTERLY','YEARLY','SPECIAL_PROJECT','EMERGENCY','TESTING','OTHER')
+      null = NOT NULL
+    }
+    column "total_amount" {
+      type = decimal(15,2)
+      null = NOT NULL
+    }
+    column "allocated_amount" {
+      type = decimal(15,2)
+      default = 0.00
+    }
+    column "spent_amount" {
+      type = decimal(15,2)
+      default = 0.00
+    }
+    column "remaining_amount" {
+      type = decimal(15,2)
+    }
+    column "start_date" {
+      type = date
+      null = NOT NULL
+    }
+    column "end_date" {
+      type = date
+    }
+    column "status" {
+      type = enum('DRAFT','ACTIVE','LOCKED','CLOSED','ARCHIVED')
+      default = 'DRAFT'
+    }
+    column "owner_id" {
+      type = bigint
+    }
+    column "department" {
+      type = varchar(100)
+    }
+    column "notes" {
+      type = text
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_marketing_budget"."budget_code" {
+  columns = <
+    {
+      name = budget_code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_core_marketing_budget"."idx_budget_dates" {
+  columns = <
+    {
+      name = start_date
+    }
+
+    {
+      name = end_date
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_budget"."idx_budget_status" {
+  columns = <
+    {
+      name = status
+    }
+
+  >
+  type = BTREE
+}
+

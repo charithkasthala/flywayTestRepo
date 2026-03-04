@@ -1,0 +1,116 @@
+table "flyway_desktop"."chs_core_account_payments" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "order_id" {
+      type = varchar(50)
+    }
+    column "payment_mode" {
+      type = enum('CASH','CARD','UPI','NETBANKING','WALLET','COD','BANK_TRANSFER')
+      null = NOT NULL
+    }
+    column "payment_gateway" {
+      type = varchar(50)
+    }
+    column "transaction_id" {
+      type = varchar(100)
+    }
+    column "amount" {
+      type = decimal(14,2)
+      null = NOT NULL
+    }
+    column "gateway_fee" {
+      type = decimal(14,2)
+      default = 0.00
+    }
+    column "tax_on_fee" {
+      type = decimal(14,2)
+      default = 0.00
+    }
+    column "net_amount" {
+      type = decimal(14,2)
+      null = NOT NULL
+    }
+    column "status" {
+      type = enum('PENDING','SUCCESS','FAILED','REFUNDED','CANCELLED')
+      default = 'PENDING'
+    }
+    column "payment_date" {
+      type = datetime
+      null = NOT NULL
+    }
+    column "settlement_date" {
+      type = date
+    }
+    column "bank_account_id" {
+      type = bigint
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_account_payments"."fk_payment_bank_account" {
+  columns = [
+    "bank_account_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_account_bank_account"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_core_account_payments"."fk_payment_bank_account" {
+  columns = <
+    {
+      name = bank_account_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_account_payments"."idx_payment_order" {
+  columns = <
+    {
+      name = order_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_account_payments"."idx_payment_status" {
+  columns = <
+    {
+      name = status
+    }
+
+  >
+  type = BTREE
+}
+

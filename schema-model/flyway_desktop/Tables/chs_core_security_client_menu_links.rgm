@@ -1,0 +1,104 @@
+table "flyway_desktop"."chs_core_security_client_menu_links" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+      default = """-
+(uuid())
+"""
+    }
+    column "client_code" {
+      type = varchar(50)
+    }
+    column "group_id" {
+      type = varchar(50)
+    }
+    column "title" {
+      type = varchar(255)
+    }
+    column "uri" {
+      type = varchar(255)
+    }
+    column "icon" {
+      type = varchar(50)
+    }
+    column "seq" {
+      type = int
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+      default = 'ACTIVE'
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_security_client_menu_links"."fk_menulink_client" {
+  columns = [
+    "client_code"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_security_client_master"
+  referencedColumns = [
+    "code"
+  ]
+}
+
+foreignKey "flyway_desktop"."chs_core_security_client_menu_links"."fk_menulink_menugroup" {
+  columns = [
+    "group_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_security_client_menu_groups"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_core_security_client_menu_links"."fk_menulink_client" {
+  columns = <
+    {
+      name = client_code
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_security_client_menu_links"."fk_menulink_menugroup" {
+  columns = <
+    {
+      name = group_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_security_client_menu_links"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

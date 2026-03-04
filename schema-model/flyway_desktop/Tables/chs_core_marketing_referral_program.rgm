@@ -1,0 +1,124 @@
+table "flyway_desktop"."chs_core_marketing_referral_program" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "program_code" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "program_name" {
+      type = varchar(200)
+      null = NOT NULL
+    }
+    column "campaign_id" {
+      type = bigint
+    }
+    column "description" {
+      type = text
+    }
+    column "start_date" {
+      type = datetime
+      null = NOT NULL
+    }
+    column "end_date" {
+      type = datetime
+    }
+    column "status" {
+      type = enum('DRAFT','ACTIVE','PAUSED','EXPIRED','ARCHIVED')
+      default = 'DRAFT'
+    }
+    column "referral_type" {
+      type = enum('ONE_TIME','RECURRING','TIERED','MULTI_LEVEL')
+      default = 'ONE_TIME'
+    }
+    column "sharing_methods" {
+      type = json
+    }
+    column "tracking_method" {
+      type = enum('COUPON_CODE','LINK','QR_CODE','SOCIAL_SHARE','EMAIL_INVITE','SMS_INVITE','WHATSAPP')
+      null = NOT NULL
+    }
+    column "terms_and_conditions" {
+      type = text
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_referral_program"."chs_core_marketing_referral_program_ibfk_1" {
+  columns = [
+    "campaign_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_campaign"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = SET NULL
+}
+
+index "flyway_desktop"."chs_core_marketing_referral_program"."campaign_id" {
+  columns = <
+    {
+      name = campaign_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_referral_program"."idx_referral_dates" {
+  columns = <
+    {
+      name = start_date
+    }
+
+    {
+      name = end_date
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_referral_program"."idx_referral_status" {
+  columns = <
+    {
+      name = status
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_referral_program"."program_code" {
+  columns = <
+    {
+      name = program_code
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

@@ -1,0 +1,87 @@
+table "flyway_desktop"."chs_core_audit_req_res_logs" {
+  columns = (
+    column "id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "txn_id" {
+      type = varchar(50)
+    }
+    column "client" {
+      type = varchar(50)
+    }
+    column "channel" {
+      type = varchar(50)
+    }
+    column "url" {
+      type = text
+    }
+    column "http_method" {
+      type = varchar(10)
+    }
+    column "payload" {
+      type = text
+    }
+    column "ip_address" {
+      type = varchar(50)
+    }
+    column "user_agent" {
+      type = varchar(512)
+    }
+    column "requested_on" {
+      type = datetime
+    }
+    column "responded_on" {
+      type = datetime
+    }
+    column "duration_ms" {
+      type = bigint
+    }
+    column "tenant_id" {
+      type = varchar(50)
+    }
+    column "response" {
+      type = mediumtext
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_audit_req_res_logs"."fk_reqres_txn" {
+  columns = [
+    "txn_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_audit_transactions"
+  referencedColumns = [
+    "txn_id"
+  ]
+}
+
+index "flyway_desktop"."chs_core_audit_req_res_logs"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
+index "flyway_desktop"."chs_core_audit_req_res_logs"."txn_id_UNIQUE" {
+  columns = <
+    {
+      name = txn_id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

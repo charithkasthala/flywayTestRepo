@@ -1,0 +1,105 @@
+table "flyway_desktop"."chs_ecom_dms_shiprocket_order" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "order_num" {
+      type = varchar(50)
+    }
+    column "dispatch_unit_code" {
+      type = varchar(50)
+    }
+    column "shiprocket_order_id" {
+      type = bigint
+    }
+    column "shipment_id" {
+      type = bigint
+    }
+    column "status_code" {
+      type = int
+    }
+    column "status" {
+      type = varchar(50)
+    }
+    column "awb_code" {
+      type = varchar(50)
+    }
+    column "courier_company_id" {
+      type = bigint
+    }
+    column "courier_name" {
+      type = varchar(100)
+    }
+    column "order_created" {
+      type = tinyint
+    }
+    column "ordered_on" {
+      type = datetime
+    }
+    column "manifest_file_id" {
+      type = varchar(50)
+    }
+    column "manifest_url" {
+      type = varchar(500)
+    }
+    column "label_file_id" {
+      type = varchar(50)
+    }
+    column "label_url" {
+      type = varchar(500)
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_ecom_dms_shiprocket_order"."fk_dms_shiprocket_shipment" {
+  columns = [
+    "shipment_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_ecom_dms_shipment"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = SET NULL
+}
+
+index "flyway_desktop"."chs_ecom_dms_shiprocket_order"."fk_dms_shiprocket_shipment" {
+  columns = <
+    {
+      name = shipment_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_ecom_dms_shiprocket_order"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

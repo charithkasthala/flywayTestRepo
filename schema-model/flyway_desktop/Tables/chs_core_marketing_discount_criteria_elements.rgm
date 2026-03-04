@@ -1,0 +1,53 @@
+table "flyway_desktop"."chs_core_marketing_discount_criteria_elements" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "code" {
+      type = varchar(50)
+    }
+    column "title" {
+      type = varchar(50)
+    }
+    column "description" {
+      type = text
+    }
+    column "value_type" {
+      type = enum('TEXT','NUMBER','DECIMAL','BOOLEAN','PERCENTAGE')
+    }
+    column "criteria_type" {
+      type = enum('CUSTOMER','INVENTORY','BILLING')
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_marketing_discount_criteria_elements"."idx_criteria_code" {
+  columns = <
+    {
+      name = code
+    }
+
+  >
+  type = BTREE
+}
+

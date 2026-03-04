@@ -1,0 +1,68 @@
+table "flyway_desktop"."chs_core_settings_code_details" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "code_id" {
+      type = bigint unsigned
+    }
+    column "param_key" {
+      type = varchar(50)
+    }
+    column "param_value" {
+      type = text
+    }
+    column "param_type" {
+      type = varchar(50)
+    }
+    column "data_type" {
+      type = enum('TEXT','BOOLEAN','NUMBER')
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+      default = 'ACTIVE'
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+  comment = More Details of high level code master configuration
+}
+
+foreignKey "flyway_desktop"."chs_core_settings_code_details"."fk_codedetails_codemaster" {
+  columns = [
+    "code_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_settings_code_master"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_core_settings_code_details"."code_parent_fk" {
+  columns = <
+    {
+      name = code_id
+    }
+
+  >
+  type = BTREE
+}
+

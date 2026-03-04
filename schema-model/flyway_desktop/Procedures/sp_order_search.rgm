@@ -1,0 +1,131 @@
+procedure "flyway_desktop"."sp_order_search" {
+  parameters = <
+    {
+      name = p_search_key
+      datatype = varchar(50)
+      mode = IN
+    }
+
+    {
+      name = p_username
+      datatype = varchar(50)
+      mode = IN
+    }
+
+  >
+  text = """-
+BEGIN 
+
+	DECLARE v_search_key VARCHAR(100);
+    DECLARE v_username VARCHAR(50);
+    DECLARE v_item_ids text;
+    declare v_order_ids text;
+
+    SET v_username = p_username;
+	-- SET v_search_key = REPLACE(TRIM(BOTH ' ' FROM REGEXP_REPLACE(LOWER(p_search_key), '[^a-z0-9 ]', '')), ' ', '* +');
+	-- SET v_search_key = CONCAT('+', p_search_key, '*');
+    
+   -- SET v_search_key = REPLACE(TRIM(BOTH ' ' FROM REGEXP_REPLACE(LOWER(p_search_key), '[^a-z0-9 ]', '')), ' ', '* +');
+   --  SET v_search_key = CONCAT('+', upper(v_search_key), '*');
+     
+    SET v_search_key = REPLACE(TRIM(BOTH ' ' FROM REGEXP_REPLACE(LOWER(p_search_key), '[^a-z0-9 ]', '')), ' ', '* ');
+	 SET v_search_key = CONCAT( v_search_key, ' *');
+	 
+   
+        
+SELECT GROUP_CONCAT(distinct p1.item_id) into v_item_ids
+    FROM chs_ecom_pms_product_card p1
+    JOIN (
+    SELECT DISTINCT p.item_id
+    FROM chs_ecom_pms_product_card p
+   -- LEFT JOIN cat_prod_map cp ON p.product_id = cp.product_id
+  --  LEFT JOIN category c ON cp.category_id = c.id
+  --  LEFT JOIN section s ON c.section_id = s.id
+    left join chs_ecom_pms_search_keywords sk  on sk.item_id=p.item_id
+    WHERE -- p.is_default_item = 1 AND
+    p.product_status = 'ACTIVE' AND p.item_status = 'ACTIVE'
+    AND p.is_default_img = 1
+        AND (
+            MATCH(p.product_title, p.product_slug) AGAINST(v_search_key IN BOOLEAN MODE) OR 
+            MATCH(p.item_title, p.item_slug) AGAINST(v_search_key IN BOOLEAN MODE)
+			OR MATCH(sk.keyword) AGAINST(v_search_key IN BOOLEAN MODE)
+           -- OR MATCH(c.title, c.slug) AGAINST(v_search_key IN BOOLEAN MODE)
+           -- OR MATCH(s.title, s.slug) AGAINST(v_search_key IN BOOLEAN MODE)
+        )
+    ORDER BY 
+        MATCH(p.product_title, p.product_slug) AGAINST(v_search_key IN BOOLEAN MODE) DESC,
+        MATCH(p.item_title, p.item_slug) AGAINST(v_search_key IN BOOLEAN MODE) DESC,
+        MATCH(sk.keyword) AGAINST(v_search_key IN BOOLEAN MODE) desc,
+      --  MATCH(c.title, c.slug) AGAINST(v_search_key IN BOOLEAN MODE) DESC,
+      --  MATCH(s.title, s.slug) AGAINST(v_search_key IN BOOLEAN MODE) DESC,
+        p.item_title
+)AS distinct_products ON p1.item_id = distinct_products.item_id WHERE
+    p1.product_status = 'ACTIVE' AND p1.item_status = 'ACTIVE';
+    -- AND p1.is_default_img = 1;
+    
+  --  select v_item_ids;
+    
+select GROUP_CONCAT(distinct om.id) into v_order_ids from chs_ecom_sales_order_master om where 
+ (MATCH(om.order_num) AGAINST(v_search_key IN BOOLEAN MODE) OR om.order_num LIKE CONCAT('%', p_search_key)) and 
+om.username = v_username;
+
+SELECT JSON_ARRAYAGG(JSON_OBJECT(
+        'id', om.id,
+        'orderNum', om.order_num,
+        'cpgOrderId',om.cpg_order_id,
+        'username', om.username,
+        'customerId', om.customer_id,
+        'orderStatus', om.order_status,
+        'totalPrice', om.total_price,
+        'totalMrp', om.total_mrp,
+        'finalPrice',om.final_price,
+        'totalItems', om.total_items,
+        'totalQty', om.total_qty,
+        'discAmount', om.disc_amount,
+        'couponDiscAmount',om.coupon_disc_amount,
+        'taxAmount', om.tax_amount,
+        'shippingCharge', om.shipping_charge,
+        'paymentStatus', om.payment_status,
+        'paymentMethod', om.payment_method,
+        'billingAddressId', null,
+        'placedOn',DATE_FORMAT(om.placed_on, '%Y-%m-%dT%H:%i:%s'),
+        'fileId', om.file_id,
+		'invoiceUrl', om.invoice_url,
+		'amount', om.amount,
+        'walletAmount', om.wallet_amount,
+        'orderItems',  (
+                SELECT JSON_ARRAYAGG(
+                    JSON_OBJECT(
+                        'id', oi.id,
+						'orderId', oi.order_id, 
+                        'productId', oi.product_id,
+                        'itemId', oi.item_id,
+                        'itemTitle', oi.item_title,
+                        'itemImage', oi.item_image,
+                        'itemSlug', oi.item_slug,
+                        'unitPrice', oi.unit_price,
+                        'unitMrp', oi.unit_mrp,
+                        'volumeUnitPrice', oi.volume_unit_price,
+                        'volumeUnitMrp', oi.volume_unit_mrp,
+                        'volumeValue', oi.volume_value,
+                        'qty', oi.qty,
+                        'taxAmt', oi.tax_amt,
+                        'discAmount', oi.disc_amount,
+                        'totalPrice', oi.total_price,
+                        'totalMrp', oi.total_mrp,
+                        'returnAllowed', oi.return_allowed
+                    )
+                ) FROM chs_ecom_sales_order_items oi WHERE oi.order_id = om.id 
+           AND (FIND_IN_SET(oi.item_id, v_item_ids)  OR FIND_IN_SET(oi.order_id, v_order_ids) )
+        )
+    )
+) AS output_json
+FROM chs_ecom_sales_order_master om WHERE om.username = v_username
+  AND EXISTS (SELECT 1 FROM chs_ecom_sales_order_items oi WHERE oi.order_id = om.id 
+      AND (FIND_IN_SET(oi.item_id, v_item_ids)  OR FIND_IN_SET(oi.order_id, v_order_ids) 
+  ))
+ORDER BY om.placed_on DESC;
+  end
+"""
+}
+

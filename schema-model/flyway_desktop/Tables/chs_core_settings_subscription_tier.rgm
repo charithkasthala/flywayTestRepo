@@ -1,0 +1,73 @@
+table "flyway_desktop"."chs_core_settings_subscription_tier" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "plan_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "name" {
+      type = varchar(50)
+    }
+    column "start_date" {
+      type = datetime
+      null = NOT NULL
+      default = CURRENT_TIMESTAMP
+    }
+    column "end_date" {
+      type = datetime
+      null = NOT NULL
+    }
+    column "issued_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "price" {
+      type = decimal(10,0)
+    }
+    column "duration_days" {
+      type = int
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_settings_subscription_tier"."fk_tier_plan" {
+  columns = [
+    "plan_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_settings_subscription_plan"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_core_settings_subscription_tier"."fk_tier_plan" {
+  columns = <
+    {
+      name = plan_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_settings_subscription_tier"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

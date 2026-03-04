@@ -1,0 +1,64 @@
+table "flyway_desktop"."chs_ecom_sales_order_docs" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "order_id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "title" {
+      type = varchar(50)
+    }
+    column "file_id" {
+      type = varchar(50)
+    }
+    column "generated_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_ecom_sales_order_docs"."fk_order_docs_order" {
+  columns = [
+    "order_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_ecom_sales_order_master"
+  referencedColumns = [
+    "id"
+  ]
+}
+
+index "flyway_desktop"."chs_ecom_sales_order_docs"."idx_order_docs_order" {
+  columns = <
+    {
+      name = order_id
+    }
+
+  >
+  type = BTREE
+}
+

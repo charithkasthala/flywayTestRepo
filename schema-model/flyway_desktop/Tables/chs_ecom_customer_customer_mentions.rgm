@@ -1,0 +1,56 @@
+table "flyway_desktop"."chs_ecom_customer_customer_mentions" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "platform" {
+      type = enum('FACEBOOK','INSTAGRAM','X','LINKEDIN','YOUTUBE')
+      null = NOT NULL
+    }
+    column "mention_id" {
+      type = varchar(255)
+      null = NOT NULL
+      comment = Meta Mention ID
+    }
+    column "user_social_id" {
+      type = varchar(255)
+      null = NOT NULL
+      comment = User’s Facebook/Instagram ID
+    }
+    column "mention_type" {
+      type = enum('POST','STORY','COMMENT')
+      null = NOT NULL
+    }
+    column "media_url" {
+      type = text
+      comment = If a media is shared
+    }
+    column "caption" {
+      type = text
+    }
+    column "mention_time" {
+      type = timestamp
+      default = CURRENT_TIMESTAMP
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_ecom_customer_customer_mentions"."mention_id" {
+  columns = <
+    {
+      name = mention_id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

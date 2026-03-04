@@ -1,0 +1,48 @@
+table "flyway_desktop"."chs_ecom_customer_profile_ext" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "customer_id" {
+      type = varchar(50)
+      null = NOT NULL
+    }
+    column "kyc_status" {
+      type = enum('PENDING','VERIFIED','REJECTED')
+      default = 'PENDING'
+    }
+    column "loyalty_tier" {
+      type = varchar(50)
+    }
+    column "risk_flag" {
+      type = tinyint
+      default = 0
+    }
+    column "notes" {
+      type = varchar(255)
+    }
+    column "last_reviewed_on" {
+      type = datetime
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_ecom_customer_profile_ext"."uk_profile_ext" {
+  columns = <
+    {
+      name = customer_id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

@@ -1,0 +1,75 @@
+table "flyway_desktop"."chs_core_cpg_payout_txns" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "payout_id" {
+      type = varchar(50)
+    }
+    column "fund_account_id" {
+      type = varchar(50)
+    }
+    column "amount" {
+      type = decimal(10,2)
+    }
+    column "currency" {
+      type = varchar(5)
+    }
+    column "fees" {
+      type = decimal(10,2)
+    }
+    column "tax" {
+      type = decimal(10,2)
+    }
+    column "status" {
+      type = varchar(50)
+    }
+    column "purpose" {
+      type = varchar(50)
+    }
+    column "narration" {
+      type = text
+    }
+    column "mode" {
+      type = varchar(50)
+    }
+    column "merchant_id" {
+      type = varchar(50)
+    }
+    column "created_at" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_core_cpg_payout_txns"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+

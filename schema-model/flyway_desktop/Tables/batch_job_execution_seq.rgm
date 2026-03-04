@@ -1,0 +1,9 @@
+table "flyway_desktop"."batch_job_execution_seq" {
+  columns = (
+    column "ID" {
+      type = bigint
+      null = NOT NULL
+    }
+  )
+}
+

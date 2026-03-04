@@ -1,0 +1,174 @@
+table "flyway_desktop"."chs_core_marketing_video_ad" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "campaign_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "video_ad_name" {
+      type = varchar(200)
+      null = NOT NULL
+    }
+    column "video_url" {
+      type = varchar(500)
+      null = NOT NULL
+    }
+    column "thumbnail_url" {
+      type = varchar(500)
+    }
+    column "duration_seconds" {
+      type = int
+    }
+    column "video_format" {
+      type = enum('MP4','WEBM','MOV','AVI','OTHER')
+    }
+    column "file_size" {
+      type = bigint
+    }
+    column "resolution" {
+      type = varchar(20)
+    }
+    column "aspect_ratio" {
+      type = varchar(10)
+    }
+    column "autoplay" {
+      type = tinyint(1)
+      default = 1
+    }
+    column "muted" {
+      type = tinyint(1)
+      default = 1
+    }
+    column "placement" {
+      type = enum('HOMEPAGE','PRODUCT_PAGE','CATEGORY_PAGE','SEARCH_RESULTS','CART_PAGE','CHECKOUT_PAGE','LANDING_PAGE','MOBILE_APP','SOCIAL_FEED','VIDEO_PLAYER','IN_CONTENT','POPUP','SIDEBAR','FOOTER','HEADER','INLINE','FLOATING','BACKGROUND')
+      null = NOT NULL
+    }
+    column "cta_text" {
+      type = varchar(100)
+    }
+    column "cta_url" {
+      type = varchar(500)
+    }
+    column "skip_enabled" {
+      type = tinyint(1)
+      default = 1
+    }
+    column "skip_after_seconds" {
+      type = int
+      default = 5
+    }
+    column "targeting_criteria" {
+      type = json
+    }
+    column "status" {
+      type = enum('DRAFT','PROCESSING','READY','ACTIVE','PAUSED','ARCHIVED')
+      default = 'DRAFT'
+    }
+    column "start_date" {
+      type = datetime
+    }
+    column "end_date" {
+      type = datetime
+    }
+    column "impressions" {
+      type = int
+      default = 0
+    }
+    column "views" {
+      type = int
+      default = 0
+    }
+    column "completed_views" {
+      type = int
+      default = 0
+    }
+    column "average_view_duration" {
+      type = int
+    }
+    column "click_through_rate" {
+      type = decimal(5,2)
+    }
+    column "engagement_rate" {
+      type = decimal(5,2)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+foreignKey "flyway_desktop"."chs_core_marketing_video_ad"."chs_core_marketing_video_ad_ibfk_1" {
+  columns = [
+    "campaign_id"
+  ]
+  referencedTable = "flyway_desktop"."chs_core_marketing_campaign"
+  referencedColumns = [
+    "id"
+  ]
+  onDelete = CASCADE
+}
+
+index "flyway_desktop"."chs_core_marketing_video_ad"."campaign_id" {
+  columns = <
+    {
+      name = campaign_id
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_video_ad"."idx_video_dates" {
+  columns = <
+    {
+      name = start_date
+    }
+
+    {
+      name = end_date
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_video_ad"."idx_video_placement" {
+  columns = <
+    {
+      name = placement
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_core_marketing_video_ad"."idx_video_status" {
+  columns = <
+    {
+      name = status
+    }
+
+  >
+  type = BTREE
+}
+

@@ -1,0 +1,56 @@
+table "flyway_desktop"."chs_core_cms_blog_posts" {
+  columns = (
+    column "id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "title" {
+      type = varchar(255)
+      null = NOT NULL
+    }
+    column "description" {
+      type = text
+      null = NOT NULL
+    }
+    column "file_id" {
+      type = varchar(50)
+    }
+    column "image_url" {
+      type = varchar(500)
+      null = NOT NULL
+    }
+    column "post_date" {
+      type = date
+      null = NOT NULL
+    }
+    column "status" {
+      type = enum('ACTIVE','DISABLED')
+      default = 'ACTIVE'
+    }
+    column "content" {
+      type = mediumtext
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "created_by" {
+      type = varchar(100)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(100)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

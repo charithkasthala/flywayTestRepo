@@ -1,0 +1,48 @@
+table "flyway_desktop"."chs_ecom_sales_order_exchange_items" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "exchange_id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "item_id" {
+      type = bigint
+      null = NOT NULL
+    }
+    column "order_item_id" {
+      type = bigint unsigned
+    }
+    column "quantity" {
+      type = int
+      null = NOT NULL
+      default = 1
+    }
+    column "status" {
+      type = enum('REQUESTED','APPROVED','QC_FAILED','REPLACEMENT_CREATED','COMPLETED')
+      default = 'REQUESTED'
+    }
+    column "created_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+

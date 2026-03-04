@@ -1,0 +1,87 @@
+table "flyway_desktop"."chs_ecom_customer_ticket" {
+  columns = (
+    column "id" {
+      type = bigint unsigned
+      null = NOT NULL
+    }
+    column "username" {
+      type = varchar(100)
+      null = NOT NULL
+    }
+    column "order_num" {
+      type = varchar(50)
+    }
+    column "email" {
+      type = varchar(100)
+    }
+    column "mobile_num" {
+      type = varchar(15)
+    }
+    column "category" {
+      type = enum('ORDER','PAYMENT','PRODUCT','TECHNICAL','OTHER')
+    }
+    column "subject" {
+      type = varchar(255)
+    }
+    column "description" {
+      type = text
+    }
+    column "priority" {
+      type = enum('LOW','MEDIUM','HIGH','CRITICAL')
+      default = 'MEDIUM'
+    }
+    column "status" {
+      type = enum('OPEN','IN_PROGRESS','RESOLVED','CLOSED')
+      default = 'OPEN'
+    }
+    column "assigned_to" {
+      type = bigint unsigned
+    }
+    column "generated_on" {
+      type = datetime
+    }
+    column "created_by" {
+      type = varchar(50)
+    }
+    column "created_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+    column "modified_by" {
+      type = varchar(50)
+    }
+    column "modified_on" {
+      type = datetime
+      default = CURRENT_TIMESTAMP
+    }
+  )
+  primaryKey = {
+    columns = [
+      id
+    ]
+    name = "PRIMARY"
+    objectType = primaryKey
+  }
+}
+
+index "flyway_desktop"."chs_ecom_customer_ticket"."fk_ticket_assigned_to" {
+  columns = <
+    {
+      name = assigned_to
+    }
+
+  >
+  type = BTREE
+}
+
+index "flyway_desktop"."chs_ecom_customer_ticket"."id_UNIQUE" {
+  columns = <
+    {
+      name = id
+    }
+
+  >
+  type = BTREE
+  unique = UNIQUE
+}
+
